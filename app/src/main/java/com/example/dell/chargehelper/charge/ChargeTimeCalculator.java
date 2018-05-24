@@ -5,7 +5,7 @@ import com.example.dell.chargehelper.charge.PowerLine;
 
 public class ChargeTimeCalculator
 {
-    public long calculateMsToCharge(PowerLine powerLine, Battery battery){
+    public long calculateTimeInMsToCharge(PowerLine powerLine, Battery battery){
         double powerWh = powerLine.Voltage * powerLine.Amperage;
         double kWhToCharge = battery.UsefulCapacityKWh * (100 - battery.RemainingEnergyPercents) / 100;
         double chargingInefficiency = (100 + battery.ChargingLoss) / 100;

@@ -7,14 +7,11 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -27,6 +24,7 @@ import com.example.dell.chargehelper.notifications.CarChargedCalendarEventSchedu
 import com.example.dell.chargehelper.notifications.CarChargedAlarmScheduler;
 import com.example.dell.chargehelper.notifications.CarChargedDirectCalendarWriteScheduler;
 import com.example.dell.chargehelper.notifications.ICarChargedNotificationScheduler;
+import com.example.dell.chargehelper.notifications.NotificationSchedulerProvider;
 import com.example.dell.chargehelper.notifications.PermissionUtils;
 
 import java.util.ArrayList;
@@ -57,7 +55,7 @@ public class MainActivity extends BaseActivity
         }
     };
 
-    private ChargeTimeCalculator calculator = new ChargeTimeCalculator();
+    private ChargeTimeCalculator timeCalculator = new ChargeTimeCalculator();
     private ViewModel viewModel = new ViewModel();
 
     private SeekBar remainingEnergySeekBar;
@@ -105,32 +103,16 @@ public class MainActivity extends BaseActivity
                 updateChargingHours();
                 long msToCharge = calculateTimeToChargeMs();
 
-                for (ICarChargedNotificationScheduler scheduler : getiNotificationSchedulers()){
+                NotificationSchedulerProvider provider = new NotificationSchedulerProvider();
+                for (ICarChargedNotificationScheduler scheduler : provider.getNotificationSchedulers(MainActivity.this)){
                     scheduler.scheduleNotification(msToCharge);
                 }
             }
         });
     }
 
-    @NonNull
-    private List<ICarChargedNotificationScheduler> getiNotificationSchedulers() {
-        ArrayList<ICarChargedNotificationScheduler> r = new ArrayList<>();
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-
-        if (preferences.getBoolean("allow_app_notifications", SettingsActivity.DEFAULT_ALLOW_APP_NOTIFICATIONS)){
-            r.add(new CarChargedAlarmScheduler(MainActivity.this));
-        }
-        if (preferences.getBoolean("allow_calendar_notifications", SettingsActivity.DEFAULT_ALLOW_CALENDAR_NOTIFICATIONS)){
-            r.add(new CarChargedCalendarEventScheduler(MainActivity.this));
-        }
-        if (preferences.getBoolean("allow_calendar_permission_notifications", SettingsActivity.DEFAULT_ALLOW_CALENDAR_PERMISSION_NOTIFICATIONS)){
-            r.add(new CarChargedDirectCalendarWriteScheduler(MainActivity.this));
-        }
-        return r;
-    }
-
     private long calculateTimeToChargeMs() {
-        return calculator.calculateMsToCharge(viewModel.getPowerLine(), viewModel.getBattery());
+        return timeCalculator.calculateTimeInMsToCharge(viewModel.getPowerLine(), viewModel.getBattery());
     }
 
     private void updateEditableViewModel() {

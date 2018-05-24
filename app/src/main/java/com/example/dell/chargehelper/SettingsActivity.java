@@ -35,7 +35,7 @@ import java.util.List;
 public class SettingsActivity extends AppCompatPreferenceActivity
 {
     public static final boolean DEFAULT_ALLOW_CALENDAR_NOTIFICATIONS  = true;
-    public static final boolean DEFAULT_ALLOW_CALENDAR_PERMISSION_NOTIFICATIONS  = true;
+    public static final boolean DEFAULT_ALLOW_CALENDAR_PERMISSION_NOTIFICATIONS  = false;
     public static final boolean DEFAULT_ALLOW_APP_NOTIFICATIONS  = true;
     public static final String DEFAULT_AMPERAGE = "16";
     public static final String DEFAULT_VOLTAGE = "220";

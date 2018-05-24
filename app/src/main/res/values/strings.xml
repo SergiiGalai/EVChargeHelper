@@ -47,6 +47,8 @@
     <string name="car_charged_title">Car charged</string>
     <string name="car_charged_descr">Your car should be charged by this time.</string>
     <string name="car_charged_time_desc">Your car should be charged by %s.</string>
+    <string name="car_charged_channel_descr">Notifies you when your car is charged</string>
+
     <string name="calendar_permission_rationale">Calendar permission is required to make reminders time customizable as well as displaying events in another color.
         Without this permission you will see new calendar event screen with default reminder time and default color.
         You will be able to change them manually</string>

@@ -8,8 +8,8 @@ import android.content.Intent;
 
 public class CarChargedAlarmReceiver extends BroadcastReceiver
 {
-    public static String NOTIFICATION_ID = "car-charged-notification-id";
-    public static String NOTIFICATION = "notification";
+    public static final String NOTIFICATION_ID = "car-charged-notification-id";
+    public static final String NOTIFICATION = "notification";
 
     @Override
     public void onReceive(Context context, Intent intent) {
