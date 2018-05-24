@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_settings">Налаштування</string>
+    <string name="title_activity_bugreport">Повідомлення про помилку</string>
+    <string name="pref_header_general">Основні</string>
+    <string name="pref_title_car_list">Модель авто</string>
+    <string name="pref_header_charging">Зарядка</string>
+    <string name="pref_title_voltage">Напруга за замовчуванням, В</string>
+    <string name="pref_title_amperage">Сила струму за замовчуванням, А</string>
+    <string name="pref_title_charging_loss">Втрата заряду, %</string>
+    <string name="pref_title_battery_capacity">Корисна ємкість батареї, кВт*г</string>
+    <string name="pref_header_notifications">Сповіщення</string>
+    <string name="pref_title_allow_app_notifications">Власні сповіщення</string>
+    <string name="pref_description_allow_app_notifications">Використовується звук, відмінний від стандартного, щоб було легше його відрізнити від стандартних сповіщень</string>
+    <string name="pref_title_allow_calendar_notifications">Сповіщення календаря Google</string>
+    <string name="pref_description_allow_calendar_notifications">Увімкнути сповіщення з нагадуваннями за замовчуванням</string>
+    <string name="pref_title_allow_calendar_permission_notifications">Додаткові сповіщення Google календаря</string>
+    <string name="car_charged_title">Авто заряджене</string>
+    <string name="car_charged_descr">Ваше авто має бути зарядженим до цього часу</string>
+    <string name="car_charged_time_desc">Ваше авто має бути зарядженим до %s</string>
+    <string name="open">Відкрити</string>
+    <string name="calendar_permissions_not_granted">Доступ до КАЛЕНДАРЯ заборонено</string>
+    <string name="remind_me_button_title">Нагадати о %s</string>
+    <string name="remaining_energy_title">Залишковий заряд, %d%%</string>
+    <string name="current_description_title">Авто заряджається використовуючи:</string>
+    <string name="amperage_title">Сила струму</string>
+    <string name="voltage_title">Напруга</string>
+    <string name="should_be_charged_prefix_title">Авто має бути заряджено через %dгод %02dхв</string>
+    <string name="pref_title_reminder">Повідомити за, хвилин</string>
+    <string name="pref_description_allow_calendar_permission_notifications">Увімкнути сповіщення з власними налаштуваннями. Потребує доступу до календаря</string>
+    <string name="calendar_permission_rationale">Доступ до календаря потрібен для встановлення власний налаштувань часу увімлення так кольору сповіщення</string>
+</resources>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/main_layout"
+    tools:context="com.example.dell.chargehelper.MainActivity">
+
+    <TextView
+        android:id="@+id/currentDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/current_description_title"
+        app:layout_constraintLeft_toLeftOf="@id/remindButton"
+        app:layout_constraintTop_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/amperage_title"
+        android:labelFor="@id/amperageText"
+        app:layout_constraintLeft_toLeftOf="@id/currentDescription"
+        app:layout_constraintTop_toBottomOf="@+id/currentDescription"/>
+
+    <NumberPicker
+        android:id="@+id/amperageText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"/>
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/voltage_title"
+        android:labelFor="@id/voltageText"
+        android:layout_marginLeft="10dp"
+        app:layout_constraintLeft_toRightOf="@id/textView2"
+        app:layout_constraintBaseline_toBaselineOf="@id/textView2"/>
+
+    <NumberPicker
+        android:id="@+id/voltageText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/textView4"/>
+
+    <TextView
+        android:id="@+id/remainingEnergyTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginTop="15dp"
+        android:labelFor="@id/remainingEnergySeekBar"
+        android:text="@string/remaining_energy_title"
+        app:layout_constraintLeft_toLeftOf="@id/remindButton"
+        app:layout_constraintTop_toBottomOf="@+id/voltageText"/>
+
+    <SeekBar
+        android:id="@+id/remainingEnergySeekBar"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:max="19"
+        android:progress="5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/remainingEnergyTitle"/>
+
+
+    <TextView
+        android:id="@+id/chargedInTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/should_be_charged_prefix_title"
+        android:textSize="16sp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/remainingEnergySeekBar"/>
+
+    <Button
+        android:id="@+id/remindButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:padding="9dp"
+        android:text="@string/remind_me_button_title"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@color/colorText"
+        app:layout_constraintLeft_toLeftOf="@id/chargedInTitle"
+        app:layout_constraintTop_toBottomOf="@+id/chargedInTitle"/>
+
+</android.support.constraint.ConstraintLayout>
