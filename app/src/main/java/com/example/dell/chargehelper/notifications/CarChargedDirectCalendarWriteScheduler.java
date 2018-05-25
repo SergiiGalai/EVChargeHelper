@@ -13,9 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
-import android.widget.Toast;
 
-import com.example.dell.chargehelper.MainActivity;
 import com.example.dell.chargehelper.R;
 import com.example.dell.chargehelper.TimeHelper;
 
@@ -23,9 +21,9 @@ import java.util.Calendar;
 
 public class CarChargedDirectCalendarWriteScheduler implements ICarChargedNotificationScheduler
 {
-    public static final int EventColor = GoogleCalendarEventColor.VIOLET;
-    public static final int MS_ONE_HOUR = 60 * 60 * 1000;
-    private static final int REMINDER_MINUTES = 15;
+    private static final int EventColor = GoogleCalendarEventColor.VIOLET;
+    private static final int MS_ONE_HOUR = 60 * 60 * 1000;
+    private static final int DEFAULT_REMINDER_MINUTES = 15;
 
 
     private CalendarRepository repository;
@@ -34,7 +32,7 @@ public class CarChargedDirectCalendarWriteScheduler implements ICarChargedNotifi
     private static String[] PERMISSIONS_CALENDAR = {Manifest.permission.READ_CALENDAR,
             Manifest.permission.WRITE_CALENDAR};
 
-    public CarChargedDirectCalendarWriteScheduler(Activity context) {
+    CarChargedDirectCalendarWriteScheduler(Activity context) {
         this.context = context;
         repository = new CalendarRepository(context);
     }
@@ -49,7 +47,9 @@ public class CarChargedDirectCalendarWriteScheduler implements ICarChargedNotifi
 
     private int getReminderMinutes(){
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return Integer.parseInt(preferences.getString("calendar_permission_reminder_minutes", String.valueOf(REMINDER_MINUTES)));
+        return Integer.parseInt(
+                preferences.getString("calendar_permission_reminder_minutes",
+                String.valueOf(DEFAULT_REMINDER_MINUTES)));
     }
 
     private void scheduleCalendarEvent(String title, String description, long eventTime) {
