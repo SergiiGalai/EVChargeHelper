@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 
@@ -24,17 +23,16 @@ public class CarChargedAlarmScheduler implements ICarChargedNotificationSchedule
 {
     private Activity activity;
     private final Uri NotificationSound;
-    private static final int REMINDER_MINUTES = 10;
+    private static final int DEFAULT_REMINDER_MINUTES = 10;
 
-    public CarChargedAlarmScheduler(Activity activity) {
+    CarChargedAlarmScheduler(Activity activity) {
         this.activity = activity;
         NotificationSound = Uri.parse("android.resource://" + activity.getPackageName() + "/" + R.raw.carhorn4);
     }
 
     @Override
     public void scheduleNotification(long eventTime) {
-        long msBeforeEvent = getReminderMs(eventTime);
-        long alarmAt = SystemClock.elapsedRealtime() + msBeforeEvent;
+        long millisToNotify = getMillisToNotify(eventTime);
         String description = getNotificationDescription(eventTime);
 
         Notification notification = getCarChargedNotification(
@@ -43,21 +41,20 @@ public class CarChargedAlarmScheduler implements ICarChargedNotificationSchedule
         );
 
         PendingIntent pendingIntent = getCarChargedNotificationPendingIntent(notification);
-        scheduleNotification(alarmAt, pendingIntent);
-
+        scheduleNotification(millisToNotify, pendingIntent);
         notifyUser(description);
     }
 
-    private int getReminderMinutes(){
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
-        return Integer.parseInt(preferences.getString("app_notification_reminder_minutes", String.valueOf(REMINDER_MINUTES)));
+    private long getMillisToNotify(long millisToEvent) {
+        long millisToNotify = TimeHelper.convertMinutesToMs(getMinutesBeforeEventToNotify());
+        if (millisToEvent > millisToNotify)
+            return millisToEvent - millisToNotify;
+        return millisToEvent;
     }
 
-    long getReminderMs(long msToEvent) {
-        long beforeEvent = TimeHelper.convertMinutesToMs(getReminderMinutes());
-        if (msToEvent > beforeEvent)
-            return msToEvent - beforeEvent;
-        return msToEvent;
+    private int getMinutesBeforeEventToNotify(){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
+        return Integer.parseInt(preferences.getString("app_notification_reminder_minutes", String.valueOf(DEFAULT_REMINDER_MINUTES)));
     }
 
     private void notifyUser(String description) {
@@ -70,7 +67,7 @@ public class CarChargedAlarmScheduler implements ICarChargedNotificationSchedule
     private String getNotificationDescription(long duration) {
         Date chargedAtTime = TimeHelper.toDate(TimeHelper.addToNow(duration));
         String descriptionTemplate = activity.getString(R.string.car_charged_time_desc);
-        return String.format(descriptionTemplate, TimeHelper.toHoursAndMinutes(chargedAtTime));
+        return String.format(descriptionTemplate, TimeHelper.formatAsHoursWithMinutes(chargedAtTime));
     }
 
     private static final String CAR_CHARGED_NOTIFICATION_CHANNEL_ID = "46578";
@@ -88,6 +85,7 @@ public class CarChargedAlarmScheduler implements ICarChargedNotificationSchedule
             channel.setSound(NotificationSound, null);
 
             NotificationManager notificationManager = (NotificationManager)activity.getSystemService(Context.NOTIFICATION_SERVICE);
+            assert notificationManager != null;
             notificationManager.deleteNotificationChannel(CAR_CHARGED_NOTIFICATION_CHANNEL_ID);
             notificationManager.createNotificationChannel(channel);
 
@@ -99,9 +97,12 @@ public class CarChargedAlarmScheduler implements ICarChargedNotificationSchedule
         return builder.build();
     }
 
-    private void scheduleNotification(long triggerAt, PendingIntent pendingIntent) {
+    private void scheduleNotification(long millis, PendingIntent pendingIntent) {
         AlarmManager alarmManager = (AlarmManager)activity.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAt, pendingIntent);
+        long triggerAt = TimeHelper.addToNow(millis);
+
+        assert alarmManager != null;
+        alarmManager.set(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent);
     }
 
     private PendingIntent getCarChargedNotificationPendingIntent(Notification notification) {

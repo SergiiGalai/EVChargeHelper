@@ -21,15 +21,12 @@ import com.example.dell.chargehelper.charge.Battery;
 import com.example.dell.chargehelper.charge.ChargeTimeCalculator;
 import com.example.dell.chargehelper.charge.PowerLine;
 import com.example.dell.chargehelper.notifications.CarChargedCalendarEventScheduler;
-import com.example.dell.chargehelper.notifications.CarChargedAlarmScheduler;
 import com.example.dell.chargehelper.notifications.CarChargedDirectCalendarWriteScheduler;
 import com.example.dell.chargehelper.notifications.ICarChargedNotificationScheduler;
 import com.example.dell.chargehelper.notifications.NotificationSchedulerProvider;
 import com.example.dell.chargehelper.notifications.PermissionUtils;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class MainActivity extends BaseActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback
@@ -141,9 +138,9 @@ public class MainActivity extends BaseActivity
         String remainingEnergyMessage = String.format(this.getString(R.string.remaining_energy_title), viewModel.getBattery().RemainingEnergyPercents);
         remainingEnergyTitle.setText(remainingEnergyMessage);
 
-        Time time = TimeHelper.toTime(msToCharge);
+        Time time = TimeHelper.getHoursAndMinutes(msToCharge);
         chargedInTitle.setText(String.format(this.getString(R.string.should_be_charged_prefix_title), time.hours, time.minutes));
-        remindButton.setText(String.format(this.getString(R.string.remind_me_button_title), TimeHelper.toHoursAndMinutes(dateChargedAt)));
+        remindButton.setText(String.format(this.getString(R.string.remind_me_button_title), TimeHelper.formatAsHoursWithMinutes(dateChargedAt)));
     }
 
     private void initializeVariables() {

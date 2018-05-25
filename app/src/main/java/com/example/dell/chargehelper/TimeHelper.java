@@ -10,20 +10,22 @@ public class TimeHelper
 {
     private static Format timeFormatter = SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT);
 
-    public static String toHoursAndMinutes(Date date){
+    public static String formatAsHoursWithMinutes(Date date){
         return timeFormatter.format(date);
     }
 
-    public static Time toTime(long ms){
-        return new Time((int)TimeUnit.MILLISECONDS.toHours(ms) % 24, (int)TimeUnit.MILLISECONDS.toMinutes(ms) % 60);
+    public static Time getHoursAndMinutes(long millis){
+        return new Time(
+                (int)TimeUnit.MILLISECONDS.toHours(millis) % 24,
+                (int)TimeUnit.MILLISECONDS.toMinutes(millis) % 60);
     }
 
-    public static Date toDate(long ms){
-        return new Date(ms);
+    public static Date toDate(long millis){
+        return new Date(millis);
     }
 
-    public static long addToNow(long ms){
-        return System.currentTimeMillis() + ms;
+    public static long addToNow(long millis){
+        return System.currentTimeMillis() + millis;
     }
 
     public static long convertMinutesToMs(int minutes){
