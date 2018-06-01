@@ -26,42 +26,71 @@ import com.example.dell.chargehelper.notifications.ICarChargedNotificationSchedu
 import com.example.dell.chargehelper.notifications.NotificationSchedulerProvider;
 import com.example.dell.chargehelper.notifications.PermissionUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends BaseActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback
 {
     private class ViewModel{
-        private PowerLine powerLine = new PowerLine();
-        private Battery battery = new Battery();
+        private String remainingEnergyText;
+        private String chargedInText;
+        private String remindButtonText;
 
-        PowerLine getPowerLine() {
-            return powerLine;
+        private long millisToCharge;
+        private final PowerLine powerLine = new PowerLine();
+        private final Battery battery = new Battery();
+
+        void refresh() {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+
+            powerLine.Amperage = amperagePicker.getValue();
+            powerLine.Voltage = voltagePicker.getValue();
+            battery.RemainingEnergyPercents = remainingEnergySeekBar.getProgress() * 5;
+            battery.UsefulCapacityKWh = Double.parseDouble(preferences.getString("battery_capacity", SettingsActivity.DEFAULT_CAPACITY));
+            battery.ChargingLoss = Integer.parseInt(preferences.getString("charging_loss", SettingsActivity.DEFAULT_CHARGING_LOSS));
+            millisToCharge = timeCalculator.calculateTimeInMsToCharge(powerLine, battery);
+
+            Date dateChargedAt = TimeHelper.toDate(TimeHelper.addToNow(millisToCharge));
+            Time time = TimeHelper.getHoursAndMinutes(millisToCharge);
+
+            remainingEnergyText = String.format(getString(R.string.remaining_energy_title), battery.RemainingEnergyPercents);
+            chargedInText = String.format(getString(R.string.should_be_charged_prefix_title), time.hours, time.minutes);
+            remindButtonText = String.format(getString(R.string.remind_me_button_title), TimeHelper.formatAsHoursWithMinutes(dateChargedAt));
         }
 
-        Battery getBattery() {
-            return battery;
-        }
+        long getMillisToCharge() { return millisToCharge; }
+        String getRemainingEnergyText() { return remainingEnergyText; }
+        String getChargedInText() { return chargedInText; }
+        String getRemindButtonText() { return remindButtonText; }
     }
 
-    private NumberPicker.OnValueChangeListener textWatcher = new NumberPicker.OnValueChangeListener(){
-        @Override
-        public void onValueChange(NumberPicker numberPicker, int i, int i1) {
-                updateEditableViewModel();
-                updateChargingHours();
-        }
-    };
+    private void updateControls()
+    {
+        viewModel.refresh();
+        remainingEnergyTitle.setText(viewModel.getRemainingEnergyText());
+        chargedInTitle.setText(viewModel.getChargedInText());
+        remindButton.setText(viewModel.getRemindButtonText());
+    }
 
     private ChargeTimeCalculator timeCalculator = new ChargeTimeCalculator();
     private ViewModel viewModel = new ViewModel();
 
     private SeekBar remainingEnergySeekBar;
     private TextView remainingEnergyTitle;
-    private NumberPicker amperageText;
+    private NumberPicker amperagePicker;
+    private NumberPicker voltagePicker;
     private TextView chargedInTitle;
-    private NumberPicker voltageText;
     private Button remindButton;
 
+
+    private NumberPicker.OnValueChangeListener textWatcher = new NumberPicker.OnValueChangeListener(){
+        @Override
+        public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+            updateControls();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,18 +98,16 @@ public class MainActivity extends BaseActivity
         setContentView(R.layout.activity_main);
 
         initializeVariables();
-        updateEditableViewModel();
-        updateChargingHours();
+        updateControls();
 
-        voltageText.setOnValueChangedListener(textWatcher);
-        amperageText.setOnValueChangedListener(textWatcher);
+        voltagePicker.setOnValueChangedListener(textWatcher);
+        amperagePicker.setOnValueChangedListener(textWatcher);
 
         remainingEnergySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
         {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
-                updateEditableViewModel();
-                updateChargingHours();
+                updateControls();
             }
 
             @Override
@@ -96,72 +123,50 @@ public class MainActivity extends BaseActivity
         {
             @Override
             public void onClick(View v) {
-                updateEditableViewModel();
-                updateChargingHours();
-                long msToCharge = calculateTimeToChargeMs();
-
+                updateControls();
                 NotificationSchedulerProvider provider = new NotificationSchedulerProvider();
                 for (ICarChargedNotificationScheduler scheduler : provider.getNotificationSchedulers(MainActivity.this)){
-                    scheduler.scheduleNotification(msToCharge);
+                    scheduler.scheduleNotification(viewModel.getMillisToCharge());
                 }
             }
         });
     }
 
-    private long calculateTimeToChargeMs() {
-        return timeCalculator.calculateTimeInMsToCharge(viewModel.getPowerLine(), viewModel.getBattery());
-    }
-
-    private void updateEditableViewModel() {
-        updatePowerLine(viewModel.getPowerLine());
-        updateBattery(viewModel.getBattery());
-    }
-
-    private void updatePowerLine(PowerLine powerLine){
-        powerLine.Voltage = voltageText.getValue();
-        powerLine.Amperage = amperageText.getValue();
-    }
-
-    private void updateBattery(Battery battery){
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-
-        battery.RemainingEnergyPercents = remainingEnergySeekBar.getProgress() * 5;
-        battery.UsefulCapacityKWh = Double.parseDouble(preferences.getString("battery_capacity", SettingsActivity.DEFAULT_CAPACITY));
-        battery.ChargingLoss = Integer.parseInt(preferences.getString("charging_loss", SettingsActivity.DEFAULT_CHARGING_LOSS));
-    }
-
-    private void updateChargingHours()
-    {
-        long msToCharge = calculateTimeToChargeMs();
-        Date dateChargedAt = TimeHelper.toDate(TimeHelper.addToNow(msToCharge));
-
-        String remainingEnergyMessage = String.format(this.getString(R.string.remaining_energy_title), viewModel.getBattery().RemainingEnergyPercents);
-        remainingEnergyTitle.setText(remainingEnergyMessage);
-
-        Time time = TimeHelper.getHoursAndMinutes(msToCharge);
-        chargedInTitle.setText(String.format(this.getString(R.string.should_be_charged_prefix_title), time.hours, time.minutes));
-        remindButton.setText(String.format(this.getString(R.string.remind_me_button_title), TimeHelper.formatAsHoursWithMinutes(dateChargedAt)));
-    }
-
     private void initializeVariables() {
         remainingEnergySeekBar = findViewById(R.id.remainingEnergySeekBar);
         remainingEnergyTitle = findViewById(R.id.remainingEnergyTitle);
-        amperageText = findViewById(R.id.amperageText);
         chargedInTitle = findViewById(R.id.chargedInTitle);
-        voltageText = findViewById(R.id.voltageText);
+        amperagePicker = findViewById(R.id.amperageValue);
+        voltagePicker = findViewById(R.id.voltageValue);
         remindButton = findViewById(R.id.remindButton);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
 
         Integer defaultAmperage =Integer.parseInt(preferences.getString("default_amperage", SettingsActivity.DEFAULT_AMPERAGE));
-        amperageText.setMinValue(6);
-        amperageText.setMaxValue(defaultAmperage + 10);
-        amperageText.setValue(defaultAmperage);
+        setPickerValues(amperagePicker, defaultAmperage, 6, defaultAmperage + 10, 1);
 
         Integer defaultVoltage = Integer.parseInt(preferences.getString("default_voltage", SettingsActivity.DEFAULT_VOLTAGE));
-        voltageText.setMinValue(defaultVoltage-30);
-        voltageText.setMaxValue(defaultVoltage+30);
-        voltageText.setValue(defaultVoltage);
+        setPickerValues(voltagePicker, defaultVoltage, 50, 5);
+    }
+
+    private void setPickerValues(NumberPicker picker, int value, int variation, int step){
+        setPickerValues(picker, value, value - variation, value + variation, step);
+    }
+
+    private void setPickerValues(NumberPicker picker, int value, int min, int max, int step){
+        picker.setDisplayedValues(null);
+
+        List<String> allowedValues = new ArrayList<>();
+        for (int i = min; i <= max; i += step){
+            allowedValues.add(String.valueOf(i));
+        }
+        String[] arr = allowedValues.toArray(new String[allowedValues.size()]);
+
+        picker.setMinValue(1);
+        picker.setMaxValue(arr.length);
+        picker.setValue(5);
+
+        picker.setDisplayedValues(arr);
     }
 
     @Override
@@ -199,7 +204,7 @@ public class MainActivity extends BaseActivity
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         if (preferences.getBoolean("allow_calendar_notifications", SettingsActivity.DEFAULT_ALLOW_CALENDAR_NOTIFICATIONS)){
             CarChargedCalendarEventScheduler scheduler = new CarChargedCalendarEventScheduler(MainActivity.this);
-            long msToCharge = calculateTimeToChargeMs();
+            long msToCharge = viewModel.getMillisToCharge();
             scheduler.scheduleNotification(msToCharge);
         }
     }
