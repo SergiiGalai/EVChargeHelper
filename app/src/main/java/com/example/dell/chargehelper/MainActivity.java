@@ -20,15 +20,14 @@ import com.example.dell.chargehelper.bugreport.BaseActivity;
 import com.example.dell.chargehelper.charge.Battery;
 import com.example.dell.chargehelper.charge.ChargeTimeCalculator;
 import com.example.dell.chargehelper.charge.PowerLine;
+import com.example.dell.chargehelper.controls.StepNumberPicker;
 import com.example.dell.chargehelper.notifications.CarChargedCalendarEventScheduler;
 import com.example.dell.chargehelper.notifications.CarChargedDirectCalendarWriteScheduler;
 import com.example.dell.chargehelper.notifications.ICarChargedNotificationScheduler;
 import com.example.dell.chargehelper.notifications.NotificationSchedulerProvider;
 import com.example.dell.chargehelper.notifications.PermissionUtils;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class MainActivity extends BaseActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback
@@ -45,8 +44,8 @@ public class MainActivity extends BaseActivity
         void refresh() {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
 
-            powerLine.Amperage = amperagePicker.getValue();
-            powerLine.Voltage = voltagePicker.getValue();
+            powerLine.Amperage = Integer.valueOf(amperagePicker.getValue());
+            powerLine.Voltage = Integer.valueOf(voltagePicker.getValue());
             battery.RemainingEnergyPercents = remainingEnergySeekBar.getProgress() * 5;
             battery.UsefulCapacityKWh = Double.parseDouble(preferences.getString("battery_capacity", SettingsActivity.DEFAULT_CAPACITY));
             battery.ChargingLoss = Integer.parseInt(preferences.getString("charging_loss", SettingsActivity.DEFAULT_CHARGING_LOSS));
@@ -79,8 +78,8 @@ public class MainActivity extends BaseActivity
 
     private SeekBar remainingEnergySeekBar;
     private TextView remainingEnergyTitle;
-    private NumberPicker amperagePicker;
-    private NumberPicker voltagePicker;
+    private StepNumberPicker amperagePicker;
+    private StepNumberPicker voltagePicker;
     private TextView chargedInTitle;
     private Button remindButton;
 
@@ -136,37 +135,22 @@ public class MainActivity extends BaseActivity
         remainingEnergySeekBar = findViewById(R.id.remainingEnergySeekBar);
         remainingEnergyTitle = findViewById(R.id.remainingEnergyTitle);
         chargedInTitle = findViewById(R.id.chargedInTitle);
-        amperagePicker = findViewById(R.id.amperageValue);
-        voltagePicker = findViewById(R.id.voltageValue);
         remindButton = findViewById(R.id.remindButton);
+
+        NumberPicker tmpAmperagePicker = findViewById(R.id.amperageValue);
+        NumberPicker tmpVoltagePicker = findViewById(R.id.voltageValue);
+        amperagePicker = new StepNumberPicker(tmpAmperagePicker);
+        voltagePicker = new StepNumberPicker(tmpVoltagePicker);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
 
-        Integer defaultAmperage =Integer.parseInt(preferences.getString("default_amperage", SettingsActivity.DEFAULT_AMPERAGE));
-        setPickerValues(amperagePicker, defaultAmperage, 6, defaultAmperage + 10, 1);
+        Integer defaultAmperage = Integer.parseInt(preferences.getString("default_amperage", SettingsActivity.DEFAULT_AMPERAGE));
+        amperagePicker.setValues(StepNumberPicker.generateSequence(6, defaultAmperage + 10, 2));
+        amperagePicker.setValue(String.valueOf(defaultAmperage));
 
         Integer defaultVoltage = Integer.parseInt(preferences.getString("default_voltage", SettingsActivity.DEFAULT_VOLTAGE));
-        setPickerValues(voltagePicker, defaultVoltage, 50, 5);
-    }
-
-    private void setPickerValues(NumberPicker picker, int value, int variation, int step){
-        setPickerValues(picker, value, value - variation, value + variation, step);
-    }
-
-    private void setPickerValues(NumberPicker picker, int value, int min, int max, int step){
-        picker.setDisplayedValues(null);
-
-        List<String> allowedValues = new ArrayList<>();
-        for (int i = min; i <= max; i += step){
-            allowedValues.add(String.valueOf(i));
-        }
-        String[] arr = allowedValues.toArray(new String[allowedValues.size()]);
-
-        picker.setMinValue(1);
-        picker.setMaxValue(arr.length);
-        picker.setValue(5);
-
-        picker.setDisplayedValues(arr);
+        voltagePicker.setValues(StepNumberPicker.generateSequence(defaultVoltage - 40, defaultVoltage + 40, 5));
+        voltagePicker.setValue(String.valueOf(defaultVoltage));
     }
 
     @Override
