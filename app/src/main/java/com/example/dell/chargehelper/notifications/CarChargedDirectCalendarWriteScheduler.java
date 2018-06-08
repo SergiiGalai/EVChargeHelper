@@ -15,7 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.view.View;
 
 import com.example.dell.chargehelper.R;
-import com.example.dell.chargehelper.TimeHelper;
+import com.example.dell.chargehelper.helpers.TimeHelper;
 
 import java.util.Calendar;
 

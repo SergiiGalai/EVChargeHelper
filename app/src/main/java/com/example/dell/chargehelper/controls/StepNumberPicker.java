@@ -2,6 +2,8 @@ package com.example.dell.chargehelper.controls;
 
 import android.widget.NumberPicker;
 
+import com.example.dell.chargehelper.helpers.Convert;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +17,7 @@ public class StepNumberPicker
     }
 
     public void setValues(List<String> values){
-        String[] arr = values.toArray(new String[values.size()]);
-        setValues(arr);
+        setValues(Convert.toArray(values));
     }
 
     public void setValues(String[] values){
