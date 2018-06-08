@@ -17,39 +17,47 @@
         app:layout_constraintLeft_toLeftOf="@id/remindButton"
         app:layout_constraintTop_toBottomOf="parent"/>
 
+
+    <NumberPicker
+        android:id="@+id/amperageValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toLeftOf="@id/currentDescription"
+        app:layout_constraintTop_toBottomOf="@+id/currentDescription"/>
+
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:text="@string/amperage_title"
-        android:labelFor="@id/amperageText"
-        app:layout_constraintLeft_toLeftOf="@id/currentDescription"
-        app:layout_constraintTop_toBottomOf="@+id/currentDescription"/>
+        android:labelFor="@id/amperageValue"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="75dp"
+        android:textSize="17sp"
+        app:layout_constraintLeft_toRightOf="@id/amperageValue"
+        app:layout_constraintBottom_toBottomOf="@id/amperageValue"/>
+
 
     <NumberPicker
-        android:id="@+id/amperageText"
+        android:id="@+id/voltageValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="@id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"/>
+        android:layout_marginStart="10dp"
+        app:layout_constraintLeft_toRightOf="@id/textView2"
+        app:layout_constraintBottom_toBottomOf="@id/amperageValue"/>
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/voltage_title"
-        android:labelFor="@id/voltageText"
-        android:layout_marginLeft="10dp"
-        app:layout_constraintLeft_toRightOf="@id/textView2"
+        android:labelFor="@id/voltageValue"
+        android:layout_marginStart="5dp"
+        android:textSize="17sp"
+        app:layout_constraintLeft_toRightOf="@id/voltageValue"
         app:layout_constraintBaseline_toBaselineOf="@id/textView2"/>
 
-    <NumberPicker
-        android:id="@+id/voltageText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="@id/textView4"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"/>
 
     <TextView
         android:id="@+id/remainingEnergyTitle"
@@ -59,7 +67,7 @@
         android:labelFor="@id/remainingEnergySeekBar"
         android:text="@string/remaining_energy_title"
         app:layout_constraintLeft_toLeftOf="@id/remindButton"
-        app:layout_constraintTop_toBottomOf="@+id/voltageText"/>
+        app:layout_constraintTop_toBottomOf="@+id/amperageValue"/>
 
     <SeekBar
         android:id="@+id/remainingEnergySeekBar"
