@@ -57,9 +57,9 @@
     <string name="calendar_permissions_not_granted">CALENDAR permission was NOT granted.</string>
     <string name="remind_me_button_title">Remind me at %s</string>
     <string name="remaining_energy_title">Remaining energy, %d%%</string>
-    <string name="current_description_title">Car charges using:</string>
-    <string name="amperage_title">Amperage</string>
-    <string name="voltage_title">Voltage</string>
+    <string name="current_description_title">Car is charging using:</string>
+    <string name="amperage_title">A</string>
+    <string name="voltage_title">V</string>
     <string name="should_be_charged_prefix_title">Car should be charged in %dh %02dm</string>
 
 </resources>

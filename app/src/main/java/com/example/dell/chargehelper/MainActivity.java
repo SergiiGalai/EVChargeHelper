@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.example.dell.chargehelper.bugreport.BaseActivity;
 import com.example.dell.chargehelper.charge.Battery;
 import com.example.dell.chargehelper.charge.ChargeTimeCalculator;
+import com.example.dell.chargehelper.charge.ChargeValuesProvider;
 import com.example.dell.chargehelper.charge.PowerLine;
 import com.example.dell.chargehelper.controls.StepNumberPicker;
 import com.example.dell.chargehelper.notifications.CarChargedCalendarEventScheduler;
@@ -28,10 +29,30 @@ import com.example.dell.chargehelper.notifications.NotificationSchedulerProvider
 import com.example.dell.chargehelper.notifications.PermissionUtils;
 
 import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends BaseActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback
 {
+
+    private ChargeTimeCalculator timeCalculator = new ChargeTimeCalculator();
+    private ViewModel viewModel = new ViewModel();
+
+    private SeekBar remainingEnergySeekBar;
+    private TextView remainingEnergyTitle;
+    private StepNumberPicker amperagePicker;
+    private StepNumberPicker voltagePicker;
+    private TextView chargedInTitle;
+    private Button remindButton;
+
+
+    private NumberPicker.OnValueChangeListener textWatcher = new NumberPicker.OnValueChangeListener(){
+        @Override
+        public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+            updateControls();
+        }
+    };
+
     private class ViewModel{
         private String remainingEnergyText;
         private String chargedInText;
@@ -72,24 +93,6 @@ public class MainActivity extends BaseActivity
         chargedInTitle.setText(viewModel.getChargedInText());
         remindButton.setText(viewModel.getRemindButtonText());
     }
-
-    private ChargeTimeCalculator timeCalculator = new ChargeTimeCalculator();
-    private ViewModel viewModel = new ViewModel();
-
-    private SeekBar remainingEnergySeekBar;
-    private TextView remainingEnergyTitle;
-    private StepNumberPicker amperagePicker;
-    private StepNumberPicker voltagePicker;
-    private TextView chargedInTitle;
-    private Button remindButton;
-
-
-    private NumberPicker.OnValueChangeListener textWatcher = new NumberPicker.OnValueChangeListener(){
-        @Override
-        public void onValueChange(NumberPicker numberPicker, int i, int i1) {
-            updateControls();
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,17 +142,17 @@ public class MainActivity extends BaseActivity
 
         NumberPicker tmpAmperagePicker = findViewById(R.id.amperageValue);
         NumberPicker tmpVoltagePicker = findViewById(R.id.voltageValue);
-        amperagePicker = new StepNumberPicker(tmpAmperagePicker);
-        voltagePicker = new StepNumberPicker(tmpVoltagePicker);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
 
         Integer defaultAmperage = Integer.parseInt(preferences.getString("default_amperage", SettingsActivity.DEFAULT_AMPERAGE));
-        amperagePicker.setValues(StepNumberPicker.generateSequence(6, defaultAmperage + 10, 2));
+        amperagePicker = new StepNumberPicker(tmpAmperagePicker);
+        amperagePicker.setValues(ChargeValuesProvider.getAllowedAmperage(defaultAmperage));
         amperagePicker.setValue(String.valueOf(defaultAmperage));
 
         Integer defaultVoltage = Integer.parseInt(preferences.getString("default_voltage", SettingsActivity.DEFAULT_VOLTAGE));
-        voltagePicker.setValues(StepNumberPicker.generateSequence(defaultVoltage - 40, defaultVoltage + 40, 5));
+        voltagePicker = new StepNumberPicker(tmpVoltagePicker);
+        voltagePicker.setValues(ChargeValuesProvider.getAllowedVoltage(defaultVoltage));
         voltagePicker.setValue(String.valueOf(defaultVoltage));
     }
 

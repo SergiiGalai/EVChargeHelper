@@ -23,8 +23,8 @@
     <string name="remind_me_button_title">Нагадати о %s</string>
     <string name="remaining_energy_title">Залишковий заряд, %d%%</string>
     <string name="current_description_title">Авто заряджається використовуючи:</string>
-    <string name="amperage_title">Сила струму</string>
-    <string name="voltage_title">Напруга</string>
+    <string name="amperage_title">А</string>
+    <string name="voltage_title">В</string>
     <string name="should_be_charged_prefix_title">Авто має бути заряджено через %dгод %02dхв</string>
     <string name="pref_title_reminder">Повідомити за, хвилин</string>
     <string name="pref_description_allow_calendar_permission_notifications">Увімкнути сповіщення з власними налаштуваннями. Потребує доступу до календаря</string>

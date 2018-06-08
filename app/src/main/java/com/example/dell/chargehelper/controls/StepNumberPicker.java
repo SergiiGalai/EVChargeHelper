@@ -58,14 +58,4 @@ public class StepNumberPicker
         }
         return -1;
     }
-
-    public static List<String> generateSequence(int min, int max, int step){
-        List<String> allowedValues = new ArrayList<>();
-
-        for (int i = min; i <= max; i += step){
-            allowedValues.add(String.valueOf(i));
-        }
-
-        return allowedValues;
-    }
 }
