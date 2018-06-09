@@ -18,7 +18,16 @@ public class ChargeValuesProvider {
     }
 
     public static List<String> getAllowedVoltage(int defaultVoltage){
-        return generateSequence(defaultVoltage - 40, defaultVoltage + 40, 5);
+        return getAllowedVoltage(defaultVoltage, 40);
+    }
+
+    public static List<String> getAllowedVoltage(int defaultVoltage, int delta){
+        if (defaultVoltage < delta)
+            delta = defaultVoltage;
+
+        int min = defaultVoltage - delta;
+        int max = defaultVoltage + delta;
+        return generateSequence(min, max, 5);
     }
 
     private static List<String> generateSequence(int min, int max, int step){

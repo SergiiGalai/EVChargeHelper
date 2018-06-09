@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.provider.CalendarContract;
 
 import com.example.dell.chargehelper.R;
-import com.example.dell.chargehelper.TimeHelper;
+import com.example.dell.chargehelper.helpers.TimeHelper;
 
 import java.util.Calendar;
 import java.util.Date;

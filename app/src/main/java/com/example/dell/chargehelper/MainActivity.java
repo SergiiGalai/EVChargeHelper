@@ -22,6 +22,7 @@ import com.example.dell.chargehelper.charge.ChargeTimeCalculator;
 import com.example.dell.chargehelper.charge.ChargeValuesProvider;
 import com.example.dell.chargehelper.charge.PowerLine;
 import com.example.dell.chargehelper.controls.StepNumberPicker;
+import com.example.dell.chargehelper.helpers.TimeHelper;
 import com.example.dell.chargehelper.notifications.CarChargedCalendarEventScheduler;
 import com.example.dell.chargehelper.notifications.CarChargedDirectCalendarWriteScheduler;
 import com.example.dell.chargehelper.notifications.ICarChargedNotificationScheduler;
@@ -29,7 +30,6 @@ import com.example.dell.chargehelper.notifications.NotificationSchedulerProvider
 import com.example.dell.chargehelper.notifications.PermissionUtils;
 
 import java.util.Date;
-import java.util.List;
 
 public class MainActivity extends BaseActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback

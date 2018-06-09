@@ -16,7 +16,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import com.example.dell.chargehelper.R;
-import com.example.dell.chargehelper.TimeHelper;
+import com.example.dell.chargehelper.helpers.TimeHelper;
 import com.example.dell.chargehelper.UserMessage;
 
 import java.util.Date;
