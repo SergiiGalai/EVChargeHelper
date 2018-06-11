@@ -8,20 +8,21 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class ChargeTimeCalculatorTest
+public class LinearChargeTimeProviderTest
 {
-    private ChargeTimeCalculator calculator;
+    private LinearChargeTimeProvider calculator;
     private PowerLine power;
     private Battery battery;
 
     @Before
     public void setUp() {
-        calculator = new ChargeTimeCalculator();
         power = new PowerLine();
+        battery = new Battery();
+
         power.Voltage = 220;
         power.Amperage = 16;
 
-        battery = new Battery();
+        calculator = new LinearChargeTimeProvider(power, battery);
         initChevyVoltBattery();
     }
 
@@ -35,7 +36,7 @@ public class ChargeTimeCalculatorTest
         power.Amperage = 0;
         battery.RemainingEnergyPercents = 10;
 
-        long actual = calculator.calculateTimeInMsToCharge(power, battery);
+        long actual = calculator.getTimeToChargeMillis();
         assertEquals(0, actual);
     }
 
@@ -44,7 +45,7 @@ public class ChargeTimeCalculatorTest
         power.Voltage = 0;
         battery.RemainingEnergyPercents = 10;
 
-        long actual = calculator.calculateTimeInMsToCharge(power, battery);
+        long actual = calculator.getTimeToChargeMillis();
         assertEquals(0, actual);
     }
 
@@ -52,7 +53,7 @@ public class ChargeTimeCalculatorTest
     public void return_time_when_calculating_for_empty_Volt(){
         battery.RemainingEnergyPercents = 0;
 
-        long actual = calculator.calculateTimeInMsToCharge(power, battery);
+        long actual = calculator.getTimeToChargeMillis();
         Time actualTime = TimeHelper.getHoursAndMinutes(actual);
         assertEquals(new Time(3, 58), actualTime);
     }
@@ -62,7 +63,7 @@ public class ChargeTimeCalculatorTest
     public void return_time_when_calculating_for_half_full_Volt(){
         battery.RemainingEnergyPercents = 50;
 
-        long actual = calculator.calculateTimeInMsToCharge(power, battery);
+        long actual = calculator.getTimeToChargeMillis();
         Time actualTime = TimeHelper.getHoursAndMinutes(actual);
         assertEquals(new Time(1, 59), actualTime);
     }

@@ -18,7 +18,8 @@ import android.widget.TextView;
 
 import com.example.dell.chargehelper.bugreport.BaseActivity;
 import com.example.dell.chargehelper.charge.Battery;
-import com.example.dell.chargehelper.charge.ChargeTimeCalculator;
+import com.example.dell.chargehelper.charge.IChargeTimeProvider;
+import com.example.dell.chargehelper.charge.LinearChargeTimeProvider;
 import com.example.dell.chargehelper.charge.ChargeValuesProvider;
 import com.example.dell.chargehelper.charge.PowerLine;
 import com.example.dell.chargehelper.controls.StepNumberPicker;
@@ -34,8 +35,6 @@ import java.util.Date;
 public class MainActivity extends BaseActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback
 {
-
-    private ChargeTimeCalculator timeCalculator = new ChargeTimeCalculator();
     private ViewModel viewModel = new ViewModel();
 
     private SeekBar remainingEnergySeekBar;
@@ -59,8 +58,15 @@ public class MainActivity extends BaseActivity
         private String remindButtonText;
 
         private long millisToCharge;
-        private final PowerLine powerLine = new PowerLine();
-        private final Battery battery = new Battery();
+        private final PowerLine powerLine;
+        private final Battery battery;
+        private IChargeTimeProvider chargeTimeProvider;
+
+        ViewModel() {
+            powerLine = new PowerLine();
+            battery = new Battery();
+            chargeTimeProvider = new LinearChargeTimeProvider(powerLine, battery);
+        }
 
         void refresh() {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
@@ -70,7 +76,7 @@ public class MainActivity extends BaseActivity
             battery.RemainingEnergyPercents = remainingEnergySeekBar.getProgress() * 5;
             battery.UsefulCapacityKWh = Double.parseDouble(preferences.getString("battery_capacity", SettingsActivity.DEFAULT_CAPACITY));
             battery.ChargingLoss = Integer.parseInt(preferences.getString("charging_loss", SettingsActivity.DEFAULT_CHARGING_LOSS));
-            millisToCharge = timeCalculator.calculateTimeInMsToCharge(powerLine, battery);
+            millisToCharge = chargeTimeProvider.getTimeToChargeMillis();
 
             Date dateChargedAt = TimeHelper.toDate(TimeHelper.addToNow(millisToCharge));
             Time time = TimeHelper.getHoursAndMinutes(millisToCharge);
