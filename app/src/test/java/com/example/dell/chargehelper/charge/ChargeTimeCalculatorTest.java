@@ -27,7 +27,7 @@ public class ChargeTimeCalculatorTest
 
     private void initChevyVoltBattery(){
         battery.ChargingLoss = 27;
-        battery.UsefulCapacityKWh = 10.5;
+        battery.UsefulCapacityKWh = 11;
     }
 
     @Test()
@@ -53,7 +53,17 @@ public class ChargeTimeCalculatorTest
         battery.RemainingEnergyPercents = 0;
 
         long actual = calculator.calculateTimeInMsToCharge(power, battery);
-        Time time = TimeHelper.getHoursAndMinutes(actual);
-        assertEquals(13638068, actual);
+        Time actualTime = TimeHelper.getHoursAndMinutes(actual);
+        assertEquals(new Time(3, 58), actualTime);
+    }
+
+
+    @Test
+    public void return_time_when_calculating_for_half_full_Volt(){
+        battery.RemainingEnergyPercents = 50;
+
+        long actual = calculator.calculateTimeInMsToCharge(power, battery);
+        Time actualTime = TimeHelper.getHoursAndMinutes(actual);
+        assertEquals(new Time(1, 59), actualTime);
     }
 }
