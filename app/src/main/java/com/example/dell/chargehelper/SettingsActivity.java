@@ -100,8 +100,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity
         // Set the listener to watch for value changes.
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 
-        // Trigger the listener immediately with the preference's
-        // current value.
+        // Trigger the listener immediately with the preference's current value.
         sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
                 PreferenceManager
                         .getDefaultSharedPreferences(preference.getContext())
@@ -126,17 +125,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean onIsMultiPane() {
         return isXLargeTablet(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void onBuildHeaders(List<Header> target) {
@@ -149,7 +142,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity
      */
     protected boolean isValidFragment(String fragmentName) {
         return PreferenceFragment.class.getName().equals(fragmentName)
-                || GeneralPreferenceFragment.class.getName().equals(fragmentName)
                 || ChargingPreferenceFragment.class.getName().equals(fragmentName)
                 || NotificationPreferenceFragment.class.getName().equals(fragmentName);
     }
@@ -165,24 +157,21 @@ public class SettingsActivity extends AppCompatPreferenceActivity
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * This fragment shows general preferences only. It is used when the
-     * activity is showing a two-pane settings UI.
-     */
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class GeneralPreferenceFragment extends PreferenceFragment
+    public static class ChargingPreferenceFragment extends PreferenceFragment
     {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_general);
+            addPreferencesFromResource(R.xml.pref_charging);
             setHasOptionsMenu(true);
 
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("car_list"));
+            //bindPreferenceSummaryToValue(findPreference("car_list"));
+            bindPreferenceSummaryToValue(findPreference("charging_loss"));
+            bindPreferenceSummaryToValue(findPreference("battery_capacity"));
+            bindPreferenceSummaryToValue(findPreference("default_voltage"));
+            bindPreferenceSummaryToValue(findPreference("default_amperage"));
         }
 
         @Override
@@ -197,10 +186,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity
         }
     }
 
-    /**
-     * This fragment shows notification preferences only. It is used when the
-     * activity is showing a two-pane settings UI.
-     */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class NotificationPreferenceFragment extends PreferenceFragment
     {
@@ -212,41 +197,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity
 
             bindPreferenceSummaryToValue(findPreference("app_notification_reminder_minutes"));
             bindPreferenceSummaryToValue(findPreference("calendar_permission_reminder_minutes"));
-        }
-
-        @Override
-        public boolean onOptionsItemSelected(MenuItem item) {
-            int id = item.getItemId();
-            if (id == android.R.id.home)
-            {
-                startActivity(new Intent(getActivity(), SettingsActivity.class));
-                return true;
-            }
-            return super.onOptionsItemSelected(item);
-        }
-    }
-
-    /**
-     * This fragment shows data and sync preferences only. It is used when the
-     * activity is showing a two-pane settings UI.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class ChargingPreferenceFragment extends PreferenceFragment
-    {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_charging);
-            setHasOptionsMenu(true);
-
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("default_voltage"));
-            bindPreferenceSummaryToValue(findPreference("default_amperage"));
-            bindPreferenceSummaryToValue(findPreference("charging_loss"));
-            bindPreferenceSummaryToValue(findPreference("battery_capacity"));
         }
 
         @Override
