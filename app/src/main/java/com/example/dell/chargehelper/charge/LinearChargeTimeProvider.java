@@ -27,7 +27,7 @@ public class LinearChargeTimeProvider implements IChargeTimeProvider
 
     private double getLinearDependencyTime() {
         double kWhToCharge = battery.UsefulCapacityKWh * (100 - battery.RemainingEnergyPercents) / 100;
-        return (kWhToCharge * 1000 / getChargingPowerWh()) * getChargingInefficiency();
+        return kWhToCharge * getChargingInefficiency() * 1000 / getChargingPowerWh();
     }
 }
 
