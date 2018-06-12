@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.example.dell.chargehelper.bugreport.BaseActivity;
 import com.example.dell.chargehelper.charge.Battery;
 import com.example.dell.chargehelper.charge.IChargeTimeProvider;
-import com.example.dell.chargehelper.charge.LinearChargeTimeProvider;
+import com.example.dell.chargehelper.charge.LiionChargeTimeProvider;
 import com.example.dell.chargehelper.charge.ChargeValuesProvider;
 import com.example.dell.chargehelper.charge.PowerLine;
 import com.example.dell.chargehelper.controls.StepNumberPicker;
@@ -65,7 +65,7 @@ public class MainActivity extends BaseActivity
         ViewModel() {
             powerLine = new PowerLine();
             battery = new Battery();
-            chargeTimeProvider = new LinearChargeTimeProvider(powerLine, battery);
+            chargeTimeProvider = new LiionChargeTimeProvider(powerLine, battery);
         }
 
         void refresh() {
@@ -114,7 +114,7 @@ public class MainActivity extends BaseActivity
         remainingEnergySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
         {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
+            public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
                 updateControls();
             }
 

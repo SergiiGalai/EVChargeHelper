@@ -8,9 +8,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class LinearChargeTimeProviderTest
+public class LiionChargeTimeProviderTest
 {
-    private LinearChargeTimeProvider calculator;
+    private LiionChargeTimeProvider calculator;
     private PowerLine power;
     private Battery battery;
 
@@ -22,12 +22,12 @@ public class LinearChargeTimeProviderTest
         power.Voltage = 220;
         power.Amperage = 16;
 
-        calculator = new LinearChargeTimeProvider(power, battery);
+        calculator = new LiionChargeTimeProvider(power, battery);
         initChevyVoltBattery();
     }
 
     private void initChevyVoltBattery(){
-        battery.ChargingLoss = 27;
+        battery.ChargingLoss = 12;
         battery.UsefulCapacityKWh = 11;
     }
 
@@ -55,7 +55,7 @@ public class LinearChargeTimeProviderTest
 
         long actual = calculator.getTimeToChargeMillis();
         Time actualTime = TimeHelper.getHoursAndMinutes(actual);
-        assertEquals(new Time(3, 58), actualTime);
+        assertEquals(new Time(3, 55), actualTime);
     }
 
 
@@ -75,7 +75,7 @@ public class LinearChargeTimeProviderTest
 
         long actual = calculator.getTimeToChargeMillis();
         Time actualTime = TimeHelper.getHoursAndMinutes(actual);
-        assertEquals(new Time(2, 58), actualTime);
+        assertEquals(new Time(3, 3), actualTime);
     }
 
     @Test
@@ -84,7 +84,7 @@ public class LinearChargeTimeProviderTest
 
         long actual = calculator.getTimeToChargeMillis();
         Time actualTime = TimeHelper.getHoursAndMinutes(actual);
-        assertEquals(new Time(1, 59), actualTime);
+        assertEquals(new Time(2, 10), actualTime);
     }
 
 
@@ -94,7 +94,7 @@ public class LinearChargeTimeProviderTest
 
         long actual = calculator.getTimeToChargeMillis();
         Time actualTime = TimeHelper.getHoursAndMinutes(actual);
-        assertEquals(new Time(0, 47), actualTime);
+        assertEquals(new Time(1, 7), actualTime);
     }
 
 
@@ -104,7 +104,7 @@ public class LinearChargeTimeProviderTest
 
         long actual = calculator.getTimeToChargeMillis();
         Time actualTime = TimeHelper.getHoursAndMinutes(actual);
-        assertEquals(new Time(0, 23), actualTime);
+        assertEquals(new Time(0, 38), actualTime);
     }
 
     @Test
@@ -113,7 +113,7 @@ public class LinearChargeTimeProviderTest
 
         long actual = calculator.getTimeToChargeMillis();
         Time actualTime = TimeHelper.getHoursAndMinutes(actual);
-        assertEquals(new Time(0, 11), actualTime);
+        assertEquals(new Time(0, 19), actualTime);
     }
 
 
