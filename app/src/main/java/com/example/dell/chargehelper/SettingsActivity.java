@@ -182,7 +182,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("car_list"));
+            //bindPreferenceSummaryToValue(findPreference("car_list"));
+            bindPreferenceSummaryToValue(findPreference("charging_loss"));
+            bindPreferenceSummaryToValue(findPreference("battery_capacity"));
         }
 
         @Override
@@ -245,8 +247,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("default_voltage"));
             bindPreferenceSummaryToValue(findPreference("default_amperage"));
-            bindPreferenceSummaryToValue(findPreference("charging_loss"));
-            bindPreferenceSummaryToValue(findPreference("battery_capacity"));
         }
 
         @Override
