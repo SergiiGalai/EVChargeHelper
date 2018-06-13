@@ -16,6 +16,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import com.example.dell.chargehelper.R;
+import com.example.dell.chargehelper.SettingsProvider;
 import com.example.dell.chargehelper.helpers.TimeHelper;
 import com.example.dell.chargehelper.UserMessage;
 
@@ -25,7 +26,6 @@ public class CarChargedAlarmScheduler implements ICarChargedNotificationSchedule
 {
     private Activity activity;
     private final Uri SoundUri;
-    private static final int DEFAULT_REMINDER_MINUTES = 10;
 
     CarChargedAlarmScheduler(Activity activity) {
         this.activity = activity;
@@ -48,15 +48,11 @@ public class CarChargedAlarmScheduler implements ICarChargedNotificationSchedule
     }
 
     private long getMillisToNotify(long millisToEvent) {
-        long millisToNotify = TimeHelper.convertMinutesToMs(getMinutesBeforeEventToNotify());
+        SettingsProvider settingsProvider = new SettingsProvider(activity);
+        long millisToNotify = TimeHelper.convertMinutesToMs(settingsProvider.getNotificationReminderMinutes());
         if (millisToEvent > millisToNotify)
             return millisToEvent - millisToNotify;
         return millisToEvent;
-    }
-
-    private int getMinutesBeforeEventToNotify(){
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
-        return Integer.parseInt(preferences.getString("app_notification_reminder_minutes", String.valueOf(DEFAULT_REMINDER_MINUTES)));
     }
 
     private String getNotificationDescription(long duration) {

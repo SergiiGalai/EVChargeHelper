@@ -15,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.view.View;
 
 import com.example.dell.chargehelper.R;
+import com.example.dell.chargehelper.SettingsProvider;
 import com.example.dell.chargehelper.helpers.TimeHelper;
 
 import java.util.Calendar;
@@ -23,11 +24,11 @@ public class CarChargedDirectCalendarWriteScheduler implements ICarChargedNotifi
 {
     private static final int EventColor = GoogleCalendarEventColor.VIOLET;
     private static final int MS_ONE_HOUR = 60 * 60 * 1000;
-    private static final int DEFAULT_REMINDER_MINUTES = 15;
 
 
     private CalendarRepository repository;
     private Activity context;
+    private SettingsProvider settingsProvider;
     public static final int REQUEST_CALENDAR = 1;
     private static String[] PERMISSIONS_CALENDAR = {Manifest.permission.READ_CALENDAR,
             Manifest.permission.WRITE_CALENDAR};
@@ -35,6 +36,7 @@ public class CarChargedDirectCalendarWriteScheduler implements ICarChargedNotifi
     CarChargedDirectCalendarWriteScheduler(Activity context) {
         this.context = context;
         repository = new CalendarRepository(context);
+        settingsProvider = new SettingsProvider(context);
     }
 
     @Override
@@ -45,21 +47,13 @@ public class CarChargedDirectCalendarWriteScheduler implements ICarChargedNotifi
                 epochMs);
     }
 
-    private int getReminderMinutes(){
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return Integer.parseInt(
-                preferences.getString("calendar_permission_reminder_minutes",
-                String.valueOf(DEFAULT_REMINDER_MINUTES)));
-    }
-
     private void scheduleCalendarEvent(String title, String description, long eventTime) {
         if (calendarPermissionsGranted())
         {
             //repository.showColors();
-
             ContentValues values = createCalendarEventContent(title, description, eventTime);
             long eventId = repository.createEvent(values);
-            int reminderMinutes = getReminderMinutes();
+            int reminderMinutes = settingsProvider.getCalendarReminderMinutes();
             repository.setReminder(eventId, reminderMinutes);
 
             notifyUser("Calendar event created", eventId);

@@ -1,8 +1,6 @@
 package com.example.dell.chargehelper;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -43,7 +41,7 @@ public class MainActivity extends BaseActivity
     private StepNumberPicker voltagePicker;
     private TextView chargedInTitle;
     private Button remindButton;
-
+    private SettingsProvider settingsProvider;
 
     private NumberPicker.OnValueChangeListener textWatcher = new NumberPicker.OnValueChangeListener(){
         @Override
@@ -69,13 +67,11 @@ public class MainActivity extends BaseActivity
         }
 
         void refresh() {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-
             powerLine.Amperage = Integer.valueOf(amperagePicker.getValue());
             powerLine.Voltage = Integer.valueOf(voltagePicker.getValue());
             battery.RemainingEnergyPercents = remainingEnergySeekBar.getProgress() * 5;
-            battery.UsefulCapacityKWh = Double.parseDouble(preferences.getString("battery_capacity", SettingsActivity.DEFAULT_CAPACITY));
-            battery.ChargingLoss = Integer.parseInt(preferences.getString("charging_loss", SettingsActivity.DEFAULT_CHARGING_LOSS));
+            battery.UsefulCapacityKWh = settingsProvider.getBatteryCapacity();
+            battery.ChargingLoss = settingsProvider.getChargingLossPct();
             millisToCharge = chargeTimeProvider.getTimeToChargeMillis();
 
             Date dateChargedAt = TimeHelper.toDate(TimeHelper.addToNow(millisToCharge));
@@ -141,6 +137,8 @@ public class MainActivity extends BaseActivity
     }
 
     private void initializeVariables() {
+        settingsProvider = new SettingsProvider(MainActivity.this);
+
         remainingEnergySeekBar = findViewById(R.id.remainingEnergySeekBar);
         remainingEnergyTitle = findViewById(R.id.remainingEnergyTitle);
         chargedInTitle = findViewById(R.id.chargedInTitle);
@@ -149,14 +147,12 @@ public class MainActivity extends BaseActivity
         NumberPicker tmpAmperagePicker = findViewById(R.id.amperageValue);
         NumberPicker tmpVoltagePicker = findViewById(R.id.voltageValue);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-
-        Integer defaultAmperage = Integer.parseInt(preferences.getString("default_amperage", SettingsActivity.DEFAULT_AMPERAGE));
+        Integer defaultAmperage = settingsProvider.getDefaultAmperage();
         amperagePicker = new StepNumberPicker(tmpAmperagePicker);
         amperagePicker.setValues(ChargeValuesProvider.getAllowedAmperage(defaultAmperage));
         amperagePicker.setValue(String.valueOf(defaultAmperage));
 
-        Integer defaultVoltage = Integer.parseInt(preferences.getString("default_voltage", SettingsActivity.DEFAULT_VOLTAGE));
+        Integer defaultVoltage = settingsProvider.getDefaultVoltage();
         voltagePicker = new StepNumberPicker(tmpVoltagePicker);
         voltagePicker.setValues(ChargeValuesProvider.getAllowedVoltage(defaultVoltage));
         voltagePicker.setValue(String.valueOf(defaultVoltage));
@@ -194,8 +190,7 @@ public class MainActivity extends BaseActivity
     }
 
     private void tryScheduleGoogleCalendar() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-        if (preferences.getBoolean("allow_calendar_notifications", SettingsActivity.DEFAULT_ALLOW_CALENDAR_NOTIFICATIONS)){
+        if (settingsProvider.googleCalendarNotificationsAllowed()){
             CarChargedCalendarEventScheduler scheduler = new CarChargedCalendarEventScheduler(MainActivity.this);
             long msToCharge = viewModel.getMillisToCharge();
             scheduler.scheduleNotification(msToCharge);
