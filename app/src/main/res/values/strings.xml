@@ -5,10 +5,13 @@
 
     <!-- Strings related to Settings -->
 
-    <!-- Example General settings -->
-    <string name="pref_header_general">General</string>
+    <!-- Example settings for Charging -->
+    <string name="pref_header_charging">Charging settings</string>
 
-    <string name="pref_title_car_list">Car Model</string>
+    <string name="pref_title_voltage">Default voltage in network, V</string>
+    <string name="pref_title_amperage">Default consuming amperage, A</string>
+    <string name="pref_title_charging_loss">Battery charging loss, %</string>
+    <string name="pref_title_battery_capacity">Useful battery capacity, kWh</string>
     <string-array name="pref_car_list_titles">
         <item>Nissan Leaf</item>
         <item>Chevy Volt, 2011–2015</item>
@@ -20,21 +23,13 @@
         <item>Ampera</item>
     </string-array>
 
-    <!-- Example settings for Charging -->
-    <string name="pref_header_charging">Charging</string>
-
-    <string name="pref_title_voltage">Default voltage, V</string>
-    <string name="pref_title_amperage">Default amperage, A</string>
-    <string name="pref_title_charging_loss">Charging loss, %</string>
-    <string name="pref_title_battery_capacity">Useful battery capacity, kWh</string>
-
     <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
+    <string name="pref_header_notifications">Notifications settings</string>
 
-    <string name="pref_title_allow_app_notifications">Own notifications</string>
+    <string name="pref_title_allow_app_notifications">Use application own notifications</string>
     <string name="pref_description_allow_app_notifications">Custom sound is used to make it easier to distinguish from other notifications</string>
 
-    <string name="pref_title_allow_calendar_notifications">Google calendar notifications</string>
+    <string name="pref_title_allow_calendar_notifications">Use Google calendar notifications</string>
     <string name="pref_description_allow_calendar_notifications">Enable notifications with default reminders.</string>
 
     <string name="pref_title_allow_calendar_permission_notifications">Custom Google calendar notifications</string>

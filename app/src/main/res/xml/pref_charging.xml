@@ -1,7 +1,13 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--<ListPreference-->
+    <!--android:defaultValue="-1"-->
+    <!--android:entries="@array/pref_car_list_titles"-->
+    <!--android:entryValues="@array/pref_car_list_values"-->
+    <!--android:key="car_list"-->
+    <!--android:negativeButtonText="@null"-->
+    <!--android:positiveButtonText="@null"-->
+    <!--android:title="@string/pref_title_car_list"/>-->
 
-    <!-- NOTE: EditTextPreference accepts EditText attributes. -->
-    <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
     <EditTextPreference
         android:defaultValue="220"
         android:inputType="number"
@@ -20,4 +26,21 @@
         android:singleLine="true"
         android:title="@string/pref_title_amperage"/>
 
+    <EditTextPreference
+        android:defaultValue="27"
+        android:inputType="number"
+        android:key="charging_loss"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_title_charging_loss"/>
+
+    <EditTextPreference
+        android:defaultValue="11"
+        android:inputType="number"
+        android:key="battery_capacity"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_title_battery_capacity"/>
 </PreferenceScreen>

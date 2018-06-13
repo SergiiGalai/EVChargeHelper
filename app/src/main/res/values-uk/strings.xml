@@ -2,17 +2,16 @@
 <resources>
     <string name="title_activity_settings">Налаштування</string>
     <string name="title_activity_bugreport">Повідомлення про помилку</string>
-    <string name="pref_header_general">Основні</string>
     <string name="pref_title_car_list">Модель авто</string>
-    <string name="pref_header_charging">Зарядка</string>
-    <string name="pref_title_voltage">Напруга за замовчуванням, В</string>
-    <string name="pref_title_amperage">Сила струму за замовчуванням, А</string>
-    <string name="pref_title_charging_loss">Втрата заряду, %</string>
+    <string name="pref_header_charging">Налаштування зарядки</string>
+    <string name="pref_title_voltage">Напруга у мережі за замовчуванням, В</string>
+    <string name="pref_title_amperage">Сила струму у мережі за замовчуванням, А</string>
+    <string name="pref_title_charging_loss">Втрати при заряджанні батареї, %</string>
     <string name="pref_title_battery_capacity">Корисна ємкість батареї, кВт*г</string>
-    <string name="pref_header_notifications">Сповіщення</string>
-    <string name="pref_title_allow_app_notifications">Власні сповіщення</string>
+    <string name="pref_header_notifications">Налаштування сповіщень</string>
+    <string name="pref_title_allow_app_notifications">Використовувати власні сповіщення програми</string>
     <string name="pref_description_allow_app_notifications">Використовується звук, відмінний від стандартного, щоб було легше його відрізнити від стандартних сповіщень</string>
-    <string name="pref_title_allow_calendar_notifications">Сповіщення календаря Google</string>
+    <string name="pref_title_allow_calendar_notifications">Використовувати Google календар для сповіщень</string>
     <string name="pref_description_allow_calendar_notifications">Увімкнути сповіщення з нагадуваннями за замовчуванням</string>
     <string name="pref_title_allow_calendar_permission_notifications">Додаткові сповіщення Google календаря</string>
     <string name="car_charged_title">Авто заряджене</string>
