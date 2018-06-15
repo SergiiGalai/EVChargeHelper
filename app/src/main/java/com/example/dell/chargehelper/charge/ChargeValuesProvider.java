@@ -11,8 +11,8 @@ public class ChargeValuesProvider {
         if (!values.contains(String.valueOf(defaultAmperage)))
             values.add(String.valueOf(defaultAmperage));
 
+        values.add("30");
         values.add("32");
-        values.add("64");
 
         return values;
     }
