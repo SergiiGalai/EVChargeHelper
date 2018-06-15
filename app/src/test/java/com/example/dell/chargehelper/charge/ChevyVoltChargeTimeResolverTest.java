@@ -8,9 +8,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class LiionChargeTimeProviderTest
+public class ChevyVoltChargeTimeResolverTest
 {
-    private LiionChargeTimeProvider calculator;
+    private LiionChargeTimeResolver timeResolver;
     private PowerLine power;
     private Battery battery;
 
@@ -19,11 +19,15 @@ public class LiionChargeTimeProviderTest
         power = new PowerLine();
         battery = new Battery();
 
+        initPowerNetwork();
+        initChevyVoltBattery();
+
+        timeResolver = new LiionChargeTimeResolver(power, battery);
+    }
+
+    private void initPowerNetwork() {
         power.Voltage = 220;
         power.Amperage = 16;
-
-        calculator = new LiionChargeTimeProvider(power, battery);
-        initChevyVoltBattery();
     }
 
     private void initChevyVoltBattery(){
@@ -34,84 +38,68 @@ public class LiionChargeTimeProviderTest
     @Test()
     public void return_zero_when_amperage_zero(){
         power.Amperage = 0;
-        battery.RemainingEnergyPercents = 10;
 
-        long actual = calculator.getTimeToChargeMillis();
+        long actual = timeResolver.getMillisToCharge((byte) 10);
         assertEquals(0, actual);
     }
 
     @Test
     public void return_zero_when_voltage_zero(){
         power.Voltage = 0;
-        battery.RemainingEnergyPercents = 10;
 
-        long actual = calculator.getTimeToChargeMillis();
+        long actual = timeResolver.getMillisToCharge((byte) 10);
         assertEquals(0, actual);
     }
 
     @Test
-    public void return_time_when_calculating_for_0_battery_full_Volt(){
-        battery.RemainingEnergyPercents = 0;
-
-        long actual = calculator.getTimeToChargeMillis();
+    public void return_time_when_calculating_for_0pct_battery(){
+        long actual = timeResolver.getMillisToCharge((byte) 0);
         Time actualTime = TimeHelper.getHoursAndMinutes(actual);
         assertEquals(new Time(3, 55), actualTime);
     }
 
 
     @Test
-    public void return_time_when_calculating_for_10pct_battery_full_Volt(){
-        battery.RemainingEnergyPercents = 10;
-
-        long actual = calculator.getTimeToChargeMillis();
+    public void return_time_when_calculating_for_10pct_battery(){
+        long actual = timeResolver.getMillisToCharge((byte) 10);
         Time actualTime = TimeHelper.getHoursAndMinutes(actual);
         assertEquals(new Time(3, 34), actualTime);
     }
 
 
     @Test
-    public void return_time_when_calculating_for_25pct_battery_full_Volt(){
-        battery.RemainingEnergyPercents = 25;
-
-        long actual = calculator.getTimeToChargeMillis();
+    public void return_time_when_calculating_for_25pct_battery(){
+        long actual = timeResolver.getMillisToCharge((byte) 25);
         Time actualTime = TimeHelper.getHoursAndMinutes(actual);
         assertEquals(new Time(3, 3), actualTime);
     }
 
     @Test
-    public void return_time_when_calculating_for_50pct_battery_full_Volt(){
-        battery.RemainingEnergyPercents = 50;
-
-        long actual = calculator.getTimeToChargeMillis();
+    public void return_time_when_calculating_for_50pct_battery(){
+        long actual = timeResolver.getMillisToCharge((byte) 50);
         Time actualTime = TimeHelper.getHoursAndMinutes(actual);
         assertEquals(new Time(2, 10), actualTime);
     }
 
 
     @Test
-    public void return_time_when_calculating_for_80pct_battery_full_Volt(){
-        battery.RemainingEnergyPercents = 80;
-
-        long actual = calculator.getTimeToChargeMillis();
+    public void return_time_when_calculating_for_80pct_battery(){
+        long actual = timeResolver.getMillisToCharge((byte) 80);
         Time actualTime = TimeHelper.getHoursAndMinutes(actual);
         assertEquals(new Time(1, 7), actualTime);
     }
 
 
     @Test
-    public void return_time_when_calculating_for_90pct_battery_full_Volt(){
-        battery.RemainingEnergyPercents = 90;
-
-        long actual = calculator.getTimeToChargeMillis();
+    public void return_time_when_calculating_for_90pct_battery(){
+        long actual = timeResolver.getMillisToCharge((byte) 90);
         Time actualTime = TimeHelper.getHoursAndMinutes(actual);
         assertEquals(new Time(0, 38), actualTime);
     }
 
     @Test
-    public void return_time_when_calculating_for_95pct_battery_full_Volt(){
-        battery.RemainingEnergyPercents = 95;
-
-        long actual = calculator.getTimeToChargeMillis();
+    public void return_time_when_calculating_for_95pct_battery(){
+        long actual = timeResolver.getMillisToCharge((byte) 95);
         Time actualTime = TimeHelper.getHoursAndMinutes(actual);
         assertEquals(new Time(0, 19), actualTime);
     }

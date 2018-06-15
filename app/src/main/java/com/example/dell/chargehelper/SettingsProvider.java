@@ -16,11 +16,11 @@ public class SettingsProvider
         return preferences.getBoolean("allow_app_notifications", true);
     }
 
-    public boolean googleCalendarNotificationsAllowed(){
+    public boolean googleBasicNotificationsAllowed(){
         return preferences.getBoolean("allow_calendar_notifications", true);
     }
 
-    public boolean googlePermissionCalendarNotificationsAllowed(){
+    public boolean googleAdvancedNotificationsAllowed(){
         return preferences.getBoolean("allow_calendar_permission_notifications", false);
     }
 
@@ -40,7 +40,7 @@ public class SettingsProvider
         return Integer.parseInt(preferences.getString("default_voltage", "220"));
     }
 
-    public int getNotificationReminderMinutes(){
+    public int getApplicationReminderMinutes(){
         return Integer.parseInt(preferences.getString("app_notification_reminder_minutes", String.valueOf(10)));
     }
 

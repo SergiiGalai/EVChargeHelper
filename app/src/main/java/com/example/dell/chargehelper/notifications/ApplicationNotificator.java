@@ -8,11 +8,9 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.media.AudioAttributes;
 import android.net.Uri;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import com.example.dell.chargehelper.R;
@@ -22,24 +20,24 @@ import com.example.dell.chargehelper.UserMessage;
 
 import java.util.Date;
 
-public class CarChargedAlarmScheduler implements ICarChargedNotificationScheduler
+public class ApplicationNotificator implements INotificator
 {
-    private Activity activity;
+    private final Activity activity;
     private final Uri SoundUri;
 
-    CarChargedAlarmScheduler(Activity activity) {
+    ApplicationNotificator(Activity activity) {
         this.activity = activity;
         SoundUri = Uri.parse("android.resource://" + activity.getPackageName() + "/" + R.raw.carhorn4);
     }
 
     @Override
-    public void scheduleNotification(long eventTime) {
-        long millisToNotify = getMillisToNotify(eventTime);
-        String description = getNotificationDescription(eventTime);
+    public void scheduleCarChargedNotification(long millisToEvent) {
+        long millisToNotify = getMillisToNotify(millisToEvent);
+        String description = getNotificationDescription(millisToEvent);
 
         Notification notification = getCarChargedNotification(
-                activity.getString(R.string.car_charged_title),
-                description
+            activity.getString(R.string.car_charged_title),
+            description
         );
 
         PendingIntent pendingIntent = getNotificationIntent(notification);
@@ -49,7 +47,7 @@ public class CarChargedAlarmScheduler implements ICarChargedNotificationSchedule
 
     private long getMillisToNotify(long millisToEvent) {
         SettingsProvider settingsProvider = new SettingsProvider(activity);
-        long millisToNotify = TimeHelper.convertMinutesToMs(settingsProvider.getNotificationReminderMinutes());
+        long millisToNotify = TimeHelper.convertMinutesToMs(settingsProvider.getApplicationReminderMinutes());
         if (millisToEvent > millisToNotify)
             return millisToEvent - millisToNotify;
         return millisToEvent;

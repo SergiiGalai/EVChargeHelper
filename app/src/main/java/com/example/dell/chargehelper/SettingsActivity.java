@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -34,10 +35,6 @@ import java.util.List;
  */
 public class SettingsActivity extends AppCompatPreferenceActivity
 {
-    /**
-     * A preference value change listener that updates the preference's summary
-     * to reflect its new value.
-     */
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener()
     {
         @Override
@@ -46,35 +43,18 @@ public class SettingsActivity extends AppCompatPreferenceActivity
 
             if (preference instanceof ListPreference)
             {
-                // For list preferences, look up the correct display value in
-                // the preference's 'entries' list.
                 ListPreference listPreference = (ListPreference) preference;
                 int index = listPreference.findIndexOfValue(stringValue);
 
-                // Set the summary to reflect the new value.
-                preference.setSummary(
-                        index >= 0
-                                ? listPreference.getEntries()[index]
-                                : null);
+                preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
 
             } else
             {
-                // For all other preferences, set the summary to the value's
-                // simple string representation.
                 preference.setSummary(stringValue);
             }
             return true;
         }
     };
-
-    /**
-     * Helper method to determine if the device has an extra-large screen. For
-     * example, 10" tablets are extra-large.
-     */
-    private static boolean isXLargeTablet(Context context) {
-        return (context.getResources().getConfiguration().screenLayout
-                & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
-    }
 
     /**
      * Binds a preference's summary to its value. More specifically, when the
@@ -89,7 +69,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity
         if (preference == null)
             return;
 
-        // Set the listener to watch for value changes.
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 
         // Trigger the listener immediately with the preference's current value.
@@ -105,9 +84,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity
         setupActionBar();
     }
 
-    /**
-     * Set up the {@link android.app.ActionBar}, if the API is available.
-     */
     private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null)
@@ -120,6 +96,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity
     @Override
     public boolean onIsMultiPane() {
         return isXLargeTablet(this);
+    }
+
+    private static boolean isXLargeTablet(Context context) {
+        Configuration configuration = context.getResources().getConfiguration();
+        return (configuration.screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >=
+                Configuration.SCREENLAYOUT_SIZE_XLARGE;
     }
 
     @Override
@@ -150,6 +132,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity
     }
 
 
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class ChargingPreferenceFragment extends PreferenceFragment
     {
@@ -177,6 +160,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity
             return super.onOptionsItemSelected(item);
         }
     }
+
+
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class NotificationPreferenceFragment extends PreferenceFragment

@@ -10,17 +10,17 @@ import com.example.dell.chargehelper.helpers.TimeHelper;
 import java.util.Calendar;
 import java.util.Date;
 
-public class CarChargedCalendarEventScheduler implements ICarChargedNotificationScheduler
+public class GoogleCalendarDefaultNotificator implements INotificator
 {
-    private Context context;
+    private final Context context;
 
-    public CarChargedCalendarEventScheduler(Context context) {
+    public GoogleCalendarDefaultNotificator(Context context) {
         this.context = context;
     }
 
     @Override
-    public void scheduleNotification(long duration) {
-        Date eventTime = TimeHelper.toDate(TimeHelper.addToNow(duration));
+    public void scheduleCarChargedNotification(long millisToEvent) {
+        Date eventTime = TimeHelper.toDate(TimeHelper.addToNow(millisToEvent));
         scheduleCalendarEvent(context.getString(R.string.car_charged_title),
                 context.getString(R.string.car_charged_descr),
                 eventTime);

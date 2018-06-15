@@ -1,25 +1,25 @@
 package com.example.dell.chargehelper.charge;
 
-public class LiionChargeTimeProvider implements IChargeTimeProvider
+public class LiionChargeTimeResolver implements IChargeTimeResolver
 {
     private PowerLine powerLine;
     private Battery battery;
 
-    public LiionChargeTimeProvider(PowerLine powerLine, Battery battery) {
+    public LiionChargeTimeResolver(PowerLine powerLine, Battery battery) {
         this.powerLine = powerLine;
         this.battery = battery;
     }
 
     @Override
-    public long getTimeToChargeMillis(){
+    public long getMillisToCharge(byte remainingEnergyPct){
         final int thresholdPercentage = 85;
         double hoursToCharge;
 
-        if (battery.RemainingEnergyPercents < thresholdPercentage){
-            hoursToCharge = getLinearDependencyTime(thresholdPercentage);
+        if (remainingEnergyPct < thresholdPercentage){
+            hoursToCharge = getLinearDependencyTime(thresholdPercentage, remainingEnergyPct);
             hoursToCharge += getFinishChargingTime(thresholdPercentage);
         } else {
-            hoursToCharge = getFinishChargingTime(battery.RemainingEnergyPercents);
+            hoursToCharge = getFinishChargingTime(remainingEnergyPct);
         }
 
         Double msToCharge = hoursToCharge * 3600 * 1000;
@@ -34,8 +34,8 @@ public class LiionChargeTimeProvider implements IChargeTimeProvider
         return 100 / (100 + battery.ChargingLoss);
     }
 
-    private double getLinearDependencyTime(int maxPercentage) {
-        double WhToCharge = battery.UsefulCapacityKWh * 1000 * (maxPercentage - battery.RemainingEnergyPercents) / 100;
+    private double getLinearDependencyTime(int maxPercentage, short remainingEnergyPct) {
+        double WhToCharge = battery.UsefulCapacityKWh * 1000 * (maxPercentage - remainingEnergyPct) / 100;
         return WhToCharge / (getChargingPowerWh() * getChargingEfficiency());
     }
 

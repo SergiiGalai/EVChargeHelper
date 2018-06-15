@@ -15,7 +15,7 @@ public class BugReportActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bugreport);
 
-        error = (TextView) findViewById(R.id.error);
+        error = findViewById(R.id.error);
         error.setMovementMethod(new ScrollingMovementMethod());
         error.setText(getIntent().getStringExtra("error"));
     }

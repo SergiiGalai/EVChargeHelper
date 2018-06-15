@@ -1,10 +1,10 @@
-package com.example.dell.chargehelper.notifications;
+package com.example.dell.chargehelper.helpers;
 
 import android.content.pm.PackageManager;
 
-public class PermissionUtils
+public class PermissionHelper
 {
-    public static boolean verifyPermissions(int[] grantResults) {
+    public static boolean isPermissionsGranted(int[] grantResults) {
         // At least one result must be checked.
         if(grantResults.length < 1){
             return false;

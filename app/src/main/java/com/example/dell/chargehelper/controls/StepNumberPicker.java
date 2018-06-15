@@ -1,10 +1,11 @@
 package com.example.dell.chargehelper.controls;
 
+import android.app.Activity;
+import android.support.annotation.IdRes;
 import android.widget.NumberPicker;
 
 import com.example.dell.chargehelper.helpers.Convert;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class StepNumberPicker
@@ -12,7 +13,10 @@ public class StepNumberPicker
     private final NumberPicker picker;
     private String[] values;
 
-    public StepNumberPicker(NumberPicker picker) {
+    public StepNumberPicker(Activity activity, @IdRes int viewId) {
+        this((NumberPicker)activity.findViewById(viewId));
+    }
+    private StepNumberPicker(NumberPicker picker) {
         this.picker = picker;
     }
 
