@@ -4,21 +4,18 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
-import android.text.TextUtils;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.example.dell.chargehelper.helpers.PreferenceHelper;
 
 import java.util.List;
 
@@ -72,10 +69,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 
         // Trigger the listener immediately with the preference's current value.
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
+        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference, PreferenceHelper.getValue(preference));
     }
 
     @Override
@@ -174,6 +168,31 @@ public class SettingsActivity extends AppCompatPreferenceActivity
 
             bindPreferenceSummaryToValue(findPreference("app_notification_reminder_minutes"));
             bindPreferenceSummaryToValue(findPreference("calendar_permission_reminder_minutes"));
+            setReminderMinutesValidation("calendar_notifications_minutes");
+            setReminderMinutesValidation("calendar_permission_reminder_minutes");
+            setReminderMinutesValidation("app_notification_reminder_minutes");
+        }
+
+        private void setReminderMinutesValidation(String preferenceKey){
+            EditTextPreference edit_Pref = (EditTextPreference) getPreferenceScreen().findPreference(preferenceKey);
+            edit_Pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    String newValueStr = (String) newValue;
+                    Integer newValueInt = Integer.valueOf(newValueStr);
+
+                    if(newValueInt >= 0 && newValueInt <= 240){
+                        preference.setSummary(newValueStr);
+                        return true;
+                    }else{
+                        Toast.makeText(preference.getContext(), R.string.pref_title_reminder_validation_error, Toast.LENGTH_LONG).show();
+                        String actualValue = PreferenceHelper.getValue(preference);
+                        preference.setSummary(actualValue);
+                        return false;
+                    }
+                }
+            });
         }
 
         @Override

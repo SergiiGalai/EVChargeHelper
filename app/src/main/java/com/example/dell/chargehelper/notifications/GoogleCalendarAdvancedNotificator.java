@@ -23,7 +23,7 @@ public class GoogleCalendarAdvancedNotificator implements INotificator
     private static final int EventColor = GoogleCalendarEventColor.VIOLET;
     private static final int MS_IN_1_HOUR = 60 * 60 * 1000;
 
-    private final CalendarRepository repository;
+    private final GoogleCalendarRepository repository;
     private final Activity context;
     private final SettingsProvider settingsProvider;
     public static final int REQUEST_CALENDAR = 1;
@@ -32,7 +32,7 @@ public class GoogleCalendarAdvancedNotificator implements INotificator
 
     GoogleCalendarAdvancedNotificator(Activity context) {
         this.context = context;
-        repository = new CalendarRepository(context);
+        repository = new GoogleCalendarRepository(context);
         settingsProvider = new SettingsProvider(context);
     }
 

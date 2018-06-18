@@ -38,6 +38,7 @@
     </string>
 
     <string name="pref_title_reminder">Remind before, minutes</string>
+    <string name="pref_title_reminder_validation_error">Value must be less than 240</string>
 
     <string name="car_charged_title">Car charged</string>
     <string name="car_charged_descr">Your car should be charged by this time.</string>
@@ -56,5 +57,6 @@
     <string name="amperage_title">A</string>
     <string name="voltage_title">V</string>
     <string name="should_be_charged_prefix_title">Car should be charged in %dh %02dm</string>
+
 
 </resources>

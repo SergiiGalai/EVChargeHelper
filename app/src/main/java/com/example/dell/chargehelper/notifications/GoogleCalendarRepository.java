@@ -1,5 +1,6 @@
 package com.example.dell.chargehelper.notifications;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -8,18 +9,19 @@ import android.net.Uri;
 import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
 
-class CalendarRepository{
+@SuppressLint("MissingPermission")
+class GoogleCalendarRepository {
     private Activity context;
 
-    public CalendarRepository(Activity context) {
+    GoogleCalendarRepository(Activity context) {
         this.context = context;
     }
 
-    @NonNull
     public long createEvent(ContentValues values){
         ContentResolver cr = context.getContentResolver();
         Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
-        return Long.parseLong(uri.getLastPathSegment());
+        String lastSegment = uri == null ? "" : uri.getLastPathSegment();
+        return Long.parseLong(lastSegment == null ? "" : lastSegment);
     }
 
     public void setReminder(long eventID, int minutesBefore) {
@@ -40,7 +42,7 @@ class CalendarRepository{
         ContentValues values = new ContentValues();
         values.put(CalendarContract.Reminders.MINUTES, minutesBefore);
         values.put(CalendarContract.Reminders.EVENT_ID, eventID);
-        values.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
+        values.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_DEFAULT);
         return values;
     }
 
@@ -60,15 +62,16 @@ class CalendarRepository{
                         },
                         null, null, null);
 
-        while (cur.moveToNext()){
-            calId = cur.getLong(projection_id);
-            String name = cur.getString(projection_name);
-            String primary = cur.getString(projection_primary);
-            if (primary.equals("1"))
-                return (int)calId;
-        };
+        if (cur != null)
+        {
+            while (cur.moveToNext()){
+                calId = cur.getLong(projection_id);
+                String name = cur.getString(projection_name);
+                String primary = cur.getString(projection_primary);
+                if (primary.equals("1"))
+                    return (int)calId;
+            }
 
-        if (cur != null){
             cur.close();
         }
 
@@ -85,19 +88,19 @@ class CalendarRepository{
                                 CalendarContract.Colors.COLOR,
                         },
                         null, null, null);
+        if (cur != null)
+        {
+            while (cur.moveToNext()){
+                long colId = cur.getLong(0);
+                long colorKey = cur.getLong(1);
+                long color = cur.getLong(2);
 
-        while (cur.moveToNext()){
-            long colId = cur.getLong(0);
-            long colorKey = cur.getLong(1);
-            long color = cur.getLong(2);
+                String hexColor= Long.toHexString(color);
+                System.out.println( "id=" + colId
+                        + "; key=" + colorKey
+                        + "; hexColor="+ hexColor);
+            }
 
-            String hexColor= Long.toHexString(color);
-            System.out.println( "id=" + colId
-                    + "; key=" + colorKey
-                    + "; hexColor="+ hexColor);
-        };
-
-        if (cur != null){
             cur.close();
         }
     }
