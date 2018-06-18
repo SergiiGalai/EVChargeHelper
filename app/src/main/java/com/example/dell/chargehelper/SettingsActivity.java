@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -32,7 +31,7 @@ import java.util.List;
  */
 public class SettingsActivity extends AppCompatPreferenceActivity
 {
-    private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener()
+    private static Preference.OnPreferenceChangeListener listSummaryToValueListener = new Preference.OnPreferenceChangeListener()
     {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
@@ -52,25 +51,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity
             return true;
         }
     };
-
-    /**
-     * Binds a preference's summary to its value. More specifically, when the
-     * preference's value is changed, its summary (line of text below the
-     * preference title) is updated to reflect the value. The summary is also
-     * immediately updated upon calling this method. The exact display format is
-     * dependent on the type of preference.
-     *
-     * @see #sBindPreferenceSummaryToValueListener
-     */
-    private static void bindPreferenceSummaryToValue(Preference preference) {
-        if (preference == null)
-            return;
-
-        preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
-
-        // Trigger the listener immediately with the preference's current value.
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference, PreferenceHelper.getValue(preference));
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,11 +116,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity
             addPreferencesFromResource(R.xml.pref_charging);
             setHasOptionsMenu(true);
 
-            //bindPreferenceSummaryToValue(findPreference("car_list"));
-            bindPreferenceSummaryToValue(findPreference("charging_loss"));
-            bindPreferenceSummaryToValue(findPreference("battery_capacity"));
-            bindPreferenceSummaryToValue(findPreference("default_voltage"));
-            bindPreferenceSummaryToValue(findPreference("default_amperage"));
+            //PreferenceHelper.setChangeListenerAndTriggerChange(findPreference("car_list"), listSummaryToValueListener);
+            PreferenceHelper.setChangeListenerAndTriggerChange(findPreference("charging_loss"), listSummaryToValueListener);
+            PreferenceHelper.setChangeListenerAndTriggerChange(findPreference("battery_capacity"), listSummaryToValueListener);
+            PreferenceHelper.setChangeListenerAndTriggerChange(findPreference("default_voltage"), listSummaryToValueListener);
+            PreferenceHelper.setChangeListenerAndTriggerChange(findPreference("default_amperage"), listSummaryToValueListener);
         }
 
         @Override
@@ -166,34 +146,30 @@ public class SettingsActivity extends AppCompatPreferenceActivity
             addPreferencesFromResource(R.xml.pref_notification);
             setHasOptionsMenu(true);
 
-            bindPreferenceSummaryToValue(findPreference("app_notification_reminder_minutes"));
-            bindPreferenceSummaryToValue(findPreference("calendar_permission_reminder_minutes"));
-            setReminderMinutesValidation("calendar_notifications_minutes");
-            setReminderMinutesValidation("calendar_permission_reminder_minutes");
-            setReminderMinutesValidation("app_notification_reminder_minutes");
+            PreferenceHelper.setChangeListenerAndTriggerChange(findPreference("calendar_permission_reminder_minutes"), maxValueValidationChangeListener);
+            PreferenceHelper.setChangeListenerAndTriggerChange(findPreference("app_notification_reminder_minutes"), maxValueValidationChangeListener);
         }
 
-        private void setReminderMinutesValidation(String preferenceKey){
-            EditTextPreference edit_Pref = (EditTextPreference) getPreferenceScreen().findPreference(preferenceKey);
-            edit_Pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        private final static int maxReminderMinutes = 480;
+        private final static Preference.OnPreferenceChangeListener maxValueValidationChangeListener = new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                String newValueStr = (String) newValue;
+                int newValueInt = Integer.parseInt(newValueStr.equals("") ? "0" : newValueStr);
 
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    String newValueStr = (String) newValue;
-                    Integer newValueInt = Integer.valueOf(newValueStr);
-
-                    if(newValueInt >= 0 && newValueInt <= 240){
-                        preference.setSummary(newValueStr);
-                        return true;
-                    }else{
-                        Toast.makeText(preference.getContext(), R.string.pref_title_reminder_validation_error, Toast.LENGTH_LONG).show();
-                        String actualValue = PreferenceHelper.getValue(preference);
-                        preference.setSummary(actualValue);
-                        return false;
-                    }
+                if( newValueInt >= 0 && newValueInt <= maxReminderMinutes){
+                    preference.setSummary(newValueStr);
+                    return true;
+                }else{
+                    String str = preference.getContext().getString(R.string.pref_title_reminder_validation_error);
+                    String formatted = String.format(str, maxReminderMinutes);
+                    Toast.makeText(preference.getContext(), formatted, Toast.LENGTH_LONG).show();
+                    String actualValue = PreferenceHelper.getValue(preference);
+                    preference.setSummary(actualValue);
+                    return false;
                 }
-            });
-        }
+            }
+        };
 
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {

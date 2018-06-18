@@ -13,8 +13,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+
+import com.example.dell.chargehelper.ISettingsProvider;
 import com.example.dell.chargehelper.R;
-import com.example.dell.chargehelper.SettingsProvider;
 import com.example.dell.chargehelper.helpers.TimeHelper;
 import com.example.dell.chargehelper.UserMessage;
 
@@ -22,10 +23,12 @@ import java.util.Date;
 
 public class ApplicationNotificator implements INotificator
 {
+    private final ISettingsProvider settingsProvider;
     private final Activity activity;
     private final Uri SoundUri;
 
-    ApplicationNotificator(Activity activity) {
+    ApplicationNotificator(ISettingsProvider settingsProvider, Activity activity) {
+        this.settingsProvider = settingsProvider;
         this.activity = activity;
         SoundUri = Uri.parse("android.resource://" + activity.getPackageName() + "/" + R.raw.carhorn4);
     }
@@ -46,7 +49,6 @@ public class ApplicationNotificator implements INotificator
     }
 
     private long getMillisToNotify(long millisToEvent) {
-        SettingsProvider settingsProvider = new SettingsProvider(activity);
         long millisToNotify = TimeHelper.convertMinutesToMs(settingsProvider.getApplicationReminderMinutes());
         if (millisToEvent > millisToNotify)
             return millisToEvent - millisToNotify;

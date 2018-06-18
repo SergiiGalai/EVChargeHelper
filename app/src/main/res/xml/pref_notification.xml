@@ -22,19 +22,10 @@
         android:summary="@string/pref_description_allow_calendar_notifications"
         android:title="@string/pref_title_allow_calendar_notifications"/>
 
-    <EditTextPreference
-        android:defaultValue="15"
-        android:inputType="number"
-        android:key="calendar_notifications_minutes"
-        android:dependency="allow_calendar_notifications"
-        android:maxLines="1"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:title="@string/pref_title_reminder"/>
-
     <SwitchPreference
         android:defaultValue="false"
         android:key="allow_calendar_permission_notifications"
+        android:dependency="allow_calendar_notifications"
         android:summary="@string/pref_description_allow_calendar_permission_notifications"
         android:title="@string/pref_title_allow_calendar_permission_notifications"/>
 

@@ -38,7 +38,7 @@
     </string>
 
     <string name="pref_title_reminder">Remind before, minutes</string>
-    <string name="pref_title_reminder_validation_error">Value must be less than 240</string>
+    <string name="pref_title_reminder_validation_error">We don\'t expect value more than %d minutes. Man, are you serious?</string>
 
     <string name="car_charged_title">Car charged</string>
     <string name="car_charged_descr">Your car should be charged by this time.</string>
@@ -50,7 +50,7 @@
         You will be able to change them manually</string>
     <string name="ok" translatable="false">OK</string>
     <string name="open">Open</string>
-    <string name="calendar_permissions_not_granted">CALENDAR permission was NOT granted.</string>
+    <string name="calendar_permissions_not_granted">CALENDAR permissions were NOT granted.</string>
     <string name="remind_me_button_title">Remind me at %s</string>
     <string name="remaining_energy_title">Remaining energy, %d%%</string>
     <string name="current_description_title">Car is charging using:</string>

@@ -1,9 +1,7 @@
 package com.example.dell.chargehelper.charge;
 
 import com.example.dell.chargehelper.helpers.Convert;
-
 import org.junit.Test;
-
 import java.util.List;
 import static org.junit.Assert.*;
 

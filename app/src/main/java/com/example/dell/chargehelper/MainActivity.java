@@ -2,7 +2,6 @@ package com.example.dell.chargehelper;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.view.Menu;
@@ -21,7 +20,6 @@ import com.example.dell.chargehelper.charge.ChargeValuesProvider;
 import com.example.dell.chargehelper.charge.PowerLine;
 import com.example.dell.chargehelper.controls.StepNumberPicker;
 import com.example.dell.chargehelper.helpers.TimeHelper;
-import com.example.dell.chargehelper.notifications.GoogleCalendarDefaultNotificator;
 import com.example.dell.chargehelper.notifications.GoogleCalendarAdvancedNotificator;
 import com.example.dell.chargehelper.notifications.INotificator;
 import com.example.dell.chargehelper.notifications.NotificatorFactory;
@@ -40,7 +38,8 @@ public class MainActivity extends BaseActivity
     private StepNumberPicker voltagePicker;
     private TextView chargedInTitle;
     private Button remindButton;
-    private SettingsProvider settingsProvider;
+    private NotificatorFactory notificatorFactory;
+    private ISettingsProvider settingsProvider;
 
     private NumberPicker.OnValueChangeListener textWatcher = new NumberPicker.OnValueChangeListener(){
         @Override
@@ -131,8 +130,7 @@ public class MainActivity extends BaseActivity
             @Override
             public void onClick(View v) {
                 updateControls();
-                NotificatorFactory provider = new NotificatorFactory();
-                for (INotificator notificator : provider.createNotificators(MainActivity.this)){
+                for (INotificator notificator : notificatorFactory.createNotificators(MainActivity.this)){
                     notificator.scheduleCarChargedNotification(viewModel.getMillisToCharge());
                 }
             }
@@ -140,7 +138,8 @@ public class MainActivity extends BaseActivity
     }
 
     private void initializeVariables() {
-        settingsProvider = new SettingsProvider(this);
+        settingsProvider = new SharedPreferenceSettingsProvider(this);
+        notificatorFactory = new NotificatorFactory(settingsProvider);
 
         remainingEnergySeekBar = findViewById(R.id.remainingEnergySeekBar);
         remainingEnergyTitle = findViewById(R.id.remainingEnergyTitle);
@@ -179,19 +178,14 @@ public class MainActivity extends BaseActivity
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == GoogleCalendarAdvancedNotificator.REQUEST_CALENDAR){
-            if(PermissionHelper.isPermissionsGranted(grantResults)){
-                tryScheduleGoogleCalendar();
-            }else{
-                Snackbar.make(findViewById(R.id.main_layout), R.string.calendar_permissions_not_granted, Snackbar.LENGTH_LONG).show();
-            }
+            INotificator notificator = notificatorFactory.tryCreate(PermissionHelper.isPermissionsGranted(grantResults), MainActivity.this);
+            if (notificator != null)
+                scheduleNotificator(notificator);
         }
     }
 
-    private void tryScheduleGoogleCalendar() {
-        if (settingsProvider.googleBasicNotificationsAllowed()){
-            long msToCharge = viewModel.getMillisToCharge();
-            INotificator notificator = new GoogleCalendarDefaultNotificator(MainActivity.this);
-            notificator.scheduleCarChargedNotification(msToCharge);
-        }
+    private void scheduleNotificator(INotificator notificator) {
+        long msToCharge = viewModel.getMillisToCharge();
+        notificator.scheduleCarChargedNotification(msToCharge);
     }
 }
