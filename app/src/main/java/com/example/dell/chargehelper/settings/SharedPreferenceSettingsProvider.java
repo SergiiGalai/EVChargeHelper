@@ -1,10 +1,11 @@
-package com.example.dell.chargehelper;
+package com.example.dell.chargehelper.settings;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-public class SharedPreferenceSettingsProvider implements ISettingsProvider {
+public class SharedPreferenceSettingsProvider implements ISettingsProvider
+{
     private final SharedPreferences preferences;
 
     public SharedPreferenceSettingsProvider(Context context){
@@ -23,7 +24,7 @@ public class SharedPreferenceSettingsProvider implements ISettingsProvider {
 
     @Override
     public boolean googleAdvancedNotificationsAllowed(){
-        return googleBasicNotificationsAllowed() && preferences.getBoolean("allow_calendar_permission_notifications", false);
+        return googleBasicNotificationsAllowed() && preferences.getBoolean("allow_calendar_permission_notifications", true);
     }
 
     @Override

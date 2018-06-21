@@ -3,7 +3,7 @@ package com.example.dell.chargehelper.notifications;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 
-import com.example.dell.chargehelper.ISettingsProvider;
+import com.example.dell.chargehelper.settings.ISettingsProvider;
 
 import java.util.ArrayList;
 import java.util.List;

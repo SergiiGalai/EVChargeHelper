@@ -32,9 +32,9 @@
     <string name="pref_title_allow_calendar_notifications">Use Google calendar notifications</string>
     <string name="pref_description_allow_calendar_notifications">Enable notifications with default reminders.</string>
 
-    <string name="pref_title_allow_calendar_permission_notifications">Custom Google calendar notifications</string>
-    <string name="pref_description_allow_calendar_permission_notifications">Enable notifications with custom settings.
-        Requires permission to access Google calendar.
+    <string name="pref_title_allow_asking_for_calendar_permissions">Allow asking for calendar permission</string>
+    <string name="pref_description_allow_asking_for_calendar_permissions">Calendar permission is needed to be able to create notifications faster and with more comfort.\n
+Allows to create notifications in one click, change reminding time, event background.
     </string>
 
     <string name="pref_title_reminder">Remind before, minutes</string>
@@ -45,9 +45,14 @@
     <string name="car_charged_time_desc">Your car should be charged by %s.</string>
     <string name="car_charged_channel_descr">Notifies you when your car is charged</string>
 
-    <string name="calendar_permission_rationale">Calendar permission is required to make reminders time customizable as well as displaying events in another color.
-        Without this permission you will see new calendar event screen with default reminder time and default color.
-        You will be able to change them manually</string>
+    <string name="calendar_permission_rationale_title">Why do we ask permission</string>
+    <string name="calendar_permission_rationale">Calendar permission is required to make reminders time customizable as well as displaying events in another color.\n
+Without this permission you will see a standard new calendar event screen.\n
+We do NOT read or change other notifications.\n
+You can change this settings anytime in application settings.
+    </string>
+    <string name="permission_dialog_allow">Proceed</string>
+    <string name="permission_dialog_forbid">Use default</string>
     <string name="ok" translatable="false">OK</string>
     <string name="open">Open</string>
     <string name="calendar_permissions_not_granted">CALENDAR permissions were NOT granted.</string>
@@ -57,6 +62,5 @@
     <string name="amperage_title">A</string>
     <string name="voltage_title">V</string>
     <string name="should_be_charged_prefix_title">Car should be charged in %dh %02dm</string>
-
-
+    <string name="event_created">Calendar event created</string>
 </resources>

@@ -69,13 +69,13 @@ public class SettingsActivity extends AppCompatPreferenceActivity
 
     @Override
     public boolean onIsMultiPane() {
-        return isXLargeTablet(this);
+        return isLargeScreen(this);
     }
 
-    private static boolean isXLargeTablet(Context context) {
+    private static boolean isLargeScreen(Context context) {
         Configuration configuration = context.getResources().getConfiguration();
         return (configuration.screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >=
-                Configuration.SCREENLAYOUT_SIZE_XLARGE;
+                Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
     @Override

@@ -2,7 +2,9 @@ package com.example.dell.chargehelper.notifications;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -12,9 +14,10 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
 
-import com.example.dell.chargehelper.ISettingsProvider;
+import com.example.dell.chargehelper.settings.ISettingsProvider;
 import com.example.dell.chargehelper.R;
 import com.example.dell.chargehelper.helpers.TimeHelper;
+import com.example.dell.chargehelper.settings.SettingsWriter;
 
 import java.util.Calendar;
 
@@ -29,36 +32,42 @@ public class GoogleCalendarAdvancedNotificator implements INotificator
     public static final int REQUEST_CALENDAR = 1;
     private static final String[] PERMISSIONS_CALENDAR = {Manifest.permission.READ_CALENDAR,
             Manifest.permission.WRITE_CALENDAR};
+    private final SettingsWriter settingsWriter;
 
-    public GoogleCalendarAdvancedNotificator(ISettingsProvider settingsProvider, Activity activity) {
+    GoogleCalendarAdvancedNotificator(ISettingsProvider settingsProvider, Activity activity) {
         this.activity = activity;
         this.settingsProvider = settingsProvider;
         repository = new GoogleCalendarRepository(activity);
+        settingsWriter = new SettingsWriter(activity);
     }
 
     @Override
     public void scheduleCarChargedNotification(long millisToEvent) {
-        long epochMs = TimeHelper.addToNow(millisToEvent);
-        scheduleCalendarEvent(activity.getString(R.string.car_charged_title),
-                activity.getString(R.string.car_charged_descr),
-                epochMs);
-    }
-
-    private void scheduleCalendarEvent(String title, String description, long eventTime) {
         if (calendarPermissionsGranted())
         {
-            //repository.showColors();
-            ContentValues values = createCalendarEventContent(title, description, eventTime);
-            long eventId = repository.createEvent(values);
-            int reminderMinutes = settingsProvider.getCalendarReminderMinutes();
-            repository.setReminder(eventId, reminderMinutes);
-
-            notifyUser("Calendar event created", eventId);
-        }
-        else
+            long epochMs = TimeHelper.addToNow(millisToEvent);
+            scheduleCalendarEvent(activity.getString(R.string.car_charged_title),
+                    activity.getString(R.string.car_charged_descr),
+                    epochMs);
+        } else if (settingsProvider.googleAdvancedNotificationsAllowed())
         {
             requestCalendarPermission();
         }
+    }
+
+    private boolean calendarPermissionsGranted() {
+        return ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED ;
+    }
+
+    private void scheduleCalendarEvent(String title, String description, long eventTime) {
+        //repository.showColors();
+        ContentValues values = createCalendarEventContent(title, description, eventTime);
+        long eventId = repository.createEvent(values);
+        int reminderMinutes = settingsProvider.getCalendarReminderMinutes();
+        repository.setReminder(eventId, reminderMinutes);
+
+        notifyUser(activity.getString(R.string.event_created), eventId);
     }
 
     private void notifyUser(String description, final long eventId) {
@@ -67,13 +76,13 @@ public class GoogleCalendarAdvancedNotificator implements INotificator
             {
                 @Override
                 public void onClick(View v) {
-                Uri.Builder uri = CalendarContract.Events.CONTENT_URI.buildUpon()
-                    .appendPath(Long.toString(eventId));
+                    Uri.Builder uri = CalendarContract.Events.CONTENT_URI.buildUpon()
+                        .appendPath(Long.toString(eventId));
 
-                Intent intent = new Intent(Intent.ACTION_VIEW)
-                    .setData(uri.build());
+                    Intent intent = new Intent(Intent.ACTION_VIEW)
+                        .setData(uri.build());
 
-                activity.startActivity(intent);
+                    activity.startActivity(intent);
                 }
             })
             .show();
@@ -96,23 +105,44 @@ public class GoogleCalendarAdvancedNotificator implements INotificator
     private void requestCalendarPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
                 Manifest.permission.WRITE_CALENDAR)){
-            Snackbar.make(activity.findViewById(android.R.id.content), R.string.calendar_permission_rationale,
-                    Snackbar.LENGTH_INDEFINITE)
-                    .setAction(R.string.ok, new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View v) {
-                            ActivityCompat.requestPermissions(activity, PERMISSIONS_CALENDAR, REQUEST_CALENDAR);
-                        }
-                    })
-                    .show();
+            //showRationaleSnackBar();
+            showRationaleDialog();
         } else {
             ActivityCompat.requestPermissions(activity, PERMISSIONS_CALENDAR, REQUEST_CALENDAR);
         }
     }
 
-    private boolean calendarPermissionsGranted() {
-        return ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED
-            && ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED ;
+    private void showRationaleSnackBar() {
+        Snackbar.make(activity.findViewById(android.R.id.content), R.string.calendar_permission_rationale,
+                Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.ok, new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v) {
+                        ActivityCompat.requestPermissions(activity, PERMISSIONS_CALENDAR, REQUEST_CALENDAR);
+                    }
+                })
+                .show();
+    }
+
+    private void showRationaleDialog() {
+        AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
+        alertDialog.setTitle(activity.getString(R.string.calendar_permission_rationale_title));
+        alertDialog.setMessage(activity.getString(R.string.calendar_permission_rationale));
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, activity.getString(R.string.permission_dialog_forbid),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        settingsWriter.saveGoogleAdvancedNotificationsAllowed(false);
+                    }
+                });
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, activity.getString(R.string.permission_dialog_allow),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        ActivityCompat.requestPermissions(activity, PERMISSIONS_CALENDAR, REQUEST_CALENDAR);
+                    }
+                });
+        alertDialog.show();
     }
 }

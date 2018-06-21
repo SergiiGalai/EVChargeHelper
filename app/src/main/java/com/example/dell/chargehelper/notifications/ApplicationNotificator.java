@@ -14,7 +14,7 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 
-import com.example.dell.chargehelper.ISettingsProvider;
+import com.example.dell.chargehelper.settings.ISettingsProvider;
 import com.example.dell.chargehelper.R;
 import com.example.dell.chargehelper.helpers.TimeHelper;
 import com.example.dell.chargehelper.UserMessage;

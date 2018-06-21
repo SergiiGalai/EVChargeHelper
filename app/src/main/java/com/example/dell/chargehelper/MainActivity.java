@@ -24,6 +24,8 @@ import com.example.dell.chargehelper.notifications.GoogleCalendarAdvancedNotific
 import com.example.dell.chargehelper.notifications.INotificator;
 import com.example.dell.chargehelper.notifications.NotificatorFactory;
 import com.example.dell.chargehelper.helpers.PermissionHelper;
+import com.example.dell.chargehelper.settings.ISettingsProvider;
+import com.example.dell.chargehelper.settings.SharedPreferenceSettingsProvider;
 
 import java.util.Date;
 
