@@ -134,6 +134,8 @@ public class GoogleCalendarAdvancedNotificator implements INotificator
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         settingsWriter.saveGoogleAdvancedNotificationsAllowed(false);
+                        //NotificationScheduler scheduler = new NotificationScheduler(activity);
+                        //scheduler.schedule();
                     }
                 });
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, activity.getString(R.string.permission_dialog_allow),

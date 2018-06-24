@@ -11,12 +11,14 @@ import java.util.List;
 public class NotificatorFactory {
 
     private final ISettingsProvider settingsProvider;
+    private final Activity activity;
 
-    public NotificatorFactory(ISettingsProvider settingsProvider) {
+    NotificatorFactory(ISettingsProvider settingsProvider, Activity activity) {
         this.settingsProvider = settingsProvider;
+        this.activity = activity;
     }
 
-    public INotificator tryCreate(boolean calendarPermissionsGranted, Activity activity){
+    public INotificator tryCreate(boolean calendarPermissionsGranted){
         if(calendarPermissionsGranted && settingsProvider.googleAdvancedNotificationsAllowed()){
             return new GoogleCalendarAdvancedNotificator(settingsProvider, activity);
         }else{
@@ -28,7 +30,7 @@ public class NotificatorFactory {
     }
 
     @NonNull
-    public List<INotificator> createNotificators(Activity activity) {
+    public List<INotificator> createNotificators() {
         ArrayList<INotificator> r = new ArrayList<>();
 
         if (settingsProvider.applicationNotificationsAllowed()){
