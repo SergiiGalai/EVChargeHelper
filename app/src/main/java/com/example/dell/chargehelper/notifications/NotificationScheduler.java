@@ -13,8 +13,9 @@ public class NotificationScheduler
     private ISettingsProvider settingsProvider;
 
     public NotificationScheduler(Activity activity) {
+        IResourceProvider resourceProvider = new ResourceProvider(activity);
         settingsProvider = new SharedPreferenceSettingsProvider(activity);
-        notificatorFactory = new NotificatorFactory(settingsProvider, activity);
+        notificatorFactory = new NotificatorFactory(settingsProvider, resourceProvider, activity);
     }
 
     public void schedule(long millisToEvent){

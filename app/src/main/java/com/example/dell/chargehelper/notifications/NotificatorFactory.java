@@ -12,9 +12,11 @@ public class NotificatorFactory {
 
     private final ISettingsProvider settingsProvider;
     private final Activity activity;
+    private final IResourceProvider resourceProvider;
 
-    NotificatorFactory(ISettingsProvider settingsProvider, Activity activity) {
+    NotificatorFactory(ISettingsProvider settingsProvider, IResourceProvider resourceProvider, Activity activity) {
         this.settingsProvider = settingsProvider;
+        this.resourceProvider = resourceProvider;
         this.activity = activity;
     }
 
@@ -34,7 +36,7 @@ public class NotificatorFactory {
         ArrayList<INotificator> r = new ArrayList<>();
 
         if (settingsProvider.applicationNotificationsAllowed()){
-            r.add(new ApplicationNotificator(settingsProvider, activity));
+            r.add(new ApplicationNotificator(settingsProvider, resourceProvider, activity));
         }
         if (settingsProvider.googleAdvancedNotificationsAllowed()){
             r.add(new GoogleCalendarAdvancedNotificator(settingsProvider, activity));

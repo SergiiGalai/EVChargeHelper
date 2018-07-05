@@ -25,12 +25,12 @@ public class ApplicationNotificator implements INotificator
 {
     private final ISettingsProvider settingsProvider;
     private final Activity activity;
-    private final Uri SoundUri;
+    private final IResourceProvider resourceProvider;
 
-    ApplicationNotificator(ISettingsProvider settingsProvider, Activity activity) {
+    ApplicationNotificator(ISettingsProvider settingsProvider, IResourceProvider resourceProvider, Activity activity) {
         this.settingsProvider = settingsProvider;
         this.activity = activity;
-        SoundUri = Uri.parse("android.resource://" + activity.getPackageName() + "/" + R.raw.carhorn4);
+        this.resourceProvider = resourceProvider;
     }
 
     @Override
@@ -67,7 +67,7 @@ public class ApplicationNotificator implements INotificator
                 .setContentTitle(title)
                 .setContentText(description)
                 .setSmallIcon(R.drawable.ic_timer_24px)
-                .setSound(SoundUri);
+                .setSound(resourceProvider.getApplicationNotificationSoundUri());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel channel = getNotificationChannel();
@@ -95,7 +95,7 @@ public class ApplicationNotificator implements INotificator
                 .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                 .build();
 
-        channel.setSound(SoundUri, attributes);
+        channel.setSound(resourceProvider.getApplicationNotificationSoundUri(), attributes);
         return channel;
     }
 
