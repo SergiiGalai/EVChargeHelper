@@ -8,7 +8,7 @@ import com.example.dell.chargehelper.R;
 public class ResourceProvider implements IResourceProvider {
     private Activity activity;
 
-    ResourceProvider(Activity activity) {
+    public ResourceProvider(Activity activity) {
         this.activity = activity;
     }
 

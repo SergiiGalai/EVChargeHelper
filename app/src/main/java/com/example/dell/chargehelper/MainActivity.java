@@ -136,8 +136,8 @@ public class MainActivity extends BaseActivity
     }
 
     private void initializeVariables() {
-        settingsProvider = new SharedPreferenceSettingsProvider(this);
-        scheduler = new NotificationScheduler(this);
+        settingsProvider = Bootstrapper.ConfigureSettings(this);
+        scheduler = Bootstrapper.ConfigureScheduler(this);
 
         remainingEnergySeekBar = findViewById(R.id.remainingEnergySeekBar);
         remainingEnergyTitle = findViewById(R.id.remainingEnergyTitle);

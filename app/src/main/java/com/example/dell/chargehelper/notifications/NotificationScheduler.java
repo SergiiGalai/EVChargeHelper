@@ -5,17 +5,19 @@ import android.support.annotation.NonNull;
 
 import com.example.dell.chargehelper.helpers.PermissionHelper;
 import com.example.dell.chargehelper.settings.ISettingsProvider;
-import com.example.dell.chargehelper.settings.SharedPreferenceSettingsProvider;
+import com.example.dell.chargehelper.settings.ISettingsWriter;
+import com.example.dell.chargehelper.settings.SettingsWriter;
 
 public class NotificationScheduler
 {
     private NotificatorFactory notificatorFactory;
-    private ISettingsProvider settingsProvider;
 
-    public NotificationScheduler(Activity activity) {
-        IResourceProvider resourceProvider = new ResourceProvider(activity);
-        settingsProvider = new SharedPreferenceSettingsProvider(activity);
-        notificatorFactory = new NotificatorFactory(settingsProvider, resourceProvider, activity);
+    public NotificationScheduler(Activity activity,
+                                 ISettingsProvider settingsProvider,
+                                 IResourceProvider resourceProvider,
+                                 ISettingsWriter settingsWriter) {
+
+        notificatorFactory = new NotificatorFactory(activity, settingsProvider, resourceProvider, settingsWriter);
     }
 
     public void schedule(long millisToEvent){

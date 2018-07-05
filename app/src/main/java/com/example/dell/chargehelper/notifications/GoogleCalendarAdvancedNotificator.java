@@ -17,7 +17,7 @@ import android.view.View;
 import com.example.dell.chargehelper.settings.ISettingsProvider;
 import com.example.dell.chargehelper.R;
 import com.example.dell.chargehelper.helpers.TimeHelper;
-import com.example.dell.chargehelper.settings.SettingsWriter;
+import com.example.dell.chargehelper.settings.ISettingsWriter;
 
 import java.util.Calendar;
 
@@ -32,13 +32,15 @@ public class GoogleCalendarAdvancedNotificator implements INotificator
     public static final int REQUEST_CALENDAR = 1;
     private static final String[] PERMISSIONS_CALENDAR = {Manifest.permission.READ_CALENDAR,
             Manifest.permission.WRITE_CALENDAR};
-    private final SettingsWriter settingsWriter;
+    private final ISettingsWriter settingsWriter;
 
-    GoogleCalendarAdvancedNotificator(ISettingsProvider settingsProvider, Activity activity) {
+    GoogleCalendarAdvancedNotificator(ISettingsProvider settingsProvider,
+                                      ISettingsWriter settingsWriter,
+                                      Activity activity) {
         this.activity = activity;
         this.settingsProvider = settingsProvider;
+        this.settingsWriter = settingsWriter;
         repository = new GoogleCalendarRepository(activity);
-        settingsWriter = new SettingsWriter(activity);
     }
 
     @Override
