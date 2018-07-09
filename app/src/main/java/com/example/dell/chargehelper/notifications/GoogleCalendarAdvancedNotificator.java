@@ -69,10 +69,20 @@ public class GoogleCalendarAdvancedNotificator implements INotificator
         int reminderMinutes = settingsProvider.getCalendarReminderMinutes();
         repository.setReminder(eventId, reminderMinutes);
 
-        notifyUser(activity.getString(R.string.event_created), eventId);
+        notifyUser_open_event(eventId);
+        //notifyUser_snackbar(activity.getString(R.string.event_created), eventId);
     }
 
-    private void notifyUser(String description, final long eventId) {
+    private void notifyUser_open_event(final long eventId){
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+
+        Uri.Builder uri = CalendarContract.Events.CONTENT_URI.buildUpon()
+                .appendPath(Long.toString(eventId));
+        intent.setData(uri.build());
+        activity.startActivity(intent);
+    }
+
+    private void notifyUser_snackbar(String description, final long eventId) {
         Snackbar.make(activity.findViewById(android.R.id.content), description, Snackbar.LENGTH_LONG)
             .setAction(R.string.open, new View.OnClickListener()
             {
