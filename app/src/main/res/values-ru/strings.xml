@@ -2,7 +2,6 @@
 <resources>
     <string name="title_activity_settings">Настройки</string>
     <string name="title_activity_bugreport">Сообщение об ошибке</string>
-    <string name="pref_title_car_list">Модель авто</string>
     <string name="pref_header_charging">Настройки зарядки</string>
     <string name="pref_title_voltage">Напряжение в сети по умолчанию, В</string>
     <string name="pref_title_amperage">Сила тока в сети по умолчанию, А</string>
@@ -19,6 +18,7 @@
     <string name="car_charged_title">Автомобиль заряжен</string>
     <string name="car_charged_descr">Ваш автомобиль должен быть заряжен к етому времени</string>
     <string name="car_charged_time_desc">Ваш автомобиль должен быть заряжен к %s</string>
+    <string name="car_charged_channel_descr">Уведомляет когда ваш авто заряжен</string>
     <string name="open">Открыть</string>
     <string name="calendar_permissions_not_granted">Доступ к КАЛЕНДАРЮ запрещен</string>
     <string name="remind_me_button_title">Напомнить в %s</string>
@@ -28,6 +28,7 @@
     <string name="voltage_title">В</string>
     <string name="should_be_charged_prefix_title">Авто должно быть заряжно через %dч %02dмин</string>
     <string name="pref_title_reminder">Сообщить за, минут</string>
+    <string name="pref_title_reminder_validation_error">Мы не разрешаем значение для уведомления больше %d минут</string>
 
     <string name="calendar_permission_rationale_title">Для чего нужен доступ</string>
     <string name="calendar_permission_rationale">Доступ до календаря требуется для установки сообственных настроек времени уведомления и цвета сообщения.\n

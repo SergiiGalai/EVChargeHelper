@@ -2,7 +2,6 @@
 <resources>
     <string name="title_activity_settings">Налаштування</string>
     <string name="title_activity_bugreport">Повідомлення про помилку</string>
-    <string name="pref_title_car_list">Модель авто</string>
     <string name="pref_header_charging">Налаштування зарядки</string>
     <string name="pref_title_voltage">Напруга у мережі за замовчуванням, В</string>
     <string name="pref_title_amperage">Сила струму у мережі за замовчуванням, А</string>
@@ -19,6 +18,7 @@
     <string name="car_charged_title">Авто заряджене</string>
     <string name="car_charged_descr">Ваше авто має бути зарядженим до цього часу</string>
     <string name="car_charged_time_desc">Ваше авто має бути зарядженим до %s</string>
+    <string name="car_charged_channel_descr">Повідомляє, коли ваше авто повністю заряджене</string>
     <string name="open">Відкрити</string>
     <string name="calendar_permissions_not_granted">Доступ до КАЛЕНДАРЯ заборонено</string>
     <string name="remind_me_button_title">Нагадати о %s</string>
@@ -28,6 +28,7 @@
     <string name="voltage_title">В</string>
     <string name="should_be_charged_prefix_title">Авто має бути заряджено через %dгод %02dхв</string>
     <string name="pref_title_reminder">Повідомити за, хвилин</string>
+    <string name="pref_title_reminder_validation_error">Значення занадто велике. Ми не дозволяємо значення для нагадування більшим за %d хвилин.</string>
 
     <string name="calendar_permission_rationale_title">Для чого потрібен доступ</string>
     <string name="calendar_permission_rationale">Доступ до календаря потрібен для швидшого і зручнішого створення нагадувань у календарі.\n
