@@ -2,7 +2,7 @@
 <resources>
     <string name="title_activity_settings">Настройки</string>
     <string name="title_activity_bugreport">Сообщение об ошибке</string>
-    <string name="pref_header_charging">Настройки зарядки</string>
+    <string name="pref_header_charging">Батарея и зарядка</string>
     <string name="pref_title_voltage">Напряжение в сети по умолчанию, В</string>
     <string name="pref_title_amperage">Сила тока в сети по умолчанию, А</string>
     <string name="pref_title_charging_loss">Потеря при заряде батареи, %</string>
@@ -22,8 +22,8 @@
     <string name="open">Открыть</string>
     <string name="calendar_permissions_not_granted">Доступ к КАЛЕНДАРЮ запрещен</string>
     <string name="remind_me_button_title">Напомнить в %s</string>
-    <string name="remaining_energy_title">Остаточный заряд, %d%%</string>
-    <string name="current_description_title">Авто заряжается используя:</string>
+    <string name="remaining_energy_title">Остаточный заряд в батарее, %d%%</string>
+    <string name="current_description_title">Настройки сети:</string>
     <string name="amperage_title">A</string>
     <string name="voltage_title">В</string>
     <string name="should_be_charged_prefix_title">Авто должно быть заряжно через %dч %02dмин</string>

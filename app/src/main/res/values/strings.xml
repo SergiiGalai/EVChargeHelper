@@ -6,7 +6,7 @@
     <!-- Strings related to Settings -->
 
     <!-- Example settings for Charging -->
-    <string name="pref_header_charging">Charging settings</string>
+    <string name="pref_header_charging">Battery and charging</string>
 
     <string name="pref_title_voltage">Default voltage in network, V</string>
     <string name="pref_title_amperage">Default consuming amperage, A</string>
@@ -24,7 +24,7 @@
     </string-array>
 
     <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications settings</string>
+    <string name="pref_header_notifications">Notification settings</string>
 
     <string name="pref_title_allow_app_notifications">Use application own notifications</string>
     <string name="pref_description_allow_app_notifications">Custom sound is used to make it easier to distinguish from other notifications</string>
@@ -57,8 +57,8 @@ You can change this settings anytime in application settings.
     <string name="open">Open</string>
     <string name="calendar_permissions_not_granted">CALENDAR permissions were NOT granted.</string>
     <string name="remind_me_button_title">Remind me at %s</string>
-    <string name="remaining_energy_title">Remaining energy, %d%%</string>
-    <string name="current_description_title">Car is charging using:</string>
+    <string name="remaining_energy_title">Remaining battery energy, %d%%</string>
+    <string name="current_description_title">Power line options:</string>
     <string name="amperage_title">A</string>
     <string name="voltage_title">V</string>
     <string name="should_be_charged_prefix_title">Car should be charged in %dh %02dm</string>
