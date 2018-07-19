@@ -7,9 +7,9 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
     signingConfigs {
-        cert {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
+        freeCert {
+            keyAlias keystoreProperties['freeKeyAlias']
+            keyPassword keystoreProperties['freeKeyPassword']
             storeFile file(keystoreProperties['storeFile'])
             storePassword keystoreProperties['storePassword']
         }
@@ -20,7 +20,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.cert
+            signingConfig signingConfigs.freeCert
         }
     }
     flavorDimensions "default"
@@ -34,7 +34,7 @@ android {
     }
     productFlavors {
         free {
-            signingConfig signingConfigs.cert
+            signingConfig signingConfigs.freeCert
         }
     }
 }
