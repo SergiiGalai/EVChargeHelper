@@ -28,7 +28,7 @@ public class GoogleCalendarDefaultNotificator implements INotificator
 
     @NonNull
     private Calendar getCalendar(long millisToEvent) {
-        Date eventTime = TimeHelper.toDate(TimeHelper.addToNow(millisToEvent));
+        Date eventTime = TimeHelper.toDate(TimeHelper.now() + millisToEvent);
         Calendar beginTime = Calendar.getInstance();
         beginTime.setTime(eventTime);
         return beginTime;

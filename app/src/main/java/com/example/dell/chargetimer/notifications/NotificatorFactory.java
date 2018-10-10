@@ -3,7 +3,7 @@ package com.example.dell.chargetimer.notifications;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 
-import com.example.dell.chargetimer.settings.ISettingsProvider;
+import com.example.dell.chargetimer.settings.ISettingsReader;
 import com.example.dell.chargetimer.settings.ISettingsWriter;
 
 import java.util.ArrayList;
@@ -11,13 +11,13 @@ import java.util.List;
 
 public class NotificatorFactory {
 
-    private final ISettingsProvider settingsProvider;
+    private final ISettingsReader settingsProvider;
     private final Activity activity;
     private final IResourceProvider resourceProvider;
     private ISettingsWriter settingsWriter;
 
     NotificatorFactory(Activity activity,
-                       ISettingsProvider settingsProvider,
+                       ISettingsReader settingsProvider,
                        IResourceProvider resourceProvider,
                        ISettingsWriter settingsWriter) {
         this.settingsProvider = settingsProvider;

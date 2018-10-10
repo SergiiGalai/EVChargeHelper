@@ -24,11 +24,7 @@ public class TimeHelper
     public static Date toDate(long millis){
         return new Date(millis);
     }
-
-    public static long addToNow(long millis){
-        return System.currentTimeMillis() + millis;
-    }
-
+    public static long now(){ return System.currentTimeMillis(); }
     public static long convertMinutesToMs(int minutes){
         if (minutes < 0)
             throw new IllegalArgumentException("minutes must be positive");

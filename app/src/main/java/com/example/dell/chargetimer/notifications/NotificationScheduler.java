@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.support.annotation.NonNull;
 
 import com.example.dell.chargetimer.helpers.PermissionHelper;
-import com.example.dell.chargetimer.settings.ISettingsProvider;
+import com.example.dell.chargetimer.settings.ISettingsReader;
 import com.example.dell.chargetimer.settings.ISettingsWriter;
 
 public class NotificationScheduler
@@ -12,7 +12,7 @@ public class NotificationScheduler
     private NotificatorFactory notificatorFactory;
 
     public NotificationScheduler(Activity activity,
-                                 ISettingsProvider settingsProvider,
+                                 ISettingsReader settingsProvider,
                                  IResourceProvider resourceProvider,
                                  ISettingsWriter settingsWriter) {
 

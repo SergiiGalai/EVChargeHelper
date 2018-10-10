@@ -4,10 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-public class SettingsWriter implements ISettingsWriter {
+public class SharedPreferenceSettingsWriter implements ISettingsWriter {
     private final SharedPreferences preferences;
 
-    public SettingsWriter(Context context){
+    public SharedPreferenceSettingsWriter(Context context){
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 

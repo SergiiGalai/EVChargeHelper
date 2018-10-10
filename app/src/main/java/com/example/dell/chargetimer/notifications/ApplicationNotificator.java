@@ -13,7 +13,7 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 
-import com.example.dell.chargetimer.settings.ISettingsProvider;
+import com.example.dell.chargetimer.settings.ISettingsReader;
 import com.example.dell.chargetimer.R;
 import com.example.dell.chargetimer.helpers.TimeHelper;
 import com.example.dell.chargetimer.UserMessage;
@@ -22,11 +22,11 @@ import java.util.Date;
 
 public class ApplicationNotificator implements INotificator
 {
-    private final ISettingsProvider settingsProvider;
+    private final ISettingsReader settingsProvider;
     private final Activity activity;
     private final IResourceProvider resourceProvider;
 
-    ApplicationNotificator(ISettingsProvider settingsProvider, IResourceProvider resourceProvider, Activity activity) {
+    ApplicationNotificator(ISettingsReader settingsProvider, IResourceProvider resourceProvider, Activity activity) {
         this.settingsProvider = settingsProvider;
         this.activity = activity;
         this.resourceProvider = resourceProvider;
@@ -55,7 +55,7 @@ public class ApplicationNotificator implements INotificator
     }
 
     private String getNotificationDescription(long duration) {
-        Date chargedAtTime = TimeHelper.toDate(TimeHelper.addToNow(duration));
+        Date chargedAtTime = TimeHelper.toDate(TimeHelper.now() + duration);
         String descriptionTemplate = activity.getString(R.string.car_charged_time_desc);
         return String.format(descriptionTemplate, TimeHelper.formatAsHoursWithMinutes(chargedAtTime));
     }
@@ -115,7 +115,7 @@ public class ApplicationNotificator implements INotificator
 
     private void scheduleNotification(long millis, PendingIntent pendingIntent) {
         AlarmManager alarmManager = (AlarmManager)activity.getSystemService(Context.ALARM_SERVICE);
-        long triggerAt = TimeHelper.addToNow(millis);
+        long triggerAt = TimeHelper.now() + millis;
 
         assert alarmManager != null;
         alarmManager.set(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent);

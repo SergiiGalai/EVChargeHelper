@@ -3,7 +3,7 @@ package com.example.dell.chargetimer.notifications;
 import android.app.Activity;
 import android.net.Uri;
 
-import com.example.dell.chargetimer.settings.ISettingsProvider;
+import com.example.dell.chargetimer.settings.ISettingsReader;
 import com.example.dell.chargetimer.settings.ISettingsWriter;
 
 import org.junit.Before;
@@ -20,7 +20,7 @@ public class NotificatorFactoryTest {
 
     private Activity activity;
     private IResourceProvider uriProvider;
-    private ISettingsProvider settings;
+    private ISettingsReader settings;
     private NotificatorFactory factory;
     private ISettingsWriter settingsWriter;
 
@@ -28,7 +28,7 @@ public class NotificatorFactoryTest {
     @Before
     public void setUp(){
         activity = mock(Activity.class);
-        settings = mock(ISettingsProvider.class);
+        settings = mock(ISettingsReader.class);
         uriProvider = mock(IResourceProvider.class);
         settingsWriter = mock(ISettingsWriter.class);
 

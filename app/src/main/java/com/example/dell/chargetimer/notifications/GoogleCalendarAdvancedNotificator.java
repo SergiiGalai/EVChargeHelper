@@ -14,7 +14,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
 
-import com.example.dell.chargetimer.settings.ISettingsProvider;
+import com.example.dell.chargetimer.settings.ISettingsReader;
 import com.example.dell.chargetimer.R;
 import com.example.dell.chargetimer.helpers.TimeHelper;
 import com.example.dell.chargetimer.settings.ISettingsWriter;
@@ -28,13 +28,13 @@ public class GoogleCalendarAdvancedNotificator implements INotificator
 
     private final GoogleCalendarRepository repository;
     private final Activity activity;
-    private final ISettingsProvider settingsProvider;
+    private final ISettingsReader settingsProvider;
     public static final int REQUEST_CALENDAR = 1;
     private static final String[] PERMISSIONS_CALENDAR = {Manifest.permission.READ_CALENDAR,
             Manifest.permission.WRITE_CALENDAR};
     private final ISettingsWriter settingsWriter;
 
-    GoogleCalendarAdvancedNotificator(ISettingsProvider settingsProvider,
+    GoogleCalendarAdvancedNotificator(ISettingsReader settingsProvider,
                                       ISettingsWriter settingsWriter,
                                       Activity activity) {
         this.activity = activity;
@@ -47,7 +47,7 @@ public class GoogleCalendarAdvancedNotificator implements INotificator
     public void scheduleCarChargedNotification(long millisToEvent) {
         if (calendarPermissionsGranted())
         {
-            long epochMs = TimeHelper.addToNow(millisToEvent);
+            long epochMs = TimeHelper.now() + millisToEvent;
             scheduleCalendarEvent(activity.getString(R.string.car_charged_title),
                     activity.getString(R.string.car_charged_descr),
                     epochMs);

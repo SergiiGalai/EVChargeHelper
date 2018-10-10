@@ -22,7 +22,7 @@ import com.example.dell.chargetimer.controls.StepNumberPicker;
 import com.example.dell.chargetimer.helpers.TimeHelper;
 import com.example.dell.chargetimer.notifications.GoogleCalendarAdvancedNotificator;
 import com.example.dell.chargetimer.notifications.NotificationScheduler;
-import com.example.dell.chargetimer.settings.ISettingsProvider;
+import com.example.dell.chargetimer.settings.ISettingsReader;
 
 import java.util.Date;
 
@@ -37,8 +37,28 @@ public class MainActivity extends BaseActivity
     private StepNumberPicker voltagePicker;
     private TextView chargedInTitle;
     private Button remindButton;
-    private ISettingsProvider settingsProvider;
+    private ISettingsReader settingsProvider;
     private NotificationScheduler scheduler;
+
+    private void initializeVariables() {
+        settingsProvider = Factory.createSettings(this);
+        scheduler = Factory.createScheduler(this);
+
+        remainingEnergySeekBar = findViewById(R.id.remainingEnergySeekBar);
+        remainingEnergyTitle = findViewById(R.id.remainingEnergyTitle);
+        chargedInTitle = findViewById(R.id.chargedInTitle);
+        remindButton = findViewById(R.id.remindButton);
+
+        Integer defaultAmperage = settingsProvider.getDefaultAmperage();
+        amperagePicker = new StepNumberPicker(this, R.id.amperageValue);
+        amperagePicker.setValues(ChargeValuesProvider.getAllowedAmperage(defaultAmperage));
+        amperagePicker.setValue(String.valueOf(defaultAmperage));
+
+        Integer defaultVoltage = settingsProvider.getDefaultVoltage();
+        voltagePicker = new StepNumberPicker(this, R.id.voltageValue);
+        voltagePicker.setValues(ChargeValuesProvider.getAllowedVoltage(defaultVoltage));
+        voltagePicker.setValue(String.valueOf(defaultVoltage));
+    }
 
     private NumberPicker.OnValueChangeListener textWatcher = new NumberPicker.OnValueChangeListener(){
         @Override
@@ -71,7 +91,7 @@ public class MainActivity extends BaseActivity
             byte remainingEnergyPct = getRemainingEnergyPercentage();
             millisToCharge = chargeTimeResolver.getMillisToCharge(remainingEnergyPct);
 
-            Date dateChargedAt = TimeHelper.toDate(TimeHelper.addToNow(millisToCharge));
+            Date dateChargedAt = TimeHelper.toDate(TimeHelper.now() + millisToCharge);
             Time time = TimeHelper.getHoursAndMinutes(millisToCharge);
 
             remainingEnergyText = String.format(getString(R.string.remaining_energy_title), remainingEnergyPct);
@@ -132,26 +152,6 @@ public class MainActivity extends BaseActivity
             scheduler.schedule(viewModel.getMillisToCharge());
             }
         });
-    }
-
-    private void initializeVariables() {
-        settingsProvider = Bootstrapper.ConfigureSettings(this);
-        scheduler = Bootstrapper.ConfigureScheduler(this);
-
-        remainingEnergySeekBar = findViewById(R.id.remainingEnergySeekBar);
-        remainingEnergyTitle = findViewById(R.id.remainingEnergyTitle);
-        chargedInTitle = findViewById(R.id.chargedInTitle);
-        remindButton = findViewById(R.id.remindButton);
-
-        Integer defaultAmperage = settingsProvider.getDefaultAmperage();
-        amperagePicker = new StepNumberPicker(this, R.id.amperageValue);
-        amperagePicker.setValues(ChargeValuesProvider.getAllowedAmperage(defaultAmperage));
-        amperagePicker.setValue(String.valueOf(defaultAmperage));
-
-        Integer defaultVoltage = settingsProvider.getDefaultVoltage();
-        voltagePicker = new StepNumberPicker(this, R.id.voltageValue);
-        voltagePicker.setValues(ChargeValuesProvider.getAllowedVoltage(defaultVoltage));
-        voltagePicker.setValue(String.valueOf(defaultVoltage));
     }
 
     @Override

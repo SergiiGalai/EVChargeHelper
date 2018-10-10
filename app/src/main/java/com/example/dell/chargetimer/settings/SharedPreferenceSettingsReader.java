@@ -4,11 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-public class SharedPreferenceSettingsProvider implements ISettingsProvider
+public class SharedPreferenceSettingsReader implements ISettingsReader
 {
     private final SharedPreferences preferences;
 
-    public SharedPreferenceSettingsProvider(Context context){
+    public SharedPreferenceSettingsReader(Context context){
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
