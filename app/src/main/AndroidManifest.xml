@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.example.dell.chargetimer.MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -21,15 +21,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.dell.chargetimer.SettingsActivity"
+            android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName="com.example.dell.chargetimer.MainActivity">
+            android:parentActivityName=".MainActivity">
         </activity>
         <activity
-            android:name="com.example.dell.chargetimer.bugreport.BugReportActivity"
+            android:name=".bugreport.BugReportActivity"
             android:label="@string/title_activity_bugreport" >
         </activity>
-        <receiver android:name="com.example.dell.chargetimer.notifications.CarChargedAlarmReceiver" />
+        <receiver android:name=".notifications.CarChargedAlarmReceiver" />
     </application>
 
 </manifest>

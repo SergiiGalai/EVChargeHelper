@@ -41,7 +41,7 @@ public class MainActivity extends BaseActivity
     private NotificationScheduler scheduler;
 
     private void initializeVariables() {
-        settingsProvider = Factory.createSettings(this);
+        settingsProvider = Factory.createSettingsReader(this);
         scheduler = Factory.createScheduler(this);
 
         remainingEnergySeekBar = findViewById(R.id.remainingEnergySeekBar);
