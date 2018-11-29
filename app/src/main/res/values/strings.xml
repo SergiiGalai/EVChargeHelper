@@ -12,26 +12,6 @@
     <string name="pref_title_amperage">Default consuming amperage, A</string>
     <string name="pref_title_charging_loss">Battery charging loss, %</string>
     <string name="pref_title_battery_capacity">Useful battery capacity, kWh</string>
-    <string-array name="pref_car_list_titles" translatable="false">
-        <item>Nissan Leaf 24kWh</item>
-        <item>Nissan Leaf 30kWh</item>
-        <item>BMW i3 24kWh</item>
-        <item>Chevy Volt gen 1</item>
-        <item>Chevy Volt gen 2</item>
-        <item>Fiat C500e</item>
-        <item>Ford Focus e</item>
-        <item>Smart For Two</item>
-    </string-array>
-    <string-array name="pref_car_list_values" translatable="false">
-        <item>Leaf24</item>
-        <item>Leaf30</item>
-        <item>BmwI324</item>
-        <item>Volt1</item>
-        <item>Volt2</item>
-        <item>Fiat500</item>
-        <item>FordFocus</item>
-        <item>SmartEV</item>
-    </string-array>
 
     <!-- Example settings for Notifications -->
     <string name="pref_header_notifications">Notification settings</string>

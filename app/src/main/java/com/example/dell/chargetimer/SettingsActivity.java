@@ -116,7 +116,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity
             addPreferencesFromResource(R.xml.pref_charging);
             setHasOptionsMenu(true);
 
-            //PreferenceHelper.setChangeListenerAndTriggerChange(findPreference("car_list"), listSummaryToValueListener);
             PreferenceHelper.setChangeListenerAndTriggerChange(findPreference("charging_loss"), listSummaryToValueListener);
             PreferenceHelper.setChangeListenerAndTriggerChange(findPreference("battery_capacity"), listSummaryToValueListener);
             PreferenceHelper.setChangeListenerAndTriggerChange(findPreference("default_voltage"), listSummaryToValueListener);
