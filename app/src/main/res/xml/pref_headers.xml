@@ -2,12 +2,12 @@
 
     <!-- These settings headers are only used on tablets. -->
     <header
-        android:fragment="com.example.dell.chargehelper.SettingsActivity$ChargingPreferenceFragment"
+        android:fragment="com.example.dell.chargetimer.SettingsActivity$ChargingPreferenceFragment"
         android:icon="@drawable/ic_sync_black_24dp"
         android:title="@string/pref_header_charging"/>
 
     <header
-        android:fragment="com.example.dell.chargehelper.SettingsActivity$NotificationPreferenceFragment"
+        android:fragment="com.example.dell.chargetimer.SettingsActivity$NotificationPreferenceFragment"
         android:icon="@drawable/ic_notifications_black_24dp"
         android:title="@string/pref_header_notifications"/>
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.example.dell.chargehelper">
+          package="com.example.dell.chargetimer">
 
     <uses-permission android:name="android.permission.READ_CALENDAR"/>
     <uses-permission android:name="android.permission.WRITE_CALENDAR"/>
@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name="com.example.dell.chargetimer.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -21,15 +21,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name="com.example.dell.chargetimer.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName="com.example.dell.chargetimer.MainActivity">
         </activity>
         <activity
-            android:name=".bugreport.BugReportActivity"
+            android:name="com.example.dell.chargetimer.bugreport.BugReportActivity"
             android:label="@string/title_activity_bugreport" >
         </activity>
-        <receiver android:name=".notifications.CarChargedAlarmReceiver" />
+        <receiver android:name="com.example.dell.chargetimer.notifications.CarChargedAlarmReceiver" />
     </application>
 
 </manifest>
