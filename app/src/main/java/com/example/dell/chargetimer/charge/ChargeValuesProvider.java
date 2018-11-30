@@ -9,10 +9,11 @@ public class ChargeValuesProvider {
 
     public static List<String> getAllowedAmperage(int defaultAmperage){
 
+        final int MaxHomeSocketAmperage = 16;
         List<String> values;
 
-        if (defaultAmperage > 16){
-            values = generateSequence(8, 16, 4);
+        if (defaultAmperage > MaxHomeSocketAmperage){
+            values = generateSequence(8, MaxHomeSocketAmperage, 4);
             List<String> additionalValues = generateSequence(defaultAmperage - 10, defaultAmperage + 10, 2);
 
             for (String tmpValue : additionalValues) {
@@ -20,7 +21,7 @@ public class ChargeValuesProvider {
                     values.add(tmpValue);
             }
         }else{
-            values = generateSequence(6, 16, 2);
+            values = generateSequence(6, MaxHomeSocketAmperage, 2);
 
             if (!values.contains(String.valueOf(defaultAmperage)))
                 values.add(String.valueOf(defaultAmperage));
