@@ -2,15 +2,30 @@ package com.example.dell.chargetimer.charge;
 
 import com.example.dell.chargetimer.helpers.Convert;
 import org.junit.Test;
+
 import java.util.List;
 import static org.junit.Assert.*;
 
 public class ChargeValuesProviderTest {
 
     @Test
-    public void contains_amperage_when_default_amperage_not_in_range(){
+    public void equals_expected_when_default_amperage_bigger_16(){
         List<String> amperage = ChargeValuesProvider.getAllowedAmperage(20);
-        assertTrue(amperage.contains("20"));
+        String[] expected = {"8", "10", "12", "14", "16", "18", "20", "22", "24", "26", "28", "30" };
+        assertArrayEquals(expected, Convert.toArray(amperage));
+    }
+
+    @Test
+    public void equals_expected_when_default_amperage_less_16(){
+        List<String> amperage = ChargeValuesProvider.getAllowedAmperage(8);
+        String[] expected = {"6", "8", "10", "12", "14", "16", "32" };
+        assertArrayEquals(expected, Convert.toArray(amperage));
+    }
+
+    @Test
+    public void contains_amperage_when_default_amperage_not_in_range(){
+        List<String> amperage = ChargeValuesProvider.getAllowedAmperage(128);
+        assertTrue(amperage.contains("128"));
     }
 
     @Test

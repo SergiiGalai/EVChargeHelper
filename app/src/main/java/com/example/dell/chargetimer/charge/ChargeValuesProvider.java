@@ -1,18 +1,40 @@
 package com.example.dell.chargetimer.charge;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class ChargeValuesProvider {
 
     public static List<String> getAllowedAmperage(int defaultAmperage){
-        List<String> values = generateSequence(6, 16, 2);
 
-        if (!values.contains(String.valueOf(defaultAmperage)))
-            values.add(String.valueOf(defaultAmperage));
+        final int MaxHomeSocketAmperage = 16;
+        List<String> values;
 
-        values.add("30");
-        values.add("32");
+        if (defaultAmperage > MaxHomeSocketAmperage){
+            values = generateSequence(8, MaxHomeSocketAmperage, 4);
+            List<String> additionalValues = generateSequence(defaultAmperage - 10, defaultAmperage + 10, 2);
+
+            for (String tmpValue : additionalValues) {
+                if (!values.contains(tmpValue))
+                    values.add(tmpValue);
+            }
+        }else{
+            values = generateSequence(6, MaxHomeSocketAmperage, 2);
+
+            if (!values.contains(String.valueOf(defaultAmperage)))
+                values.add(String.valueOf(defaultAmperage));
+
+            values.add("32");
+        }
+
+        Collections.sort(values, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return Integer.parseInt(o1) - Integer.parseInt(o2);
+            }
+        });
 
         return values;
     }

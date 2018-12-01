@@ -12,12 +12,12 @@ public class LiionChargeTimeResolver implements IChargeTimeResolver
 
     @Override
     public long getMillisToCharge(byte remainingEnergyPct){
-        final int thresholdPercentage = 85;
+        final int linearThresholdPercentage = 80;
         double hoursToCharge;
 
-        if (remainingEnergyPct < thresholdPercentage){
-            hoursToCharge = getLinearDependencyTime(thresholdPercentage, remainingEnergyPct);
-            hoursToCharge += getFinishChargingTime(thresholdPercentage);
+        if (remainingEnergyPct < linearThresholdPercentage){
+            hoursToCharge = getLinearDependencyTime(linearThresholdPercentage, remainingEnergyPct);
+            hoursToCharge += getFinishChargingTime(linearThresholdPercentage);
         } else {
             hoursToCharge = getFinishChargingTime(remainingEnergyPct);
         }
@@ -40,8 +40,9 @@ public class LiionChargeTimeResolver implements IChargeTimeResolver
     }
 
     private double getFinishChargingTime(int currentPercentage) {
+        final int ChargingAmperageSlowdown = 2;
         double WhToCharge = battery.UsefulCapacityKWh * 1000 * (100 - currentPercentage) / 100;
-        return WhToCharge / (getChargingPowerWh() * 0.55 * getChargingEfficiency());
+        return ChargingAmperageSlowdown * WhToCharge / (getChargingPowerWh() * getChargingEfficiency());
     }
 }
 
