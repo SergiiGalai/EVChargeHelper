@@ -2,7 +2,7 @@ package com.example.dell.chargetimer.charge;
 
 public class Battery
 {
-    public double UsefulCapacityKWh;
-    public double ChargingLoss;
+    public double UsableCapacityKWh;
+    public double ChargingLossPct;
 }
 

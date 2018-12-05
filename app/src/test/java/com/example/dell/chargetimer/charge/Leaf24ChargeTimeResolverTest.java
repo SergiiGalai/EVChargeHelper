@@ -21,8 +21,8 @@ public class Leaf24ChargeTimeResolverTest
 
         power.Voltage = 220;
         power.Amperage = 32;
-        battery.ChargingLoss = 12;
-        battery.UsefulCapacityKWh = 22;
+        battery.ChargingLossPct = 12;
+        battery.UsableCapacityKWh = 22;
 
         timeResolver = new LiionChargeTimeResolver(power, battery);
     }

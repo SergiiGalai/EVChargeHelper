@@ -35,7 +35,7 @@ public class LiionChargeTimeResolver implements IChargeTimeResolver
     }
 
     private double getChargingEfficiency() {
-        return 100 / (100 + battery.ChargingLoss);
+        return 100 / (100 + battery.ChargingLossPct);
     }
 
     private double getLinearDependencyTime(short maxPercentage, short currentPercentage) {
@@ -51,7 +51,7 @@ public class LiionChargeTimeResolver implements IChargeTimeResolver
     }
 
     private double getEmptyBatteryChargeTime() {
-        double WhToCharge = battery.UsefulCapacityKWh * 1000;
+        double WhToCharge = battery.UsableCapacityKWh * 1000;
         return WhToCharge / (getChargingPowerWh() * getChargingEfficiency());
     }
 }

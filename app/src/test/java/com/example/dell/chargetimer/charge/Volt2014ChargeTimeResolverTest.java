@@ -21,8 +21,8 @@ public class Volt2014ChargeTimeResolverTest
 
         power.Voltage = 220;
         power.Amperage = 16;
-        battery.ChargingLoss = 12;
-        battery.UsefulCapacityKWh = 10.5;
+        battery.ChargingLossPct = 12;
+        battery.UsableCapacityKWh = 10.5;
 
         timeResolver = new LiionChargeTimeResolver(power, battery);
     }

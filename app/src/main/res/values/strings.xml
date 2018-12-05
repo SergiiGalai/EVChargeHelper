@@ -47,7 +47,7 @@ You can change this settings anytime in application settings.
     <string name="open">Open</string>
     <string name="calendar_permissions_not_granted">CALENDAR permissions were NOT granted.</string>
     <string name="remind_me_button_title">Remind me at %s</string>
-    <string name="remaining_energy_title">Remaining battery energy, %d%%</string>
+    <string name="remaining_energy_title">Remaining battery energy, %d%% (%.1f of %.1fkWh)</string>
     <string name="current_description_title">Power line options:</string>
     <string name="amperage_title">A</string>
     <string name="voltage_title">V</string>

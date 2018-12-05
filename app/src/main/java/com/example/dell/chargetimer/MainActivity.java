@@ -88,21 +88,27 @@ public class MainActivity extends BaseActivity
         void refresh() {
             powerLine.Amperage = Integer.valueOf(amperagePicker.getValue());
             powerLine.Voltage = Integer.valueOf(voltagePicker.getValue());
-            battery.UsefulCapacityKWh = settingsProvider.getBatteryCapacity();
-            battery.ChargingLoss = settingsProvider.getChargingLossPct();
-            byte remainingEnergyPct = getRemainingEnergyPercentage();
-            millisToCharge = chargeTimeResolver.getMillisToCharge(remainingEnergyPct);
+            battery.UsableCapacityKWh = settingsProvider.getBatteryCapacity();
+            battery.ChargingLossPct = settingsProvider.getChargingLossPct();
 
+            byte remainingEnergyPct = getRemainingEnergyPercentage();
+            double remainingEnergyKWt = getRemainingEnergyKWh(remainingEnergyPct);
+            remainingEnergyText = String.format(getString(R.string.remaining_energy_title), remainingEnergyPct, remainingEnergyKWt, battery.UsableCapacityKWh);
+
+            millisToCharge = chargeTimeResolver.getMillisToCharge(remainingEnergyPct);
             Date dateChargedAt = TimeHelper.toDate(TimeHelper.now() + millisToCharge);
             Time time = TimeHelper.getHoursAndMinutes(millisToCharge);
 
-            remainingEnergyText = String.format(getString(R.string.remaining_energy_title), remainingEnergyPct);
             chargedInText = String.format(getString(R.string.should_be_charged_prefix_title), time.hours, time.minutes);
             remindButtonText = String.format(getString(R.string.remind_me_button_title), TimeHelper.formatAsHoursWithMinutes(dateChargedAt));
         }
 
         private byte getRemainingEnergyPercentage(){
             return (byte) (remainingEnergySeekBar.getProgress() * 5);
+        }
+
+        private double getRemainingEnergyKWh(byte remainingEnergyPct){
+            return battery.UsableCapacityKWh * remainingEnergyPct / 100;
         }
 
         long getMillisToCharge() { return millisToCharge; }
