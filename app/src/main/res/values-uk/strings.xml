@@ -22,7 +22,7 @@
     <string name="open">Відкрити</string>
     <string name="calendar_permissions_not_granted">Доступ до КАЛЕНДАРЯ заборонено</string>
     <string name="remind_me_button_title">Нагадати о %s</string>
-    <string name="remaining_energy_title">Залишковий заряд у батареї, %d%% (%.1f з %.1fкВтг)</string>
+    <string name="remaining_energy_title">Лишилося %d%% заряду (%.1f з %.1fкВтг)</string>
     <string name="current_description_title">Налаштування мережі:</string>
     <string name="amperage_title">А</string>
     <string name="voltage_title">В</string>
