@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class ChevyVoltChargeTimeResolverTest
+public class Volt2014ChargeTimeResolverTest
 {
     private LiionChargeTimeResolver timeResolver;
     private PowerLine power;
@@ -19,20 +19,12 @@ public class ChevyVoltChargeTimeResolverTest
         power = new PowerLine();
         battery = new Battery();
 
-        initPowerNetwork();
-        initChevyVoltBattery();
-
-        timeResolver = new LiionChargeTimeResolver(power, battery);
-    }
-
-    private void initPowerNetwork() {
         power.Voltage = 220;
         power.Amperage = 16;
-    }
-
-    private void initChevyVoltBattery(){
         battery.ChargingLoss = 12;
         battery.UsefulCapacityKWh = 10.5;
+
+        timeResolver = new LiionChargeTimeResolver(power, battery);
     }
 
     @Test()
