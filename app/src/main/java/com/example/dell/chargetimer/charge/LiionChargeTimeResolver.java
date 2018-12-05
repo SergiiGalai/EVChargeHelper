@@ -2,6 +2,7 @@ package com.example.dell.chargetimer.charge;
 
 public class LiionChargeTimeResolver implements IChargeTimeResolver
 {
+    private static final short LINEAR_CHARGING_THRESHOLD_PCT = 80;
     private PowerLine powerLine;
     private Battery battery;
 
@@ -12,18 +13,21 @@ public class LiionChargeTimeResolver implements IChargeTimeResolver
 
     @Override
     public long getMillisToCharge(byte remainingEnergyPct){
-        final int linearThresholdPercentage = 80;
         double hoursToCharge;
 
-        if (remainingEnergyPct < linearThresholdPercentage){
-            hoursToCharge = getLinearDependencyTime(linearThresholdPercentage, remainingEnergyPct);
-            hoursToCharge += getFinishChargingTime(linearThresholdPercentage);
+        if (remainingEnergyPct < LINEAR_CHARGING_THRESHOLD_PCT){
+            hoursToCharge = getLinearDependencyTime(LINEAR_CHARGING_THRESHOLD_PCT, remainingEnergyPct);
+            hoursToCharge += getFinishChargingTime(LINEAR_CHARGING_THRESHOLD_PCT);
         } else {
             hoursToCharge = getFinishChargingTime(remainingEnergyPct);
         }
 
-        Double msToCharge = hoursToCharge * 3600 * 1000;
-        return msToCharge.isInfinite() ? 0 : msToCharge.longValue();
+        return convertHoursToMs(hoursToCharge);
+    }
+
+    private long convertHoursToMs(double hours) {
+        Double ms = hours * 3600 * 1000;
+        return ms.isInfinite() ? 0 : ms.longValue();
     }
 
     private int getChargingPowerWh() {
@@ -34,15 +38,21 @@ public class LiionChargeTimeResolver implements IChargeTimeResolver
         return 100 / (100 + battery.ChargingLoss);
     }
 
-    private double getLinearDependencyTime(int maxPercentage, short remainingEnergyPct) {
-        double WhToCharge = battery.UsefulCapacityKWh * 1000 * (maxPercentage - remainingEnergyPct) / 100;
-        return WhToCharge / (getChargingPowerWh() * getChargingEfficiency());
+    private double getLinearDependencyTime(short maxPercentage, short currentPercentage) {
+        return getEmptyBatteryChargeTime() *
+                (maxPercentage - currentPercentage) / 100;
     }
 
     private double getFinishChargingTime(int currentPercentage) {
         final int ChargingAmperageSlowdown = 2;
-        double WhToCharge = battery.UsefulCapacityKWh * 1000 * (100 - currentPercentage) / 100;
-        return ChargingAmperageSlowdown * WhToCharge / (getChargingPowerWh() * getChargingEfficiency());
+
+        return getEmptyBatteryChargeTime() * ChargingAmperageSlowdown *
+                (100 - currentPercentage) / 100;
+    }
+
+    private double getEmptyBatteryChargeTime() {
+        double WhToCharge = battery.UsefulCapacityKWh * 1000;
+        return WhToCharge / (getChargingPowerWh() * getChargingEfficiency());
     }
 }
 

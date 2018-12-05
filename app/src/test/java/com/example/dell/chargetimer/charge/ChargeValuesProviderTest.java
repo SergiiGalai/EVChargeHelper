@@ -36,15 +36,22 @@ public class ChargeValuesProviderTest {
 
     @Test
     public void equals_expected_when_default_voltage_bigger_delta(){
-        List<String> voltage = ChargeValuesProvider.getAllowedVoltage(200, 10);
-        String[] expected = {"190", "195", "200", "205", "210" };
+        List<String> voltage = ChargeValuesProvider.getAllowedVoltage(200);
+        String[] expected = {"160", "170", "180", "190", "200", "210", "220", "230", "240" };
         assertArrayEquals(expected, Convert.toArray(voltage));
     }
 
     @Test
     public void equals_expected_when_default_voltage_less_delta(){
-        List<String> voltage = ChargeValuesProvider.getAllowedVoltage(10, 40);
-        String[] expected = {"0", "5", "10", "15", "20" };
+        List<String> voltage = ChargeValuesProvider.getAllowedVoltage(10);
+        String[] expected = {"0", "10", "20" };
+        assertArrayEquals(expected, Convert.toArray(voltage));
+    }
+
+    @Test
+    public void equals_expected_when_default_voltage_US(){
+        List<String> voltage = ChargeValuesProvider.getAllowedVoltage(110);
+        String[] expected = {"90", "100", "110", "120", "130" };
         assertArrayEquals(expected, Convert.toArray(voltage));
     }
 }

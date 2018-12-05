@@ -29,6 +29,8 @@ import java.util.Date;
 public class MainActivity extends BaseActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback
 {
+    private final static int SETTINGS_REQUEST_CODE = 9000;
+
     private ViewModel viewModel = new ViewModel();
 
     private SeekBar remainingEnergySeekBar;
@@ -165,7 +167,7 @@ public class MainActivity extends BaseActivity
         switch (menuItem.getItemId())
         {
             case R.id.settings:
-                startActivity(new Intent(this, SettingsActivity.class));
+                startActivityForResult(new Intent(this, SettingsActivity.class), SETTINGS_REQUEST_CODE);
                 return true;
             default:
                 return super.onOptionsItemSelected(menuItem);
@@ -177,5 +179,14 @@ public class MainActivity extends BaseActivity
         if (requestCode == GoogleCalendarAdvancedNotificator.REQUEST_CALENDAR){
             scheduler.schedule(grantResults, viewModel.getMillisToCharge());
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == SETTINGS_REQUEST_CODE){
+            initializeVariables();
+            updateControls();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
