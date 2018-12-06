@@ -2,8 +2,7 @@
 <resources>
     <string name="title_activity_settings">Настройки</string>
     <string name="title_activity_bugreport">Сообщение об ошибке</string>
-    <string name="pref_title_car_list">Модель авто</string>
-    <string name="pref_header_charging">Настройки зарядки</string>
+    <string name="pref_header_charging">Батарея и зарядка</string>
     <string name="pref_title_voltage">Напряжение в сети по умолчанию, В</string>
     <string name="pref_title_amperage">Сила тока в сети по умолчанию, А</string>
     <string name="pref_title_charging_loss">Потеря при заряде батареи, %</string>
@@ -13,19 +12,30 @@
     <string name="pref_description_allow_app_notifications">Используется звук, отличный от стандартного, чтобы можна было легче его отличить от стандарных уведомлений.</string>
     <string name="pref_title_allow_calendar_notifications">Уведомления календаря Google</string>
     <string name="pref_description_allow_calendar_notifications">Включить уведомления с настройками по умолчанию</string>
-    <string name="pref_title_allow_calendar_permission_notifications">Дополнительные уведомления календаря Google</string>
+    <string name="pref_title_allow_asking_for_calendar_permissions">Разрешить запрос на доступ к календарю</string>
+    <string name="pref_description_allow_asking_for_calendar_permissions">Доступ к календарю нужен для более быстрого и удобного создания уведомлений о зарядке авто.\n
+Например, создание уведомлений в один клик, изменение времени уведомления, цвета фона.</string>
     <string name="car_charged_title">Автомобиль заряжен</string>
     <string name="car_charged_descr">Ваш автомобиль должен быть заряжен к етому времени</string>
     <string name="car_charged_time_desc">Ваш автомобиль должен быть заряжен к %s</string>
+    <string name="car_charged_channel_descr">Уведомляет когда ваш авто заряжен</string>
     <string name="open">Открыть</string>
     <string name="calendar_permissions_not_granted">Доступ к КАЛЕНДАРЮ запрещен</string>
     <string name="remind_me_button_title">Напомнить в %s</string>
-    <string name="remaining_energy_title">Остаточный заряд, %d%%</string>
-    <string name="current_description_title">Авто заряжается используя:</string>
+    <string name="remaining_energy_title">Осталось %d%% заряда (%.1f из %.1fкВтч)</string>
+    <string name="current_description_title">Настройки сети:</string>
     <string name="amperage_title">A</string>
     <string name="voltage_title">В</string>
     <string name="should_be_charged_prefix_title">Авто должно быть заряжно через %dч %02dмин</string>
     <string name="pref_title_reminder">Сообщить за, минут</string>
-    <string name="pref_description_allow_calendar_permission_notifications">Включить уведомления с собственными настройками. Требует доступа к календарю</string>
-    <string name="calendar_permission_rationale">Доступ до календаря требуется для установки сообственных настроек времени уведомления и цвета сообщения</string>
+    <string name="pref_title_reminder_validation_error">Мы не разрешаем значение для уведомления больше %d минут</string>
+
+    <string name="calendar_permission_rationale_title">Для чего нужен доступ</string>
+    <string name="calendar_permission_rationale">Доступ до календаря требуется для установки сообственных настроек времени уведомления и цвета сообщения.\n
+Без доступа вы будете использовать стандартный екран нового уведомления календаря.\n
+Мы не читаем и не изменяем другие уведомления.\n
+Вы можете изменить данное значение в любое время в настройках приложения</string>
+    <string name="permission_dialog_allow">Продолжить</string>
+    <string name="permission_dialog_forbid">Стандартный</string>
+    <string name="event_created">Уведомление в календаре создано</string>
 </resources>

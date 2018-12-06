@@ -1,30 +1,20 @@
 <resources>
-    <string name="app_name" translatable="false">EV Charge Helper</string>
+    <string name="app_name" translatable="false">EV Charge Timer</string>
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_bugreport">Bug Report</string>
 
     <!-- Strings related to Settings -->
 
     <!-- Example settings for Charging -->
-    <string name="pref_header_charging">Charging settings</string>
+    <string name="pref_header_charging">Battery and charging</string>
 
     <string name="pref_title_voltage">Default voltage in network, V</string>
     <string name="pref_title_amperage">Default consuming amperage, A</string>
     <string name="pref_title_charging_loss">Battery charging loss, %</string>
-    <string name="pref_title_battery_capacity">Useful battery capacity, kWh</string>
-    <string-array name="pref_car_list_titles">
-        <item>Nissan Leaf</item>
-        <item>Chevy Volt, 2011–2015</item>
-        <item>Opel Ampera</item>
-    </string-array>
-    <string-array name="pref_car_list_values">
-        <item>Leaf1</item>
-        <item>Volt1</item>
-        <item>Ampera</item>
-    </string-array>
+    <string name="pref_title_battery_capacity">Usable battery capacity, kWh</string>
 
     <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications settings</string>
+    <string name="pref_header_notifications">Notification settings</string>
 
     <string name="pref_title_allow_app_notifications">Use application own notifications</string>
     <string name="pref_description_allow_app_notifications">Custom sound is used to make it easier to distinguish from other notifications</string>
@@ -32,29 +22,35 @@
     <string name="pref_title_allow_calendar_notifications">Use Google calendar notifications</string>
     <string name="pref_description_allow_calendar_notifications">Enable notifications with default reminders.</string>
 
-    <string name="pref_title_allow_calendar_permission_notifications">Custom Google calendar notifications</string>
-    <string name="pref_description_allow_calendar_permission_notifications">Enable notifications with custom settings.
-        Requires permission to access Google calendar.
+    <string name="pref_title_allow_asking_for_calendar_permissions">Allow asking for calendar permission</string>
+    <string name="pref_description_allow_asking_for_calendar_permissions">Calendar permission is needed to be able to create notifications faster and with more comfort.\n
+Allows to create notifications in one click, change reminding time, event background.
     </string>
 
     <string name="pref_title_reminder">Remind before, minutes</string>
+    <string name="pref_title_reminder_validation_error">It seems too big. We don\'t allow value for reminder more than %d minutes.</string>
 
     <string name="car_charged_title">Car charged</string>
     <string name="car_charged_descr">Your car should be charged by this time.</string>
     <string name="car_charged_time_desc">Your car should be charged by %s.</string>
     <string name="car_charged_channel_descr">Notifies you when your car is charged</string>
 
-    <string name="calendar_permission_rationale">Calendar permission is required to make reminders time customizable as well as displaying events in another color.
-        Without this permission you will see new calendar event screen with default reminder time and default color.
-        You will be able to change them manually</string>
+    <string name="calendar_permission_rationale_title">Why do we ask permission</string>
+    <string name="calendar_permission_rationale">Calendar permission is required to make reminders time customizable as well as displaying events in another color.\n
+Without this permission you will see a standard new calendar event screen.\n
+We do NOT read or change other notifications.\n
+You can change this settings anytime in application settings.
+    </string>
+    <string name="permission_dialog_allow">Proceed</string>
+    <string name="permission_dialog_forbid">Use default</string>
     <string name="ok" translatable="false">OK</string>
     <string name="open">Open</string>
-    <string name="calendar_permissions_not_granted">CALENDAR permission was NOT granted.</string>
+    <string name="calendar_permissions_not_granted">CALENDAR permissions were NOT granted.</string>
     <string name="remind_me_button_title">Remind me at %s</string>
-    <string name="remaining_energy_title">Remaining energy, %d%%</string>
-    <string name="current_description_title">Car is charging using:</string>
+    <string name="remaining_energy_title">%d%% battery remaining (%.1f of %.1fkWh)</string>
+    <string name="current_description_title">Power line options:</string>
     <string name="amperage_title">A</string>
     <string name="voltage_title">V</string>
     <string name="should_be_charged_prefix_title">Car should be charged in %dh %02dm</string>
-
+    <string name="event_created">Calendar event created</string>
 </resources>
