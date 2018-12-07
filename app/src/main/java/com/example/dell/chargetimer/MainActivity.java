@@ -13,6 +13,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.dell.chargetimer.bugreport.BaseActivity;
+import com.example.dell.chargetimer.cars.Car;
+import com.example.dell.chargetimer.cars.CarsProvider;
 import com.example.dell.chargetimer.charge.Battery;
 import com.example.dell.chargetimer.charge.IChargeTimeResolver;
 import com.example.dell.chargetimer.charge.LiionChargeTimeResolver;
@@ -24,6 +26,7 @@ import com.example.dell.chargetimer.notifications.GoogleCalendarAdvancedNotifica
 import com.example.dell.chargetimer.notifications.NotificationScheduler;
 import com.example.dell.chargetimer.settings.ISettingsReader;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class MainActivity extends BaseActivity
@@ -43,6 +46,10 @@ public class MainActivity extends BaseActivity
     private NotificationScheduler scheduler;
 
     private void initializeVariables() {
+        CarsProvider carsProvider = new CarsProvider(this);
+        ArrayList<Car> cars = carsProvider.Get();
+        int len = cars.size();
+
         settingsProvider = Factory.createSettingsReader(this);
         scheduler = Factory.createScheduler(this);
 

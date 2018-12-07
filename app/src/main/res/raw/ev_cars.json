@@ -1,0 +1,12 @@
+{
+  "ev_cars":[
+    {"id": "leaf24",      "manufacture":"Nissan",       "model":"Leaf",           "capacity":24,      "usableCapacity":22},
+    {"id": "leaf30",      "manufacture":"Nissan",       "model":"Leaf",           "capacity":30,      "usableCapacity":28},
+    {"id": "volt2014",    "manufacture":"Chevrolet",    "model":"Volt 2012-2014", "capacity":16.5,    "usableCapacity":10.5},
+    {"id": "volt2016",    "manufacture":"Chevrolet",    "model":"Volt 2016-2019", "capacity":18.4,    "usableCapacity":13.8},
+    {"id": "i3_60",       "manufacture":"BMW",          "model":"i3 60Ah",        "capacity":22,      "usableCapacity":18.8},
+    {"id": "i3_90",       "manufacture":"BMW",          "model":"i3 90Ah",        "capacity":33.2,    "usableCapacity":27.2},
+    {"id": "zoe22",       "manufacture":"Renault",      "model":"Zoe",            "capacity":26,      "usableCapacity":23.3},
+    {"id": "zoe40",       "manufacture":"Renault",      "model":"Zoe",            "capacity":45.6,    "usableCapacity":41}
+  ]
+}
