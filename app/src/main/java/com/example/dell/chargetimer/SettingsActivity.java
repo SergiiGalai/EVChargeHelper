@@ -74,8 +74,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity
 
     private static boolean isLargeScreen(Context context) {
         Configuration configuration = context.getResources().getConfiguration();
-        return (configuration.screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >=
-                Configuration.SCREENLAYOUT_SIZE_LARGE;
+        int screenMask = configuration.screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
+
+        return screenMask >= Configuration.SCREENLAYOUT_SIZE_LARGE
+                || (screenMask == Configuration.SCREENLAYOUT_SIZE_NORMAL
+                    && configuration.orientation == Configuration.ORIENTATION_LANDSCAPE);
     }
 
     @Override
