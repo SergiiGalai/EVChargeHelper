@@ -125,6 +125,10 @@ public class MainActivity extends BaseActivity
         remindButton.setText(viewModel.getRemindButtonText());
     }
 
+    private void startSettingsActivity(){
+        startActivityForResult(new Intent(this, SettingsActivity.class), SETTINGS_REQUEST_CODE);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -160,6 +164,11 @@ public class MainActivity extends BaseActivity
             scheduler.schedule(viewModel.getMillisToCharge());
             }
         });
+
+        if (settingsProvider.firstApplicationRun()){
+            Factory.createSettingsWriter(this).setFirstApplicationRunDone();
+            startSettingsActivity();
+        }
     }
 
     @Override
@@ -173,7 +182,7 @@ public class MainActivity extends BaseActivity
         switch (menuItem.getItemId())
         {
             case R.id.settings:
-                startActivityForResult(new Intent(this, SettingsActivity.class), SETTINGS_REQUEST_CODE);
+                startSettingsActivity();
                 return true;
             default:
                 return super.onOptionsItemSelected(menuItem);

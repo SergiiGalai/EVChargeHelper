@@ -12,6 +12,13 @@ public class SharedPreferenceSettingsWriter implements ISettingsWriter {
     }
 
     @Override
+    public void setFirstApplicationRunDone() {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("first_application_run", false);
+        editor.apply();
+    }
+
+    @Override
     public void saveGoogleAdvancedNotificationsAllowed(boolean value){
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("allow_calendar_permission_notifications", value);

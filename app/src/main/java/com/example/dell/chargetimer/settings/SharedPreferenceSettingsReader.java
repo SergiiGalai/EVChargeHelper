@@ -13,6 +13,11 @@ public class SharedPreferenceSettingsReader implements ISettingsReader
     }
 
     @Override
+    public boolean firstApplicationRun() {
+        return preferences.getBoolean("first_application_run", true);
+    }
+
+    @Override
     public boolean applicationNotificationsAllowed(){
         return preferences.getBoolean("allow_app_notifications", true);
     }
