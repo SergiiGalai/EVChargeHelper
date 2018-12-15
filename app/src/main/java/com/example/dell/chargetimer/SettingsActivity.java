@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.view.MenuItem;
@@ -31,8 +32,7 @@ import java.util.List;
  */
 public class SettingsActivity extends AppCompatPreferenceActivity
 {
-    public final static String EXTRA_LOAD_FRAGMENT = "frgToLoad";
-    public final static int FRAGMENT_CHARGING = 100;
+    public final static String EXTRA_LOAD_FRAGMENT_MESSAGE = "frgToLoad";
 
     private static Preference.OnPreferenceChangeListener listSummaryToValueListener = new Preference.OnPreferenceChangeListener()
     {
@@ -61,8 +61,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity
         setupActionBar();
 
         Bundle extras = getIntent().getExtras();
-        if (extras != null && extras.getInt(EXTRA_LOAD_FRAGMENT) == FRAGMENT_CHARGING)
+        if (extras != null && extras.containsKey(EXTRA_LOAD_FRAGMENT_MESSAGE))
         {
+            String message = extras.getString(EXTRA_LOAD_FRAGMENT_MESSAGE);
+            UserMessage.showSnackbar(this, message, Snackbar.LENGTH_INDEFINITE);
             getFragmentManager().beginTransaction().replace(android.R.id.content,
                     new ChargingPreferenceFragment()).commit();
         }
@@ -94,7 +96,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity
     @Override
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void onBuildHeaders(List<Header> target) {
-        if (! getIntent().hasExtra(EXTRA_LOAD_FRAGMENT))
+        if (! getIntent().hasExtra(EXTRA_LOAD_FRAGMENT_MESSAGE))
             loadHeadersFromResource(R.xml.pref_headers, target);
     }
 

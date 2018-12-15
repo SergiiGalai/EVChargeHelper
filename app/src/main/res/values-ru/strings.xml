@@ -38,4 +38,5 @@
     <string name="permission_dialog_allow">Продолжить</string>
     <string name="permission_dialog_forbid">Стандартный</string>
     <string name="event_created">Уведомление в календаре создано</string>
+    <string name="first_time_settings">Заполните емкость батареи, а также напряжение и силу тука в вашей сети</string>
 </resources>

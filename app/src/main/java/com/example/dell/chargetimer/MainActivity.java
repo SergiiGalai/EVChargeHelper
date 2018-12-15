@@ -72,7 +72,7 @@ public class MainActivity extends BaseActivity
         initializeChangeListeners();
 
         if (settingsProvider.firstApplicationRun()){
-            Factory.createSettingsWriter(this).setFirstApplicationRunDone();
+            Factory.createSettingsWriter(this).setFirstApplicationRunCompleted();
             startSettingsActivity(true);
         }
     }
@@ -207,7 +207,7 @@ public class MainActivity extends BaseActivity
     private void startSettingsActivity(boolean openChargeFragment){
         Intent i = new Intent(this, SettingsActivity.class);
         if (openChargeFragment)
-            i.putExtra(SettingsActivity.EXTRA_LOAD_FRAGMENT, SettingsActivity.FRAGMENT_CHARGING);
+            i.putExtra(SettingsActivity.EXTRA_LOAD_FRAGMENT_MESSAGE, getString(R.string.first_time_settings));
         startActivityForResult(i, SETTINGS_REQUEST_CODE);
     }
 }

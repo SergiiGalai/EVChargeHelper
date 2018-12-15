@@ -53,4 +53,5 @@ You can change this settings anytime in application settings.
     <string name="voltage_title">V</string>
     <string name="should_be_charged_prefix_title">Car should be charged in %dh %02dm</string>
     <string name="event_created">Calendar event created</string>
+    <string name="first_time_settings">Before we go please fill your battery capacity and usual power line settings</string>
 </resources>

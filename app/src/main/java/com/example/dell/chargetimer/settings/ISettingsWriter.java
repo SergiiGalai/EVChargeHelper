@@ -1,6 +1,6 @@
 package com.example.dell.chargetimer.settings;
 
 public interface ISettingsWriter {
-    void setFirstApplicationRunDone();
+    void setFirstApplicationRunCompleted();
     void saveGoogleAdvancedNotificationsAllowed(boolean value);
 }

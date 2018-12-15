@@ -7,11 +7,19 @@ import android.widget.Toast;
 
 public final class UserMessage {
     public static void showSnackbar(Activity activity, String description) {
-        Snackbar.make(activity.findViewById(android.R.id.content), description, Snackbar.LENGTH_LONG)
+        showSnackbar(activity, description, Snackbar.LENGTH_LONG);
+    }
+
+    public static void showSnackbar(Activity activity, String description, int snackbarTimeLength) {
+        Snackbar.make(activity.findViewById(android.R.id.content), description, snackbarTimeLength)
                 .show();
     }
 
     public static void showToast(Context context, String description) {
-        Toast.makeText(context, description, Toast.LENGTH_SHORT).show();
+        showToast(context, description, Toast.LENGTH_SHORT);
+    }
+
+    public static void showToast(Context context, String description, int toastTimeLength) {
+        Toast.makeText(context, description, toastTimeLength).show();
     }
 }
