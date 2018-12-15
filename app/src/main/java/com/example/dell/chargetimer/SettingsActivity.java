@@ -31,6 +31,9 @@ import java.util.List;
  */
 public class SettingsActivity extends AppCompatPreferenceActivity
 {
+    public final static String EXTRA_LOAD_FRAGMENT = "frgToLoad";
+    public final static int FRAGMENT_CHARGING = 100;
+
     private static Preference.OnPreferenceChangeListener listSummaryToValueListener = new Preference.OnPreferenceChangeListener()
     {
         @Override
@@ -56,6 +59,13 @@ public class SettingsActivity extends AppCompatPreferenceActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupActionBar();
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null && extras.getInt(EXTRA_LOAD_FRAGMENT) == FRAGMENT_CHARGING)
+        {
+            getFragmentManager().beginTransaction().replace(android.R.id.content,
+                    new ChargingPreferenceFragment()).commit();
+        }
     }
 
     private void setupActionBar() {
@@ -84,7 +94,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity
     @Override
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void onBuildHeaders(List<Header> target) {
-        loadHeadersFromResource(R.xml.pref_headers, target);
+        if (! getIntent().hasExtra(EXTRA_LOAD_FRAGMENT))
+            loadHeadersFromResource(R.xml.pref_headers, target);
     }
 
     /**

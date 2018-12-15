@@ -31,14 +31,14 @@ public class MainActivity extends BaseActivity
 {
     private final static int SETTINGS_REQUEST_CODE = 9000;
 
-    private ViewModel viewModel = new ViewModel();
-
     private SeekBar remainingEnergySeekBar;
     private TextView remainingEnergyTitle;
     private StepNumberPicker amperagePicker;
     private StepNumberPicker voltagePicker;
     private TextView chargedInTitle;
     private Button remindButton;
+
+    private ViewModel viewModel = new ViewModel();
     private ISettingsReader settingsProvider;
     private NotificationScheduler scheduler;
 
@@ -62,12 +62,54 @@ public class MainActivity extends BaseActivity
         voltagePicker.setValue(String.valueOf(defaultVoltage));
     }
 
-    private NumberPicker.OnValueChangeListener textWatcher = new NumberPicker.OnValueChangeListener(){
-        @Override
-        public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        initializeVariables();
+        updateControls();
+        initializeChangeListeners();
+
+        if (settingsProvider.firstApplicationRun()){
+            Factory.createSettingsWriter(this).setFirstApplicationRunDone();
+            startSettingsActivity(true);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.app_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId())
+        {
+            case R.id.settings:
+                startSettingsActivity(false);
+                return true;
+            default:
+                return super.onOptionsItemSelected(menuItem);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == GoogleCalendarAdvancedNotificator.REQUEST_CALENDAR){
+            scheduler.schedule(grantResults, viewModel.getMillisToCharge());
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == SETTINGS_REQUEST_CODE){
+            initializeVariables();
             updateControls();
         }
-    };
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     private class ViewModel{
         private String remainingEnergyText;
@@ -117,26 +159,7 @@ public class MainActivity extends BaseActivity
         String getRemindButtonText() { return remindButtonText; }
     }
 
-    private void updateControls()
-    {
-        viewModel.refresh();
-        remainingEnergyTitle.setText(viewModel.getRemainingEnergyText());
-        chargedInTitle.setText(viewModel.getChargedInText());
-        remindButton.setText(viewModel.getRemindButtonText());
-    }
-
-    private void startSettingsActivity(){
-        startActivityForResult(new Intent(this, SettingsActivity.class), SETTINGS_REQUEST_CODE);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        initializeVariables();
-        updateControls();
-
+    private void initializeChangeListeners(){
         voltagePicker.setOnValueChangedListener(textWatcher);
         amperagePicker.setOnValueChangedListener(textWatcher);
 
@@ -160,48 +183,31 @@ public class MainActivity extends BaseActivity
         {
             @Override
             public void onClick(View v) {
-            updateControls();
-            scheduler.schedule(viewModel.getMillisToCharge());
+                updateControls();
+                scheduler.schedule(viewModel.getMillisToCharge());
             }
         });
-
-        if (settingsProvider.firstApplicationRun()){
-            Factory.createSettingsWriter(this).setFirstApplicationRunDone();
-            startSettingsActivity();
-        }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.app_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem menuItem) {
-        switch (menuItem.getItemId())
-        {
-            case R.id.settings:
-                startSettingsActivity();
-                return true;
-            default:
-                return super.onOptionsItemSelected(menuItem);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == GoogleCalendarAdvancedNotificator.REQUEST_CALENDAR){
-            scheduler.schedule(grantResults, viewModel.getMillisToCharge());
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == SETTINGS_REQUEST_CODE){
-            initializeVariables();
+    private NumberPicker.OnValueChangeListener textWatcher = new NumberPicker.OnValueChangeListener(){
+        @Override
+        public void onValueChange(NumberPicker numberPicker, int i, int i1) {
             updateControls();
         }
-        super.onActivityResult(requestCode, resultCode, data);
+    };
+
+    private void updateControls()
+    {
+        viewModel.refresh();
+        remainingEnergyTitle.setText(viewModel.getRemainingEnergyText());
+        chargedInTitle.setText(viewModel.getChargedInText());
+        remindButton.setText(viewModel.getRemindButtonText());
+    }
+
+    private void startSettingsActivity(boolean openChargeFragment){
+        Intent i = new Intent(this, SettingsActivity.class);
+        if (openChargeFragment)
+            i.putExtra(SettingsActivity.EXTRA_LOAD_FRAGMENT, SettingsActivity.FRAGMENT_CHARGING);
+        startActivityForResult(i, SETTINGS_REQUEST_CODE);
     }
 }
