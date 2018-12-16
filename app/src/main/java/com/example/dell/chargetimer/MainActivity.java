@@ -1,5 +1,6 @@
 package com.example.dell.chargetimer;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -38,7 +39,7 @@ public class MainActivity extends BaseActivity
     private TextView chargedInTitle;
     private Button remindButton;
 
-    private ViewModel viewModel = new ViewModel();
+    private ViewModel viewModel = new ViewModel(this);
     private ISettingsReader settingsProvider;
     private NotificationScheduler scheduler;
 
@@ -117,6 +118,7 @@ public class MainActivity extends BaseActivity
     }
 
     private class ViewModel{
+        private Context context;
         private String remainingEnergyText;
         private String chargedInText;
         private String remindButtonText;
@@ -126,7 +128,8 @@ public class MainActivity extends BaseActivity
         private final Battery battery;
         private IChargeTimeResolver chargeTimeResolver;
 
-        ViewModel() {
+        ViewModel(Context context) {
+            this.context = context;
             powerLine = new PowerLine();
             battery = new Battery();
             chargeTimeResolver = new LiionChargeTimeResolver(powerLine, battery);
@@ -147,7 +150,8 @@ public class MainActivity extends BaseActivity
             Time time = TimeHelper.getHoursAndMinutes(millisToCharge);
 
             chargedInText = String.format(getString(R.string.should_be_charged_prefix_title), time.hours, time.minutes);
-            remindButtonText = String.format(getString(R.string.remind_me_button_title), TimeHelper.formatAsHoursWithMinutes(dateChargedAt));
+            remindButtonText = String.format(getString(R.string.remind_me_button_title),
+                    TimeHelper.formatAsHoursWithMinutes(context, dateChargedAt));
         }
 
         private byte getRemainingEnergyPercentage(){
