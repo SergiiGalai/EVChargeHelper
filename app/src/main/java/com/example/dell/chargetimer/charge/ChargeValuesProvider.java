@@ -39,8 +39,7 @@ public class ChargeValuesProvider {
     }
 
     private static List<String> getAllowedAmperageForPublicChargers(int defaultAmperage) {
-        List<String> values;
-        values = generateSequence(8, MAX_HOME_SOCKET_AMPERAGE, 4);
+        List<String> values = generateSequence(8, MAX_HOME_SOCKET_AMPERAGE, 4);
         List<String> additionalValues = generateSequence(defaultAmperage - 10, defaultAmperage + 10, 2);
 
         for (String tmpValue : additionalValues) {

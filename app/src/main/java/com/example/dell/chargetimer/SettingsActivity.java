@@ -32,9 +32,10 @@ import java.util.List;
  */
 public class SettingsActivity extends AppCompatPreferenceActivity
 {
-    public final static String EXTRA_LOAD_FRAGMENT_MESSAGEID = "frgToLoad";
+    public final static String EXTRA_LOAD_FRAGMENT_MESSAGE_ID = "frgToLoad";
 
-    private static Preference.OnPreferenceChangeListener listSummaryToValueListener = new Preference.OnPreferenceChangeListener()
+    private static Preference.OnPreferenceChangeListener listSummaryToValueListener =
+            new Preference.OnPreferenceChangeListener()
     {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
@@ -45,10 +46,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity
                 ListPreference listPreference = (ListPreference) preference;
                 int index = listPreference.findIndexOfValue(stringValue);
 
-                preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
+                preference.setSummary(index >= 0
+                        ? listPreference.getEntries()[index]
+                        : null);
 
-            } else
-            {
+            } else {
                 preference.setSummary(stringValue);
             }
             return true;
@@ -61,9 +63,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity
         setupActionBar();
 
         Bundle extras = getIntent().getExtras();
-        if (extras != null && extras.containsKey(EXTRA_LOAD_FRAGMENT_MESSAGEID))
+        if (extras != null && extras.containsKey(EXTRA_LOAD_FRAGMENT_MESSAGE_ID))
         {
-            int messageId = extras.getInt(EXTRA_LOAD_FRAGMENT_MESSAGEID);
+            int messageId = extras.getInt(EXTRA_LOAD_FRAGMENT_MESSAGE_ID);
             UserMessage.showSnackbar(this, messageId, Snackbar.LENGTH_INDEFINITE);
             getFragmentManager().beginTransaction().replace(android.R.id.content,
                     new ChargingPreferenceFragment()).commit();
@@ -96,7 +98,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity
     @Override
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void onBuildHeaders(List<Header> target) {
-        if (! getIntent().hasExtra(EXTRA_LOAD_FRAGMENT_MESSAGEID))
+        if (! getIntent().hasExtra(EXTRA_LOAD_FRAGMENT_MESSAGE_ID))
             loadHeadersFromResource(R.xml.pref_headers, target);
     }
 
@@ -132,10 +134,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity
             addPreferencesFromResource(R.xml.pref_charging);
             setHasOptionsMenu(true);
 
-            PreferenceHelper.setChangeListenerAndTriggerChange(findPreference("charging_loss"), listSummaryToValueListener);
-            PreferenceHelper.setChangeListenerAndTriggerChange(findPreference("battery_capacity"), listSummaryToValueListener);
-            PreferenceHelper.setChangeListenerAndTriggerChange(findPreference("default_voltage"), listSummaryToValueListener);
-            PreferenceHelper.setChangeListenerAndTriggerChange(findPreference("default_amperage"), listSummaryToValueListener);
+            for (Preference preference: new Preference[]{
+                    findPreference("charging_loss"),
+                    findPreference("battery_capacity"),
+                    findPreference("default_voltage"),
+                    findPreference("default_amperage"),
+            }) {
+                PreferenceHelper.setChangeListenerAndTriggerChange(preference, listSummaryToValueListener);
+            }
         }
 
         @Override
@@ -161,26 +167,33 @@ public class SettingsActivity extends AppCompatPreferenceActivity
             addPreferencesFromResource(R.xml.pref_notification);
             setHasOptionsMenu(true);
 
-            PreferenceHelper.setChangeListenerAndTriggerChange(findPreference("calendar_permission_reminder_minutes"), maxValueValidationChangeListener);
-            PreferenceHelper.setChangeListenerAndTriggerChange(findPreference("app_notification_reminder_minutes"), maxValueValidationChangeListener);
+            for (Preference preference: new Preference[]{
+                    findPreference("calendar_permission_reminder_minutes"),
+                    findPreference("app_notification_reminder_minutes"),
+            }) {
+                PreferenceHelper.setChangeListenerAndTriggerChange(preference, maxValueValidationChangeListener);
+            }
         }
 
         private final static int maxReminderMinutes = 480;
-        private final static Preference.OnPreferenceChangeListener maxValueValidationChangeListener = new Preference.OnPreferenceChangeListener() {
+        private final static Preference.OnPreferenceChangeListener maxValueValidationChangeListener =
+                new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 String newValueStr = (String) newValue;
                 int newValueInt = Integer.parseInt(newValueStr.equals("") ? "0" : newValueStr);
 
-                if( newValueInt >= 0 && newValueInt <= maxReminderMinutes){
+                if( newValueInt >= 0 && newValueInt <= maxReminderMinutes ){
                     preference.setSummary(newValueStr);
                     return true;
                 }else{
-                    String str = preference.getContext().getString(R.string.pref_title_reminder_validation_error);
-                    String formatted = String.format(str, maxReminderMinutes);
-                    Toast.makeText(preference.getContext(), formatted, Toast.LENGTH_LONG).show();
-                    String actualValue = PreferenceHelper.getValue(preference);
-                    preference.setSummary(actualValue);
+                    Context context = preference.getContext();
+                    String errorText = context.getString(R.string.pref_title_reminder_validation_error);
+                    String formattedError = String.format(errorText, maxReminderMinutes);
+                    UserMessage.showToast(context, formattedError, Toast.LENGTH_LONG);
+
+                    String preferenceValue = PreferenceHelper.getValue(preference);
+                    preference.setSummary(preferenceValue);
                     return false;
                 }
             }

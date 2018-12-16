@@ -72,7 +72,7 @@ public class MainActivity extends BaseActivity
         initializeChangeListeners();
 
         if (settingsProvider.firstApplicationRun()){
-            startSettingsActivity(true);
+            startChargingSettingsActivity();
         }
     }
 
@@ -87,7 +87,7 @@ public class MainActivity extends BaseActivity
         switch (menuItem.getItemId())
         {
             case R.id.settings:
-                startSettingsActivity(false);
+                startSettingsActivity();
                 return true;
             default:
                 return super.onOptionsItemSelected(menuItem);
@@ -95,7 +95,9 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         if (requestCode == GoogleCalendarAdvancedNotificator.REQUEST_CALENDAR){
             scheduler.schedule(grantResults, viewModel.getMillisToCharge());
         }
@@ -207,10 +209,14 @@ public class MainActivity extends BaseActivity
         remindButton.setText(viewModel.getRemindButtonText());
     }
 
-    private void startSettingsActivity(boolean openChargeFragment){
+    private void startSettingsActivity(){
         Intent i = new Intent(this, SettingsActivity.class);
-        if (openChargeFragment)
-            i.putExtra(SettingsActivity.EXTRA_LOAD_FRAGMENT_MESSAGEID, R.string.first_time_settings_activity_message);
+        startActivityForResult(i, SETTINGS_REQUEST_CODE);
+    }
+
+    private void startChargingSettingsActivity(){
+        Intent i = new Intent(this, SettingsActivity.class);
+        i.putExtra(SettingsActivity.EXTRA_LOAD_FRAGMENT_MESSAGE_ID, R.string.first_time_settings_activity_message);
         startActivityForResult(i, SETTINGS_REQUEST_CODE);
     }
 }

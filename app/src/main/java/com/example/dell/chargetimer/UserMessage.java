@@ -21,7 +21,9 @@ public final class UserMessage {
     }
 
     static void showMultilineSnackbar(@NonNull Activity activity, @StringRes int messageId, int lineNumber) {
-        final Snackbar snackbar = Snackbar.make(activity.findViewById(android.R.id.content), messageId, Snackbar.LENGTH_INDEFINITE);
+        final Snackbar snackbar = Snackbar.make(activity.findViewById(android.R.id.content),
+                messageId,
+                Snackbar.LENGTH_INDEFINITE);
 
         final TextView snackTextView = snackbar.getView()
                 .findViewById(android.support.design.R.id.snackbar_text);
