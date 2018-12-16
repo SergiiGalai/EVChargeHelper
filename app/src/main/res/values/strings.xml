@@ -53,5 +53,7 @@ You can change this settings anytime in application settings.
     <string name="voltage_title">V</string>
     <string name="should_be_charged_prefix_title">Car should be charged in %dh %02dm</string>
     <string name="event_created">Calendar event created</string>
-    <string name="first_time_settings">Before we go please fill your battery capacity and usual power line settings</string>
+    <string name="first_time_settings_activity_message">Before continue fill your battery capacity and usual power line settings for more precise time calculation.</string>
+    <string name="first_time_main_activity_message">This app is NOT connected to your car and cannot get its actual charging info.
+Charge time calculation is based on data entered on this screen.</string>
 </resources>

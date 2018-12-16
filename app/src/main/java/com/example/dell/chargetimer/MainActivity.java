@@ -72,7 +72,6 @@ public class MainActivity extends BaseActivity
         initializeChangeListeners();
 
         if (settingsProvider.firstApplicationRun()){
-            Factory.createSettingsWriter(this).setFirstApplicationRunCompleted();
             startSettingsActivity(true);
         }
     }
@@ -107,6 +106,10 @@ public class MainActivity extends BaseActivity
         if (requestCode == SETTINGS_REQUEST_CODE){
             initializeVariables();
             updateControls();
+            if (settingsProvider.firstApplicationRun()){
+                Factory.createSettingsWriter(this).setFirstApplicationRunCompleted();
+                UserMessage.showMultilineSnackbar(this, R.string.first_time_main_activity_message, 4);
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -207,7 +210,7 @@ public class MainActivity extends BaseActivity
     private void startSettingsActivity(boolean openChargeFragment){
         Intent i = new Intent(this, SettingsActivity.class);
         if (openChargeFragment)
-            i.putExtra(SettingsActivity.EXTRA_LOAD_FRAGMENT_MESSAGE, getString(R.string.first_time_settings));
+            i.putExtra(SettingsActivity.EXTRA_LOAD_FRAGMENT_MESSAGEID, R.string.first_time_settings_activity_message);
         startActivityForResult(i, SETTINGS_REQUEST_CODE);
     }
 }

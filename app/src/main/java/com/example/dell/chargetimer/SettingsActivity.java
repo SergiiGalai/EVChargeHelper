@@ -32,7 +32,7 @@ import java.util.List;
  */
 public class SettingsActivity extends AppCompatPreferenceActivity
 {
-    public final static String EXTRA_LOAD_FRAGMENT_MESSAGE = "frgToLoad";
+    public final static String EXTRA_LOAD_FRAGMENT_MESSAGEID = "frgToLoad";
 
     private static Preference.OnPreferenceChangeListener listSummaryToValueListener = new Preference.OnPreferenceChangeListener()
     {
@@ -61,10 +61,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity
         setupActionBar();
 
         Bundle extras = getIntent().getExtras();
-        if (extras != null && extras.containsKey(EXTRA_LOAD_FRAGMENT_MESSAGE))
+        if (extras != null && extras.containsKey(EXTRA_LOAD_FRAGMENT_MESSAGEID))
         {
-            String message = extras.getString(EXTRA_LOAD_FRAGMENT_MESSAGE);
-            UserMessage.showSnackbar(this, message, Snackbar.LENGTH_INDEFINITE);
+            int messageId = extras.getInt(EXTRA_LOAD_FRAGMENT_MESSAGEID);
+            UserMessage.showSnackbar(this, messageId, Snackbar.LENGTH_INDEFINITE);
             getFragmentManager().beginTransaction().replace(android.R.id.content,
                     new ChargingPreferenceFragment()).commit();
         }
@@ -96,7 +96,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity
     @Override
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void onBuildHeaders(List<Header> target) {
-        if (! getIntent().hasExtra(EXTRA_LOAD_FRAGMENT_MESSAGE))
+        if (! getIntent().hasExtra(EXTRA_LOAD_FRAGMENT_MESSAGEID))
             loadHeadersFromResource(R.xml.pref_headers, target);
     }
 
