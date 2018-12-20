@@ -1,6 +1,7 @@
 package com.example.dell.chargetimer;
 
 import android.app.Activity;
+import android.content.Context;
 
 import com.example.dell.chargetimer.notifications.IResourceProvider;
 import com.example.dell.chargetimer.notifications.NotificationScheduler;
@@ -12,11 +13,15 @@ import com.example.dell.chargetimer.settings.SharedPreferenceSettingsReader;
 
 class Factory {
 
-    public static ISettingsReader createSettingsReader(Activity activity){
-        return new SharedPreferenceSettingsReader(activity);
+    static ISettingsReader createSettingsReader(Context context){
+        return new SharedPreferenceSettingsReader(context);
     }
 
-    public static NotificationScheduler createScheduler(Activity activity){
+    static ISettingsWriter createSettingsWriter(Context context) {
+        return new SharedPreferenceSettingsWriter(context);
+    }
+
+    static NotificationScheduler createScheduler(Activity activity){
         IResourceProvider resourceProvider = new ResourceProvider(activity);
         ISettingsWriter settingsWriter = new SharedPreferenceSettingsWriter(activity);
         ISettingsReader settingsProvider = createSettingsReader(activity);

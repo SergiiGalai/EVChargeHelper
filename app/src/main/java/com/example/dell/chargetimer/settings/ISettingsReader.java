@@ -1,6 +1,8 @@
 package com.example.dell.chargetimer.settings;
 
 public interface ISettingsReader {
+    boolean firstApplicationRun();
+
     boolean applicationNotificationsAllowed();
 
     boolean googleBasicNotificationsAllowed();

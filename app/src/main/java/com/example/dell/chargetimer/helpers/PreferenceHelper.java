@@ -11,7 +11,8 @@ public class PreferenceHelper {
                 .getString(preference.getKey(), "");
     }
 
-    public static void setChangeListenerAndTriggerChange(Preference preference, Preference.OnPreferenceChangeListener changeListener){
+    public static void setChangeListenerAndTriggerChange(Preference preference,
+                                                         Preference.OnPreferenceChangeListener changeListener){
         preference.setOnPreferenceChangeListener(changeListener);
         changeListener.onPreferenceChange(preference, getValue(preference));
     }

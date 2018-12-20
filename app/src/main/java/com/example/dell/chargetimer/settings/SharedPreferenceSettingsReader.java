@@ -13,6 +13,11 @@ public class SharedPreferenceSettingsReader implements ISettingsReader
     }
 
     @Override
+    public boolean firstApplicationRun() {
+        return preferences.getBoolean("first_application_run", true);
+    }
+
+    @Override
     public boolean applicationNotificationsAllowed(){
         return preferences.getBoolean("allow_app_notifications", true);
     }
@@ -24,7 +29,8 @@ public class SharedPreferenceSettingsReader implements ISettingsReader
 
     @Override
     public boolean googleAdvancedNotificationsAllowed(){
-        return googleBasicNotificationsAllowed() && preferences.getBoolean("allow_calendar_permission_notifications", true);
+        return googleBasicNotificationsAllowed() &&
+                preferences.getBoolean("allow_calendar_permission_notifications", true);
     }
 
     @Override

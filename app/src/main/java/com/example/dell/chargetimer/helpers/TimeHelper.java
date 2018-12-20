@@ -1,5 +1,9 @@
 package com.example.dell.chargetimer.helpers;
 
+import android.content.Context;
+import android.provider.Settings;
+import android.text.TextUtils;
+
 import com.example.dell.chargetimer.Time;
 
 import java.text.Format;
@@ -9,9 +13,8 @@ import java.util.concurrent.TimeUnit;
 
 public class TimeHelper
 {
-    private static Format timeFormatter = SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT);
-
-    public static String formatAsHoursWithMinutes(Date date){
+    public static String formatAsHoursWithMinutes(Context context, Date date){
+        final Format timeFormatter = android.text.format.DateFormat.getTimeFormat(context);
         return timeFormatter.format(date);
     }
 
