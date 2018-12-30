@@ -8,9 +8,11 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 @SuppressLint("MissingPermission")
 class GoogleCalendarRepository {
+    private static final String TAG = "GoogleCalendarRepo";
     private Activity activity;
 
     GoogleCalendarRepository(Activity activity) {
@@ -19,30 +21,37 @@ class GoogleCalendarRepository {
 
     long createEvent(ContentValues values){
         ContentResolver cr = activity.getContentResolver();
+
         Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
         String lastSegment = uri == null ? "" : uri.getLastPathSegment();
-        return Long.parseLong(lastSegment == null ? "" : lastSegment);
+        String event = lastSegment == null ? "" : lastSegment;
+
+        return Long.parseLong(event);
     }
 
     void setReminder(long eventID, int minutesBefore) {
         ContentResolver cr = activity.getContentResolver();
         ContentValues values = createReminderValues(eventID, minutesBefore);
+
         Uri uri = cr.insert(CalendarContract.Reminders.CONTENT_URI, values);
-        Cursor c = CalendarContract.Reminders.query(cr, eventID,
-                new String[]{CalendarContract.Reminders.MINUTES});
-        if (c.moveToFirst()) {
-            System.out.println("calendar"
-                    + c.getInt(c.getColumnIndex(CalendarContract.Reminders.MINUTES)));
+
+        try (Cursor c = CalendarContract.Reminders.query(cr, eventID,
+                new String[]{CalendarContract.Reminders.MINUTES})) {
+            if (c.moveToFirst()) {
+                System.out.println("calendar"
+                        + c.getInt(c.getColumnIndex(CalendarContract.Reminders.MINUTES)));
+            }
         }
-        c.close();
     }
 
     @NonNull
     private ContentValues createReminderValues(long eventID, int minutesBefore) {
         ContentValues values = new ContentValues();
+
         values.put(CalendarContract.Reminders.MINUTES, minutesBefore);
         values.put(CalendarContract.Reminders.EVENT_ID, eventID);
         values.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_DEFAULT);
+
         return values;
     }
 
@@ -64,15 +73,18 @@ class GoogleCalendarRepository {
 
         if (cur != null)
         {
-            while (cur.moveToNext()){
-                calId = cur.getLong(projection_id);
-                String name = cur.getString(projection_name);
-                String primary = cur.getString(projection_primary);
-                if (primary.equals("1"))
-                    return (int)calId;
+            try {
+                while (cur.moveToNext()){
+                    calId = cur.getLong(projection_id);
+                    String name = cur.getString(projection_name);
+                    String primary = cur.getString(projection_primary);
+                    if (primary.equals("1"))
+                        return (int)calId;
+                }
             }
-
-            cur.close();
+            finally {
+                cur.close();
+            }
         }
 
         return (int)calId;
@@ -90,18 +102,22 @@ class GoogleCalendarRepository {
                         null, null, null);
         if (cur != null)
         {
-            while (cur.moveToNext()){
-                long colId = cur.getLong(0);
-                long colorKey = cur.getLong(1);
-                long color = cur.getLong(2);
+            try{
+                while (cur.moveToNext()){
+                    long colId = cur.getLong(0);
+                    long colorKey = cur.getLong(1);
+                    long color = cur.getLong(2);
 
-                String hexColor= Long.toHexString(color);
-                System.out.println( "id=" + colId
-                        + "; key=" + colorKey
-                        + "; hexColor="+ hexColor);
+                    String hexColor= Long.toHexString(color);
+
+                    Log.d( TAG, "id=" + colId
+                            + "; key=" + colorKey
+                            + "; hexColor="+ hexColor);
+                }
             }
-
-            cur.close();
+            finally {
+                cur.close();
+            }
         }
     }
 

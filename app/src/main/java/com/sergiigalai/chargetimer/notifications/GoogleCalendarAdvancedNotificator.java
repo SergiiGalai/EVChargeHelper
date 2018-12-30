@@ -64,9 +64,12 @@ public class GoogleCalendarAdvancedNotificator implements INotificator
 
     private void scheduleCalendarEvent(String title, String description, long eventTime) {
         //repository.showColors();
+
         ContentValues values = createCalendarEventContent(title, description, eventTime);
+
         long eventId = repository.createEvent(values);
         int reminderMinutes = settingsProvider.getCalendarReminderMinutes();
+
         repository.setReminder(eventId, reminderMinutes);
 
         notifyUser_open_event(eventId);
@@ -103,6 +106,7 @@ public class GoogleCalendarAdvancedNotificator implements INotificator
     @NonNull
     private ContentValues createCalendarEventContent(String title, String description, long eventTime) {
         ContentValues values = new ContentValues();
+
         values.put(CalendarContract.Events.DTSTART, eventTime);
         values.put(CalendarContract.Events.DTEND, eventTime + MS_IN_1_HOUR);
         values.put(CalendarContract.Events.TITLE, title);
@@ -111,6 +115,7 @@ public class GoogleCalendarAdvancedNotificator implements INotificator
         values.put(CalendarContract.Events.EVENT_COLOR_KEY, EventColor);
         values.put(CalendarContract.Events.EVENT_TIMEZONE,
                 Calendar.getInstance().getTimeZone().getID());
+
         return values;
     }
 
