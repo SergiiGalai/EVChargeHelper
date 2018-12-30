@@ -1,9 +1,6 @@
 package com.sergiigalai.chargetimer.charge;
 
 import com.sergiigalai.chargetimer.Time;
-import com.sergiigalai.chargetimer.charge.Battery;
-import com.sergiigalai.chargetimer.charge.LiionChargeTimeResolver;
-import com.sergiigalai.chargetimer.charge.PowerLine;
 import com.sergiigalai.chargetimer.helpers.TimeHelper;
 
 import org.junit.Before;
@@ -49,7 +46,7 @@ public class Volt2014ChargeTimeResolverTest
     @Test
     public void return_time_when_calculating_for_0pct_battery(){
         long actual = timeResolver.getMillisToCharge((byte) 0);
-        Time actualTime = TimeHelper.getHoursAndMinutes(actual);
+        Time actualTime = TimeHelper.toTime(actual);
         assertEquals(new Time(4, 0), actualTime);
     }
 
@@ -57,7 +54,7 @@ public class Volt2014ChargeTimeResolverTest
     @Test
     public void return_time_when_calculating_for_10pct_battery(){
         long actual = timeResolver.getMillisToCharge((byte) 10);
-        Time actualTime = TimeHelper.getHoursAndMinutes(actual);
+        Time actualTime = TimeHelper.toTime(actual);
         assertEquals(new Time(3, 40), actualTime);
     }
 
@@ -65,14 +62,14 @@ public class Volt2014ChargeTimeResolverTest
     @Test
     public void return_time_when_calculating_for_25pct_battery(){
         long actual = timeResolver.getMillisToCharge((byte) 25);
-        Time actualTime = TimeHelper.getHoursAndMinutes(actual);
+        Time actualTime = TimeHelper.toTime(actual);
         assertEquals(new Time(3, 10), actualTime);
     }
 
     @Test
     public void return_time_when_calculating_for_50pct_battery(){
         long actual = timeResolver.getMillisToCharge((byte) 50);
-        Time actualTime = TimeHelper.getHoursAndMinutes(actual);
+        Time actualTime = TimeHelper.toTime(actual);
         assertEquals(new Time(2, 20), actualTime);
     }
 
@@ -80,7 +77,7 @@ public class Volt2014ChargeTimeResolverTest
     @Test
     public void return_time_when_calculating_for_80pct_battery(){
         long actual = timeResolver.getMillisToCharge((byte) 80);
-        Time actualTime = TimeHelper.getHoursAndMinutes(actual);
+        Time actualTime = TimeHelper.toTime(actual);
         assertEquals(new Time(1, 20), actualTime);
     }
 
@@ -88,14 +85,14 @@ public class Volt2014ChargeTimeResolverTest
     @Test
     public void return_time_when_calculating_for_90pct_battery(){
         long actual = timeResolver.getMillisToCharge((byte) 90);
-        Time actualTime = TimeHelper.getHoursAndMinutes(actual);
+        Time actualTime = TimeHelper.toTime(actual);
         assertEquals(new Time(0, 40), actualTime);
     }
 
     @Test
     public void return_time_when_calculating_for_95pct_battery(){
         long actual = timeResolver.getMillisToCharge((byte) 95);
-        Time actualTime = TimeHelper.getHoursAndMinutes(actual);
+        Time actualTime = TimeHelper.toTime(actual);
         assertEquals(new Time(0, 20), actualTime);
     }
 

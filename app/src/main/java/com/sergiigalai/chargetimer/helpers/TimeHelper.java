@@ -1,22 +1,24 @@
 package com.sergiigalai.chargetimer.helpers;
 
-import android.content.Context;
-
 import com.sergiigalai.chargetimer.Time;
 
-import java.text.Format;
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class TimeHelper
 {
-    public static String formatAsHoursWithMinutes(Context context, Date date){
-        final Format timeFormatter = android.text.format.DateFormat.getTimeFormat(context);
-        return timeFormatter.format(date);
+    public static String formatAsShortDateTime(Date date){
+        return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(date);
     }
 
-    public static Time getHoursAndMinutes(long millis){
+    public static String formatAsShortTime(Date date){
+        return DateFormat.getTimeInstance(DateFormat.SHORT).format(date);
+    }
+
+    public static Time toTime(long millis){
         return new Time(
+                (int)TimeUnit.MILLISECONDS.toDays(millis),
                 (int)TimeUnit.MILLISECONDS.toHours(millis) % 24,
                 (int)TimeUnit.MILLISECONDS.toMinutes(millis) % 60);
     }

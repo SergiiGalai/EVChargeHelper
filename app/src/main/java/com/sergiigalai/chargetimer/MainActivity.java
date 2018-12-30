@@ -30,6 +30,7 @@ import java.util.Date;
 public class MainActivity extends BaseActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback
 {
+    private final static String TAG = "MainActivity";
     private final static int SETTINGS_REQUEST_CODE = 9000;
 
     private SeekBar remainingEnergySeekBar;
@@ -143,15 +144,24 @@ public class MainActivity extends BaseActivity
 
             byte remainingEnergyPct = getRemainingEnergyPercentage();
             double remainingEnergyKWt = getRemainingEnergyKWh(remainingEnergyPct);
-            remainingEnergyText = String.format(getString(R.string.remaining_energy_title), remainingEnergyPct, remainingEnergyKWt, battery.UsableCapacityKWh);
+            remainingEnergyText = String.format(getString(R.string.remaining_energy_title),
+                    remainingEnergyPct, remainingEnergyKWt, battery.UsableCapacityKWh);
 
             millisToCharge = chargeTimeResolver.getMillisToCharge(remainingEnergyPct);
             Date dateChargedAt = TimeHelper.toDate(TimeHelper.now() + millisToCharge);
-            Time time = TimeHelper.getHoursAndMinutes(millisToCharge);
+            Time time = TimeHelper.toTime(millisToCharge);
 
-            chargedInText = String.format(getString(R.string.should_be_charged_prefix_title), time.hours, time.minutes);
-            remindButtonText = String.format(getString(R.string.remind_me_button_title),
-                    TimeHelper.formatAsHoursWithMinutes(context, dateChargedAt));
+            if (time.days > 0){
+                chargedInText = String.format(getString(R.string.should_be_charged_in_days_title),
+                        time.days, time.hours, time.minutes);
+                remindButtonText = String.format(getString(R.string.remind_me_button_title),
+                        TimeHelper.formatAsShortDateTime(dateChargedAt));
+            } else {
+                chargedInText = String.format(getString(R.string.should_be_charged_in_hours_title),
+                        time.hours, time.minutes);
+                remindButtonText = String.format(getString(R.string.remind_me_button_title),
+                        TimeHelper.formatAsShortTime(dateChargedAt));
+            }
         }
 
         private byte getRemainingEnergyPercentage(){

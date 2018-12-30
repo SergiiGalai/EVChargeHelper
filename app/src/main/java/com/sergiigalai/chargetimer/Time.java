@@ -8,6 +8,13 @@ public class Time{
         this.minutes = minutes;
     }
 
+    public Time(int days, int hours, int minutes) {
+        this.days = days;
+        this.hours = hours;
+        this.minutes = minutes;
+    }
+
+    int days;
     int hours;
     int minutes;
 
@@ -16,19 +23,21 @@ public class Time{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Time time = (Time) o;
-        return hours == time.hours &&
+        return  days == time.days &&
+                hours == time.hours &&
                 minutes == time.minutes;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(hours, minutes);
+        return Objects.hash(days, hours, minutes);
     }
 
     @Override
     public String toString() {
         return "Time{" +
-                "hours=" + hours +
+                "days=" + days +
+                ", hours=" + hours +
                 ", minutes=" + minutes +
                 '}';
     }

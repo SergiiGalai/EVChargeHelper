@@ -27,7 +27,8 @@
     <string name="current_description_title">Настройки сети:</string>
     <string name="amperage_title">A</string>
     <string name="voltage_title">В</string>
-    <string name="should_be_charged_prefix_title">Авто должно быть заряжно через %dч %02dмин</string>
+    <string name="should_be_charged_in_days_title">Авто должно быть заряжно через %dд %02dч %02dм</string>
+    <string name="should_be_charged_in_hours_title">Авто должно быть заряжно через %dч %02dмин</string>
     <string name="pref_title_reminder">Сообщить за, минут</string>
     <string name="pref_title_reminder_validation_error">Мы не разрешаем значение для уведомления больше %d минут</string>
 

@@ -57,7 +57,7 @@ public class ApplicationNotificator implements INotificator
     private String getNotificationDescription(long duration) {
         Date chargedAtTime = TimeHelper.toDate(TimeHelper.now() + duration);
         String descriptionTemplate = activity.getString(R.string.car_charged_time_desc);
-        return String.format(descriptionTemplate, TimeHelper.formatAsHoursWithMinutes(activity, chargedAtTime));
+        return String.format(descriptionTemplate, TimeHelper.formatAsShortTime(chargedAtTime));
     }
 
     private static final String CAR_CHARGED_NOTIFICATION_CHANNEL_ID = "46578";

@@ -1,6 +1,5 @@
 package com.sergiigalai.chargetimer.charge;
 
-import com.sergiigalai.chargetimer.charge.ChargeValuesProvider;
 import com.sergiigalai.chargetimer.helpers.Convert;
 import org.junit.Test;
 

@@ -1,9 +1,6 @@
 package com.sergiigalai.chargetimer.charge;
 
 import com.sergiigalai.chargetimer.Time;
-import com.sergiigalai.chargetimer.charge.Battery;
-import com.sergiigalai.chargetimer.charge.LiionChargeTimeResolver;
-import com.sergiigalai.chargetimer.charge.PowerLine;
 import com.sergiigalai.chargetimer.helpers.TimeHelper;
 
 import org.junit.Before;
@@ -35,21 +32,21 @@ public class Leaf24ChargeTimeResolverTest
         power.Amperage = 16;
 
         long actual = timeResolver.getMillisToCharge((byte) 0);
-        Time actualTime = TimeHelper.getHoursAndMinutes(actual);
+        Time actualTime = TimeHelper.toTime(actual);
         assertEquals(new Time(8, 23), actualTime);
     }
 
     @Test
     public void return_time_when_calculating_for_0pct_battery(){
         long actual = timeResolver.getMillisToCharge((byte) 0);
-        Time actualTime = TimeHelper.getHoursAndMinutes(actual);
+        Time actualTime = TimeHelper.toTime(actual);
         assertEquals(new Time(4, 11), actualTime);
     }
 
     @Test
     public void return_time_when_calculating_for_80pct_battery(){
         long actual = timeResolver.getMillisToCharge((byte) 80);
-        Time actualTime = TimeHelper.getHoursAndMinutes(actual);
+        Time actualTime = TimeHelper.toTime(actual);
         assertEquals(new Time(1, 27), actualTime);
     }
 
