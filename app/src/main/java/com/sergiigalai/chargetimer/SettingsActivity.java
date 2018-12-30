@@ -34,29 +34,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity
 {
     public final static String EXTRA_LOAD_FRAGMENT_MESSAGE_ID = "frgToLoad";
 
-    private static Preference.OnPreferenceChangeListener listSummaryToValueListener =
-            new Preference.OnPreferenceChangeListener()
-    {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object value) {
-            String stringValue = value.toString();
-
-            if (preference instanceof ListPreference)
-            {
-                ListPreference listPreference = (ListPreference) preference;
-                int index = listPreference.findIndexOfValue(stringValue);
-
-                preference.setSummary(index >= 0
-                        ? listPreference.getEntries()[index]
-                        : null);
-
-            } else {
-                preference.setSummary(stringValue);
-            }
-            return true;
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -154,6 +131,35 @@ public class SettingsActivity extends AppCompatPreferenceActivity
             }
             return super.onOptionsItemSelected(item);
         }
+
+        private final static Preference.OnPreferenceChangeListener listSummaryToValueListener =
+                new Preference.OnPreferenceChangeListener()
+                {
+                    @Override
+                    public boolean onPreferenceChange(Preference preference, Object value) {
+                        String stringValue = value.toString().trim();
+
+                        if (stringValue.equals("")) {
+                            Context context = preference.getContext();
+                            UserMessage.showToast(context, R.string.value_not_empty, Toast.LENGTH_LONG);
+                            return false;
+                        }
+
+                        if (preference instanceof ListPreference)
+                        {
+                            ListPreference listPreference = (ListPreference) preference;
+                            int index = listPreference.findIndexOfValue(stringValue);
+
+                            preference.setSummary(index >= 0
+                                    ? listPreference.getEntries()[index]
+                                    : null);
+
+                        } else {
+                            preference.setSummary(stringValue);
+                        }
+                        return true;
+                    }
+                };
     }
 
 
@@ -180,8 +186,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity
                 new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                String newValueStr = (String) newValue;
-                int newValueInt = Integer.parseInt(newValueStr.equals("") ? "0" : newValueStr);
+                String newValueStr = newValue.toString().trim();
+                int newValueInt = newValueStr.equals("") ? 0 : Integer.parseInt(newValueStr);
 
                 if( newValueInt >= 0 && newValueInt <= maxReminderMinutes ){
                     preference.setSummary(newValueStr);

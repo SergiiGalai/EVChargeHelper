@@ -34,32 +34,46 @@ public class SharedPreferenceSettingsReader implements ISettingsReader
     }
 
     @Override
-    public Double getBatteryCapacity(){
-        return Double.parseDouble(preferences.getString("battery_capacity","11"));
+    public double getBatteryCapacity(){
+        return parseDouble("battery_capacity",11);
     }
 
     @Override
-    public Integer getChargingLossPct(){
-        return Integer.parseInt(preferences.getString("charging_loss", "12"));
+    public int getChargingLossPct(){
+        return parseInteger("charging_loss", 12);
     }
 
     @Override
-    public Integer getDefaultAmperage(){
-        return Integer.parseInt(preferences.getString("default_amperage",  "16"));
+    public int getDefaultAmperage(){
+        return parseInteger("default_amperage", 16);
     }
 
     @Override
-    public Integer getDefaultVoltage(){
-        return Integer.parseInt(preferences.getString("default_voltage", "220"));
+    public int getDefaultVoltage(){
+        return parseInteger("default_voltage", 220);
     }
 
     @Override
     public int getApplicationReminderMinutes(){
-        return Integer.parseInt(preferences.getString("app_notification_reminder_minutes", String.valueOf(10)));
+        return parseInteger("app_notification_reminder_minutes", 10);
     }
 
     @Override
     public int getCalendarReminderMinutes(){
-        return Integer.parseInt(preferences.getString("calendar_permission_reminder_minutes", String.valueOf(15)));
+        return parseInteger("calendar_permission_reminder_minutes", 15);
+    }
+
+    private Integer parseInteger(String key, Integer valueWhenEmpty){
+        final String value = preferences.getString(key, String.valueOf(valueWhenEmpty));
+        if (value.equals(""))
+            return valueWhenEmpty;
+        return Integer.parseInt(value);
+    }
+
+    private double parseDouble(String key, double valueWhenEmpty){
+        final String value = preferences.getString(key, String.valueOf(valueWhenEmpty));
+        if (value.equals(""))
+            return valueWhenEmpty;
+        return Double.parseDouble(value);
     }
 }

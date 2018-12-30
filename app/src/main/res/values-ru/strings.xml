@@ -2,6 +2,7 @@
 <resources>
     <string name="title_activity_settings">Настройки</string>
     <string name="title_activity_bugreport">Сообщение об ошибке</string>
+    <string name="value_not_empty">Значение не может быть пустым</string>
     <string name="pref_header_charging">Батарея и зарядка</string>
     <string name="pref_title_voltage">Напряжение в сети по умолчанию, В</string>
     <string name="pref_title_amperage">Сила тока в сети по умолчанию, А</string>

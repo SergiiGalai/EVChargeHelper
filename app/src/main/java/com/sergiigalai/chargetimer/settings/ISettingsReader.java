@@ -9,13 +9,13 @@ public interface ISettingsReader {
 
     boolean googleAdvancedNotificationsAllowed();
 
-    Double getBatteryCapacity();
+    double getBatteryCapacity();
 
-    Integer getChargingLossPct();
+    int getChargingLossPct();
 
-    Integer getDefaultAmperage();
+    int getDefaultAmperage();
 
-    Integer getDefaultVoltage();
+    int getDefaultVoltage();
 
     int getApplicationReminderMinutes();
 

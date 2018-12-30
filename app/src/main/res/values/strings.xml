@@ -4,6 +4,7 @@
     <string name="title_activity_bugreport">Bug Report</string>
 
     <!-- Strings related to Settings -->
+    <string name="value_not_empty">Value cannot be empty</string>
 
     <!-- Example settings for Charging -->
     <string name="pref_header_charging">Battery and charging</string>

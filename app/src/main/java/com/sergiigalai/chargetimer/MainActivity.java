@@ -52,12 +52,12 @@ public class MainActivity extends BaseActivity
         chargedInTitle = findViewById(R.id.chargedInTitle);
         remindButton = findViewById(R.id.remindButton);
 
-        Integer defaultAmperage = settingsProvider.getDefaultAmperage();
+        int defaultAmperage = settingsProvider.getDefaultAmperage();
         amperagePicker = new StepNumberPicker(this, R.id.amperageValue);
         amperagePicker.setValues(ChargeValuesProvider.getAllowedAmperage(defaultAmperage));
         amperagePicker.setValue(String.valueOf(defaultAmperage));
 
-        Integer defaultVoltage = settingsProvider.getDefaultVoltage();
+        int defaultVoltage = settingsProvider.getDefaultVoltage();
         voltagePicker = new StepNumberPicker(this, R.id.voltageValue);
         voltagePicker.setValues(ChargeValuesProvider.getAllowedVoltage(defaultVoltage));
         voltagePicker.setValue(String.valueOf(defaultVoltage));

@@ -3,8 +3,8 @@ package com.sergiigalai.chargetimer.charge;
 public class LiionChargeTimeResolver implements IChargeTimeResolver
 {
     private static final short LINEAR_CHARGING_THRESHOLD_PCT = 80;
-    private PowerLine powerLine;
-    private Battery battery;
+    private final PowerLine powerLine;
+    private final Battery battery;
 
     public LiionChargeTimeResolver(PowerLine powerLine, Battery battery) {
         this.powerLine = powerLine;

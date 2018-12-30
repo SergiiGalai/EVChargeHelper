@@ -17,6 +17,10 @@ android {
     compileSdkVersion 27
     buildToolsVersion '28.0.3'
     buildTypes {
+        debug {
+            testCoverageEnabled false
+            debuggable true
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
