@@ -46,7 +46,7 @@ public final class UserMessage {
         Toast.makeText(context, description, toastTimeLength).show();
     }
 
-    static void showToast(@NonNull Context context, @StringRes int messageId, int toastTimeLength) {
+    public static void showToast(@NonNull Context context, @StringRes int messageId, int toastTimeLength) {
         Toast.makeText(context, messageId, toastTimeLength).show();
     }
 }

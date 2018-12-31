@@ -58,7 +58,7 @@ public class StepNumberPicker
         for (int i = 0; i < values.length; i++)
         {
             String item = values[i];
-            if (item.equals(s))
+            if (item != null && item.equals(s))
                 return i;
         }
         return -1;

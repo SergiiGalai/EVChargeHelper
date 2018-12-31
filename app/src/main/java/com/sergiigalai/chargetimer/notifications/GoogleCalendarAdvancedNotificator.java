@@ -10,10 +10,10 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.view.View;
+import android.widget.Toast;
 
+import com.sergiigalai.chargetimer.UserMessage;
 import com.sergiigalai.chargetimer.settings.ISettingsReader;
 import com.sergiigalai.chargetimer.R;
 import com.sergiigalai.chargetimer.helpers.TimeHelper;
@@ -65,15 +65,19 @@ public class GoogleCalendarAdvancedNotificator implements INotificator
     private void scheduleCalendarEvent(String title, String description, long eventTime) {
         //repository.showColors();
 
-        ContentValues values = createCalendarEventContent(title, description, eventTime);
+        int calendarId = repository.getPrimaryCalendarId();
+        if (calendarId == -1) {
+            UserMessage.showToast(activity, R.string.error_no_primary_calendar, Toast.LENGTH_LONG);
+        }else{
+            ContentValues values = createCalendarEventContent(calendarId, title, description, eventTime);
 
-        long eventId = repository.createEvent(values);
-        int reminderMinutes = settingsProvider.getCalendarReminderMinutes();
+            long eventId = repository.createEvent(values);
+            int reminderMinutes = settingsProvider.getCalendarReminderMinutes();
 
-        repository.setReminder(eventId, reminderMinutes);
+            repository.setReminder(eventId, reminderMinutes);
 
-        notifyUser_open_event(eventId);
-        //notifyUser_snackbar(activity.getString(R.string.event_created), eventId);
+            notifyUser_open_event(eventId);
+        }
     }
 
     private void notifyUser_open_event(final long eventId){
@@ -85,33 +89,14 @@ public class GoogleCalendarAdvancedNotificator implements INotificator
         activity.startActivity(intent);
     }
 
-    private void notifyUser_snackbar(String description, final long eventId) {
-        Snackbar.make(activity.findViewById(android.R.id.content), description, Snackbar.LENGTH_LONG)
-            .setAction(R.string.open, new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v) {
-                    Uri.Builder uri = CalendarContract.Events.CONTENT_URI.buildUpon()
-                        .appendPath(Long.toString(eventId));
-
-                    Intent intent = new Intent(Intent.ACTION_VIEW)
-                        .setData(uri.build());
-
-                    activity.startActivity(intent);
-                }
-            })
-            .show();
-    }
-
     @NonNull
-    private ContentValues createCalendarEventContent(String title, String description, long eventTime) {
+    private ContentValues createCalendarEventContent(int calendarId, String title, String description, long eventTime) {
         ContentValues values = new ContentValues();
-
         values.put(CalendarContract.Events.DTSTART, eventTime);
         values.put(CalendarContract.Events.DTEND, eventTime + MS_IN_1_HOUR);
         values.put(CalendarContract.Events.TITLE, title);
         values.put(CalendarContract.Events.DESCRIPTION, description);
-        values.put(CalendarContract.Events.CALENDAR_ID, repository.getPrimaryCalendarId());
+        values.put(CalendarContract.Events.CALENDAR_ID, calendarId);
         values.put(CalendarContract.Events.EVENT_TIMEZONE,
                 Calendar.getInstance().getTimeZone().getID());
 
@@ -124,24 +109,10 @@ public class GoogleCalendarAdvancedNotificator implements INotificator
     private void requestCalendarPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
                 Manifest.permission.WRITE_CALENDAR)){
-            //showRationaleSnackBar();
             showRationaleDialog();
         } else {
             ActivityCompat.requestPermissions(activity, PERMISSIONS_CALENDAR, REQUEST_CALENDAR);
         }
-    }
-
-    private void showRationaleSnackBar() {
-        Snackbar.make(activity.findViewById(android.R.id.content), R.string.calendar_permission_rationale,
-                Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.ok, new View.OnClickListener()
-                {
-                    @Override
-                    public void onClick(View v) {
-                        ActivityCompat.requestPermissions(activity, PERMISSIONS_CALENDAR, REQUEST_CALENDAR);
-                    }
-                })
-                .show();
     }
 
     private void showRationaleDialog() {

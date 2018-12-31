@@ -139,7 +139,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity
                     public boolean onPreferenceChange(Preference preference, Object value) {
                         String stringValue = value.toString().trim();
 
-                        if (stringValue.equals("")) {
+                        if ("".equals(stringValue)) {
                             Context context = preference.getContext();
                             UserMessage.showToast(context, R.string.value_not_empty, Toast.LENGTH_LONG);
                             return false;
@@ -186,7 +186,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 String newValueStr = newValue.toString().trim();
-                int newValueInt = newValueStr.equals("") ? 0 : Integer.parseInt(newValueStr);
+                int newValueInt = "".equals(newValueStr) ? 0 : Integer.parseInt(newValueStr);
 
                 if( newValueInt >= 0 && newValueInt <= maxReminderMinutes ){
                     preference.setSummary(newValueStr);

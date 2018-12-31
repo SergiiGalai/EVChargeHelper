@@ -78,11 +78,11 @@ public class SharedPreferenceSettingsReader implements ISettingsReader
 
     private Integer parseInteger(String key, String valueWhenEmpty){
         final String value = preferences.getString(key, String.valueOf(valueWhenEmpty));
-        return Integer.parseInt(value.equals("") ? valueWhenEmpty : value);
+        return Integer.parseInt("".equals(value) ? valueWhenEmpty : value);
     }
 
     private double parseDouble(String key, String valueWhenEmpty){
         final String value = preferences.getString(key, String.valueOf(valueWhenEmpty));
-        return Double.parseDouble(value.equals("") ? valueWhenEmpty : value);
+        return Double.parseDouble("".equals(value) ? valueWhenEmpty : value);
     }
 }

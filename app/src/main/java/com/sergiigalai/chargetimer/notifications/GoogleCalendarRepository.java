@@ -71,7 +71,7 @@ class GoogleCalendarRepository {
     }
 
     int getPrimaryCalendarId(){
-        long calendarId = 1;
+        long calendarId = -1;
 
         final int projection_id = 0;
         final int projection_name = 1;
@@ -94,7 +94,7 @@ class GoogleCalendarRepository {
                     calendarId = cursor.getLong(projection_id);
                     String name = cursor.getString(projection_name);
                     String primary = cursor.getString(projection_primary);
-                    if (primary.equals("1"))
+                    if ("1".equals(primary))
                         return (int)calendarId;
                 }
             }
