@@ -7,7 +7,7 @@
     <string name="pref_title_voltage">Напруга у мережі за замовчуванням, В</string>
     <string name="pref_title_amperage">Сила струму у мережі за замовчуванням, А</string>
     <string name="pref_title_charging_loss">Втрати при заряджанні батареї, %</string>
-    <string name="pref_title_battery_capacity">Корисна ємкість батареї, кВт*г</string>
+    <string name="pref_title_battery_capacity">Корисна ємкість батареї, кВт\u22C5г</string>
     <string name="pref_header_notifications">Налаштування сповіщень</string>
     <string name="pref_title_allow_app_notifications">Використовувати власні сповіщення програми</string>
     <string name="pref_description_allow_app_notifications">Використовується звук, відмінний від стандартного, щоб було легше його відрізнити від стандартних сповіщень</string>
