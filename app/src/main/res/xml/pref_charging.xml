@@ -42,5 +42,5 @@
         android:maxLines="1"
         android:selectAllOnFocus="true"
         android:singleLine="true"
-        android:title="@string/pref_title_charging_loss"/>
+        android:title="@string/pref_title_charge_loss"/>
 </PreferenceScreen>

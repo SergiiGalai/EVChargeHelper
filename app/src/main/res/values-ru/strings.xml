@@ -4,17 +4,17 @@
     <string name="title_activity_bugreport">Сообщение об ошибке</string>
     <string name="value_not_empty">Значение не может быть пустым</string>
     <string name="pref_header_charging">Батарея и зарядка</string>
-    <string name="pref_title_voltage">Напряжение в сети по умолчанию, В</string>
-    <string name="pref_title_amperage">Сила тока в сети по умолчанию, А</string>
-    <string name="pref_title_charging_loss">Потеря при заряде батареи, %</string>
+    <string name="pref_title_voltage">Напряжение заряда по умолчанию, В</string>
+    <string name="pref_title_amperage">Сила тока при заряде по умолчанию, А</string>
+    <string name="pref_title_charge_loss">Потери при заряде, %</string>
     <string name="pref_title_battery_capacity">Полезная емкость батареи, кВт\u22C5ч</string>
     <string name="pref_header_notifications">Настройки уведомлений</string>
-    <string name="pref_title_allow_app_notifications">Использовать собственные уведомления приложения</string>
+    <string name="pref_title_allow_app_notifications">Уведомления приложения</string>
     <string name="pref_description_allow_app_notifications">Используется звук, отличный от стандартного, чтобы можна было легче его отличить от стандарных уведомлений.</string>
-    <string name="pref_title_allow_calendar_notifications">Уведомления календаря Google</string>
+    <string name="pref_title_allow_calendar_notifications">Уведомления календаря</string>
     <string name="pref_description_allow_calendar_notifications">Включить уведомления с настройками по умолчанию</string>
-    <string name="pref_title_allow_asking_for_calendar_permissions">Разрешить запрос на доступ к календарю</string>
-    <string name="pref_description_allow_asking_for_calendar_permissions">Доступ к календарю нужен для более быстрого и удобного создания уведомлений о зарядке авто.\n
+    <string name="pref_title_allow_asking_for_calendar_permissions">Запрос на доступ к календарю</string>
+    <string name="pref_description_allow_asking_for_calendar_permissions">Доступ нужен для более быстрого и удобного создания уведомлений о зарядке авто.\n
 Например, создание уведомлений в один клик, изменение времени уведомления, цвета фона.</string>
     <string name="car_charged_title">Автомобиль заряжен</string>
     <string name="car_charged_descr">Ваш автомобиль должен быть заряжен к етому времени</string>

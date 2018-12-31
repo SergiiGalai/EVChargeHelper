@@ -11,20 +11,20 @@
 
     <string name="pref_title_voltage">Default voltage in network, V</string>
     <string name="pref_title_amperage">Default consuming amperage, A</string>
-    <string name="pref_title_charging_loss">Battery charging loss, %</string>
+    <string name="pref_title_charge_loss">Charge loss, %</string>
     <string name="pref_title_battery_capacity">Usable battery capacity, kWh</string>
 
     <!-- Example settings for Notifications -->
     <string name="pref_header_notifications">Notification settings</string>
 
-    <string name="pref_title_allow_app_notifications">Use application own notifications</string>
+    <string name="pref_title_allow_app_notifications">Application notifications</string>
     <string name="pref_description_allow_app_notifications">Custom sound is used to make it easier to distinguish from other notifications</string>
 
-    <string name="pref_title_allow_calendar_notifications">Use Google calendar notifications</string>
+    <string name="pref_title_allow_calendar_notifications">Calendar notifications</string>
     <string name="pref_description_allow_calendar_notifications">Enable notifications with default reminders.</string>
 
-    <string name="pref_title_allow_asking_for_calendar_permissions">Allow asking for calendar permission</string>
-    <string name="pref_description_allow_asking_for_calendar_permissions">Calendar permission is needed to be able to create notifications faster and with more comfort.\n
+    <string name="pref_title_allow_asking_for_calendar_permissions">Ask for calendar permission</string>
+    <string name="pref_description_allow_asking_for_calendar_permissions">Permission is required to be able to create notifications faster and easier.\n
 Allows to create notifications in one click, change reminding time, event background.
     </string>
 
