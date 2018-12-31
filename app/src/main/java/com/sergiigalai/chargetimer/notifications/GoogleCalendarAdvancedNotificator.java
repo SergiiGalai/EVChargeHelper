@@ -112,9 +112,11 @@ public class GoogleCalendarAdvancedNotificator implements INotificator
         values.put(CalendarContract.Events.TITLE, title);
         values.put(CalendarContract.Events.DESCRIPTION, description);
         values.put(CalendarContract.Events.CALENDAR_ID, repository.getPrimaryCalendarId());
-        values.put(CalendarContract.Events.EVENT_COLOR_KEY, EventColor);
         values.put(CalendarContract.Events.EVENT_TIMEZONE,
                 Calendar.getInstance().getTimeZone().getID());
+
+        if (repository.customColorsSupported())
+            values.put(CalendarContract.Events.EVENT_COLOR_KEY, EventColor);
 
         return values;
     }

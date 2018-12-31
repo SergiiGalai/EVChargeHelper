@@ -42,7 +42,7 @@ public final class UserMessage {
         showToast(context, description, Toast.LENGTH_SHORT);
     }
 
-    static void showToast(@NonNull Context context, @NonNull String description, int toastTimeLength) {
+    public static void showToast(@NonNull Context context, @NonNull String description, int toastTimeLength) {
         Toast.makeText(context, description, toastTimeLength).show();
     }
 

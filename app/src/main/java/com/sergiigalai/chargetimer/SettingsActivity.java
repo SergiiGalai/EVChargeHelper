@@ -162,14 +162,13 @@ public class SettingsActivity extends AppCompatPreferenceActivity
                 };
     }
 
-
-
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class NotificationPreferenceFragment extends PreferenceFragment
     {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+
             addPreferencesFromResource(R.xml.pref_notification);
             setHasOptionsMenu(true);
 

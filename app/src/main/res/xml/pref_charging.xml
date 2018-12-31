@@ -9,7 +9,7 @@
     <!--android:title="@string/pref_title_car_list"/>-->
 
     <EditTextPreference
-        android:defaultValue="220"
+        android:defaultValue="@string/pref_default_voltage"
         android:inputType="number"
         android:key="default_voltage"
         android:maxLines="1"
@@ -18,7 +18,7 @@
         android:title="@string/pref_title_voltage"/>
 
     <EditTextPreference
-        android:defaultValue="16"
+        android:defaultValue="@string/pref_default_amperage"
         android:inputType="number"
         android:key="default_amperage"
         android:maxLines="1"
@@ -27,7 +27,7 @@
         android:title="@string/pref_title_amperage"/>
 
     <EditTextPreference
-        android:defaultValue="10.5"
+        android:defaultValue="@string/pref_default_battery_capacity"
         android:inputType="numberDecimal"
         android:key="battery_capacity"
         android:maxLines="1"
@@ -36,7 +36,7 @@
         android:title="@string/pref_title_battery_capacity"/>
 
     <EditTextPreference
-        android:defaultValue="12"
+        android:defaultValue="@string/pref_default_charging_loss"
         android:inputType="number"
         android:key="charging_loss"
         android:maxLines="1"

@@ -5,10 +5,14 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDoneException;
 import android.net.Uri;
 import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.sergiigalai.chargetimer.UserMessage;
 
 @SuppressLint("MissingPermission")
 class GoogleCalendarRepository {
@@ -22,25 +26,36 @@ class GoogleCalendarRepository {
     long createEvent(ContentValues values){
         ContentResolver cr = activity.getContentResolver();
 
-        Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
-        String lastSegment = uri == null ? "" : uri.getLastPathSegment();
-        String event = lastSegment == null ? "" : lastSegment;
+        try {
+            Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
 
-        return Long.parseLong(event);
+            String lastSegment = uri == null ? "" : uri.getLastPathSegment();
+            String event = lastSegment == null ? "" : lastSegment;
+            return Long.parseLong(event);
+        }catch(SQLiteDoneException ex) {
+            UserMessage.showToast(activity, ex.getMessage(), Toast.LENGTH_LONG);
+            Log.e(TAG, ex.getMessage());
+            return 0;
+        }
     }
 
     void setReminder(long eventID, int minutesBefore) {
         ContentResolver cr = activity.getContentResolver();
-        ContentValues values = createReminderValues(eventID, minutesBefore);
+        ContentValues reminderValues = createReminderValues(eventID, minutesBefore);
 
-        Uri uri = cr.insert(CalendarContract.Reminders.CONTENT_URI, values);
+        try {
+            cr.insert(CalendarContract.Reminders.CONTENT_URI, reminderValues);
 
-        try (Cursor c = CalendarContract.Reminders.query(cr, eventID,
-                new String[]{CalendarContract.Reminders.MINUTES})) {
-            if (c.moveToFirst()) {
-                System.out.println("calendar"
-                        + c.getInt(c.getColumnIndex(CalendarContract.Reminders.MINUTES)));
+            try (Cursor cursor = CalendarContract.Reminders.query(cr, eventID,
+                    new String[]{CalendarContract.Reminders.MINUTES})) {
+                if (cursor.moveToFirst()) {
+                    System.out.println("calendar"
+                            + cursor.getInt(cursor.getColumnIndex(CalendarContract.Reminders.MINUTES)));
+                }
             }
+        }catch(SQLiteDoneException ex) {
+            UserMessage.showToast(activity, ex.getMessage(), Toast.LENGTH_LONG);
+            Log.e(TAG, ex.getMessage());
         }
     }
 
@@ -56,13 +71,14 @@ class GoogleCalendarRepository {
     }
 
     int getPrimaryCalendarId(){
-        long calId = 1;
+        long calendarId = 1;
 
         final int projection_id = 0;
         final int projection_name = 1;
         final int projection_primary = 2;
 
-        Cursor cur = activity.getContentResolver()
+        Cursor cursor = activity
+                .getContentResolver()
                 .query(CalendarContract.Calendars.CONTENT_URI,
                         new String[]{
                                 CalendarContract.Calendars._ID,
@@ -71,28 +87,28 @@ class GoogleCalendarRepository {
                         },
                         null, null, null);
 
-        if (cur != null)
+        if (cursor != null)
         {
             try {
-                while (cur.moveToNext()){
-                    calId = cur.getLong(projection_id);
-                    String name = cur.getString(projection_name);
-                    String primary = cur.getString(projection_primary);
+                while (cursor.moveToNext()){
+                    calendarId = cursor.getLong(projection_id);
+                    String name = cursor.getString(projection_name);
+                    String primary = cursor.getString(projection_primary);
                     if (primary.equals("1"))
-                        return (int)calId;
+                        return (int)calendarId;
                 }
             }
             finally {
-                cur.close();
+                cursor.close();
             }
         }
 
-        return (int)calId;
+        return (int)calendarId;
     }
 
-
-    public void showColors(){
-        Cursor cur = activity.getContentResolver()
+    boolean customColorsSupported(){
+        Cursor cur = activity
+                .getContentResolver()
                 .query(CalendarContract.Colors.CONTENT_URI,
                         new String[]{
                                 CalendarContract.Colors._ID,
@@ -100,24 +116,48 @@ class GoogleCalendarRepository {
                                 CalendarContract.Colors.COLOR,
                         },
                         null, null, null);
-        if (cur != null)
-        {
-            try{
-                while (cur.moveToNext()){
-                    long colId = cur.getLong(0);
-                    long colorKey = cur.getLong(1);
-                    long color = cur.getLong(2);
 
-                    String hexColor= Long.toHexString(color);
+        if (cur == null)
+            return false;
 
-                    Log.d( TAG, "id=" + colId
-                            + "; key=" + colorKey
-                            + "; hexColor="+ hexColor);
-                }
+        try{
+            return cur.moveToFirst();
+        }
+        finally {
+            cur.close();
+        }
+
+    }
+
+    public void showColors(){
+        Cursor cur = activity
+                .getContentResolver()
+                .query(CalendarContract.Colors.CONTENT_URI,
+                        new String[]{
+                                CalendarContract.Colors._ID,
+                                CalendarContract.Colors.COLOR_KEY,
+                                CalendarContract.Colors.COLOR,
+                        },
+                        null, null, null);
+
+        if (cur == null)
+            return;
+
+        try{
+            while (cur.moveToNext()){
+                long colId = cur.getLong(0);
+                long colorKey = cur.getLong(1);
+                long color = cur.getLong(2);
+
+                String hexColor= Long.toHexString(color);
+
+                Log.d( TAG, "id=" + colId
+                        + "; key=" + colorKey
+                        + "; hexColor="+ hexColor);
             }
-            finally {
-                cur.close();
-            }
+        }
+        finally {
+            cur.close();
         }
     }
 
