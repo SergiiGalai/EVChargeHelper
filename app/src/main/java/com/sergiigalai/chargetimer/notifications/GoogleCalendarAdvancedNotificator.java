@@ -23,7 +23,6 @@ import java.util.Calendar;
 
 public class GoogleCalendarAdvancedNotificator implements INotificator
 {
-    private static final int EventColor = GoogleCalendarEventColor.VIOLET;
     private static final int MS_IN_1_HOUR = 60 * 60 * 1000;
 
     private final GoogleCalendarRepository repository;
@@ -104,9 +103,6 @@ public class GoogleCalendarAdvancedNotificator implements INotificator
         values.put(CalendarContract.Events.CALENDAR_ID, calendarId);
         values.put(CalendarContract.Events.EVENT_TIMEZONE,
                 Calendar.getInstance().getTimeZone().getID());
-
-        if (repository.customColorsSupported())
-            values.put(CalendarContract.Events.EVENT_COLOR_KEY, EventColor);
 
         return values;
     }

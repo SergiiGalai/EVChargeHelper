@@ -106,29 +106,6 @@ class GoogleCalendarRepository {
         return (int)calendarId;
     }
 
-    boolean customColorsSupported(){
-        Cursor cur = activity
-                .getContentResolver()
-                .query(CalendarContract.Colors.CONTENT_URI,
-                        new String[]{
-                                CalendarContract.Colors._ID,
-                                CalendarContract.Colors.COLOR_KEY,
-                                CalendarContract.Colors.COLOR,
-                        },
-                        null, null, null);
-
-        if (cur == null)
-            return false;
-
-        try{
-            return cur.moveToFirst();
-        }
-        finally {
-            cur.close();
-        }
-
-    }
-
     public void showColors(){
         Cursor cur = activity
                 .getContentResolver()
