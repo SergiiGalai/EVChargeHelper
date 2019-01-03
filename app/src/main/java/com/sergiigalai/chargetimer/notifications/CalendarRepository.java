@@ -15,15 +15,15 @@ import android.widget.Toast;
 import com.sergiigalai.chargetimer.UserMessage;
 
 @SuppressLint("MissingPermission")
-class GoogleCalendarRepository {
-    private static final String TAG = "GoogleCalendarRepo";
+class CalendarRepository implements ICalendarRepository {
+    private static final String TAG = "CalendarRepository";
     private Activity activity;
 
-    GoogleCalendarRepository(Activity activity) {
+    CalendarRepository(Activity activity) {
         this.activity = activity;
     }
 
-    long createEvent(ContentValues values){
+    public long createEvent(ContentValues values){
         ContentResolver cr = activity.getContentResolver();
 
         try {
@@ -39,7 +39,7 @@ class GoogleCalendarRepository {
         }
     }
 
-    void setReminder(long eventID, int minutesBefore) {
+    public void setReminder(long eventID, int minutesBefore) {
         ContentResolver cr = activity.getContentResolver();
         ContentValues reminderValues = createReminderValues(eventID, minutesBefore);
 
@@ -70,7 +70,7 @@ class GoogleCalendarRepository {
         return values;
     }
 
-    int getPrimaryCalendarId(){
+    public int getPrimaryCalendarId(){
         long calendarId = -1;
 
         final int projection_id = 0;

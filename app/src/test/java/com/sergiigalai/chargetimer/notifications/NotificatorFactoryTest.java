@@ -3,12 +3,6 @@ package com.sergiigalai.chargetimer.notifications;
 import android.app.Activity;
 import android.net.Uri;
 
-import com.sergiigalai.chargetimer.notifications.ApplicationNotificator;
-import com.sergiigalai.chargetimer.notifications.GoogleCalendarAdvancedNotificator;
-import com.sergiigalai.chargetimer.notifications.GoogleCalendarDefaultNotificator;
-import com.sergiigalai.chargetimer.notifications.INotificator;
-import com.sergiigalai.chargetimer.notifications.IResourceProvider;
-import com.sergiigalai.chargetimer.notifications.NotificatorFactory;
 import com.sergiigalai.chargetimer.settings.ISettingsReader;
 import com.sergiigalai.chargetimer.settings.ISettingsWriter;
 
@@ -60,45 +54,45 @@ public class NotificatorFactoryTest {
     }
 
     @Test
-    public void advanced_google_notifications_when_googleAdvancedNotificationsAllowed(){
-        when(settings.googleAdvancedNotificationsAllowed()).thenReturn(true);
+    public void advanced_calendar_notifications_when_calendarAdvancedNotificationsAllowed(){
+        when(settings.calendarAdvancedNotificationsAllowed()).thenReturn(true);
 
         List<INotificator> actual = factory.createNotificators();
 
         assertThat(actual.size(), is(1));
-        assertTrue(actual.get(0) instanceof GoogleCalendarAdvancedNotificator);
+        assertTrue(actual.get(0) instanceof CalendarAdvancedNotificator);
     }
 
     @Test
-    public void advanced_google_notifications_when_allowed_in_settings(){
-        when(settings.googleAdvancedNotificationsAllowed()).thenReturn(true);
-        when(settings.googleBasicNotificationsAllowed()).thenReturn(true);
+    public void advanced_calendar_notifications_when_allowed_in_settings(){
+        when(settings.calendarAdvancedNotificationsAllowed()).thenReturn(true);
+        when(settings.calendarBasicNotificationsAllowed()).thenReturn(true);
 
         List<INotificator> actual = factory.createNotificators();
 
         assertThat(actual.size(), is(1));
-        assertTrue(actual.get(0) instanceof  GoogleCalendarAdvancedNotificator);
+        assertTrue(actual.get(0) instanceof CalendarAdvancedNotificator);
     }
 
     @Test
-    public void basic_google_notifications_when_allowed_in_settings(){
-        when(settings.googleBasicNotificationsAllowed()).thenReturn(true);
+    public void basic_calendar_notifications_when_allowed_in_settings(){
+        when(settings.calendarBasicNotificationsAllowed()).thenReturn(true);
 
         List<INotificator> actual = factory.createNotificators();
 
         assertThat(actual.size(), is(1));
-        assertTrue(actual.get(0) instanceof  GoogleCalendarDefaultNotificator);
+        assertTrue(actual.get(0) instanceof CalendarDefaultNotificator);
     }
 
     @Test
-    public void app_and_basic_google_notifications_when_allowed_in_settings(){
+    public void app_and_basic_calendar_notifications_when_allowed_in_settings(){
         when(settings.applicationNotificationsAllowed()).thenReturn(true);
-        when(settings.googleBasicNotificationsAllowed()).thenReturn(true);
+        when(settings.calendarBasicNotificationsAllowed()).thenReturn(true);
 
         List<INotificator> actual = factory.createNotificators();
 
         assertThat(actual.size(), is(2));
         assertTrue(actual.get(0) instanceof  ApplicationNotificator);
-        assertTrue(actual.get(1) instanceof GoogleCalendarDefaultNotificator);
+        assertTrue(actual.get(1) instanceof CalendarDefaultNotificator);
     }
 }

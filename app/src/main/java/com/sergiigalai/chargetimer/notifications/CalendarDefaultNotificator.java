@@ -11,11 +11,11 @@ import com.sergiigalai.chargetimer.helpers.TimeHelper;
 import java.util.Calendar;
 import java.util.Date;
 
-public class GoogleCalendarDefaultNotificator implements INotificator
+public class CalendarDefaultNotificator implements INotificator
 {
     private final Context context;
 
-    GoogleCalendarDefaultNotificator(Context context) {
+    CalendarDefaultNotificator(Context context) {
         this.context = context;
     }
 

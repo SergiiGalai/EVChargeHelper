@@ -28,14 +28,14 @@ public class SharedPreferenceSettingsReader implements ISettingsReader
     }
 
     @Override
-    public boolean googleBasicNotificationsAllowed(){
+    public boolean calendarBasicNotificationsAllowed(){
         return preferences.getBoolean("allow_calendar_notifications",
                 context.getResources().getBoolean(R.bool.pref_default_allow_calendar_notifications));
     }
 
     @Override
-    public boolean googleAdvancedNotificationsAllowed(){
-        return googleBasicNotificationsAllowed() &&
+    public boolean calendarAdvancedNotificationsAllowed(){
+        return calendarBasicNotificationsAllowed() &&
                 preferences.getBoolean("allow_calendar_permission_notifications",
                         context.getResources().getBoolean(R.bool.pref_default_allow_calendar_permission_notifications));
     }

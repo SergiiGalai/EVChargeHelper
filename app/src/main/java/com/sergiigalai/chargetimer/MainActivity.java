@@ -21,7 +21,7 @@ import com.sergiigalai.chargetimer.charge.LiionChargeTimeResolver;
 import com.sergiigalai.chargetimer.charge.PowerLine;
 import com.sergiigalai.chargetimer.controls.StepNumberPicker;
 import com.sergiigalai.chargetimer.helpers.TimeHelper;
-import com.sergiigalai.chargetimer.notifications.GoogleCalendarAdvancedNotificator;
+import com.sergiigalai.chargetimer.notifications.CalendarAdvancedNotificator;
 import com.sergiigalai.chargetimer.notifications.NotificationScheduler;
 import com.sergiigalai.chargetimer.settings.ISettingsReader;
 
@@ -100,7 +100,7 @@ public class MainActivity extends BaseActivity
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        if (requestCode == GoogleCalendarAdvancedNotificator.REQUEST_CALENDAR){
+        if (requestCode == CalendarAdvancedNotificator.REQUEST_CALENDAR){
             scheduler.schedule(grantResults, viewModel.getMillisToCharge());
         }
     }

@@ -19,7 +19,7 @@ public class SharedPreferenceSettingsWriter implements ISettingsWriter {
     }
 
     @Override
-    public void saveGoogleAdvancedNotificationsAllowed(boolean value){
+    public void saveCalendarAdvancedNotificationsAllowed(boolean value){
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("allow_calendar_permission_notifications", value);
         editor.apply();

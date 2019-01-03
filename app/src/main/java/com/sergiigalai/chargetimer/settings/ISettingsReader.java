@@ -5,9 +5,9 @@ public interface ISettingsReader {
 
     boolean applicationNotificationsAllowed();
 
-    boolean googleBasicNotificationsAllowed();
+    boolean calendarBasicNotificationsAllowed();
 
-    boolean googleAdvancedNotificationsAllowed();
+    boolean calendarAdvancedNotificationsAllowed();
 
     double getBatteryCapacity();
 

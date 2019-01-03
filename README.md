@@ -12,15 +12,15 @@ Application does NOT have connection to your car. So it cannot receive actual va
 
 To get correct calculations in the settings it is needed to specify some values.
 * Voltage and amperage may differ depending on your location and power line. In settings please specify defaults for you.
-* Usable battery capacity. Car makers preserve some capacity to extend battery life time. That's why Nissan Leaf with 24 kWh battery has usable capacity about 22 kWh for a new battery. Chevy Volt gen 1 from 16.5kWh can use about 10.5kWh. This value will decrease though the time. Current value of the usable capacity on some cars you can get from the car computers. For other cars you can use OBDII devices. For the rest car manual and Google.
+* Usable battery capacity. Car makers preserve some capacity to extend battery life time. That's why Nissan Leaf with 24 kWh battery has usable capacity about 22 kWh for a new battery. Chevy Volt gen 1 from 16.5kWh can use about 10.5kWh. This value will decrease though the time. Current value of the usable capacity on some cars you can get from the car computers. For other cars you can use OBDII devices. For the rest see car manual or Google it.
 
 Application is on early development stages and could contain bugs. If you encounter that you have correct values but calculated time does not correspond to the actual values and you cannot rely on it please let me know.
 
 Advantages:
 * customized notification time
 * own notifications
-* Google calendar notifications
-* advanced Google calendar notifications
+* calendar notifications
+* advanced calendar notifications
 * works offline
 * free
 * open source

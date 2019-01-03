@@ -27,10 +27,10 @@ class NotificatorFactory {
     }
 
     INotificator tryCreate(boolean calendarPermissionsGranted){
-        if(calendarPermissionsGranted && settingsProvider.googleAdvancedNotificationsAllowed()){
+        if(calendarPermissionsGranted && settingsProvider.calendarAdvancedNotificationsAllowed()){
             return createAdvancedNotificator();
         }else{
-            if (settingsProvider.googleBasicNotificationsAllowed()){
+            if (settingsProvider.calendarBasicNotificationsAllowed()){
                 return createBasicNotificator();
             }
         }
@@ -44,10 +44,10 @@ class NotificatorFactory {
         if (settingsProvider.applicationNotificationsAllowed()){
             r.add(new ApplicationNotificator(settingsProvider, resourceProvider, activity));
         }
-        if (settingsProvider.googleAdvancedNotificationsAllowed()){
+        if (settingsProvider.calendarAdvancedNotificationsAllowed()){
             r.add(createAdvancedNotificator());
         }else{
-            if (settingsProvider.googleBasicNotificationsAllowed()){
+            if (settingsProvider.calendarBasicNotificationsAllowed()){
                 r.add(createBasicNotificator());
             }
         }
@@ -56,15 +56,21 @@ class NotificatorFactory {
 
     @NonNull
     private INotificator createAdvancedNotificator() {
-        return new GoogleCalendarAdvancedNotificator(
+        return new CalendarAdvancedNotificator(
                 createBasicNotificator(),
+                createCalendarRepository(),
                 settingsProvider,
                 settingsWriter,
                 activity);
     }
 
     @NonNull
-    private INotificator createBasicNotificator() {
-        return new GoogleCalendarDefaultNotificator(activity);
+    private CalendarRepository createCalendarRepository() {
+        return new CalendarRepository(activity);
+    }
+
+    @NonNull
+    private CalendarDefaultNotificator createBasicNotificator() {
+        return new CalendarDefaultNotificator(activity);
     }
 }

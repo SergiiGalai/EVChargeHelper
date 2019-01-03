@@ -21,21 +21,24 @@ import com.sergiigalai.chargetimer.settings.ISettingsWriter;
 
 import java.util.Calendar;
 
-public class GoogleCalendarAdvancedNotificator implements INotificator
+public class CalendarAdvancedNotificator implements INotificator
 {
+    public static final int REQUEST_CALENDAR = 1;
     private static final int MS_IN_1_HOUR = 60 * 60 * 1000;
+    private static final String[] PERMISSIONS_CALENDAR = {
+            Manifest.permission.READ_CALENDAR,
+            Manifest.permission.WRITE_CALENDAR
+    };
 
-    private final GoogleCalendarRepository repository;
+    private final ICalendarRepository calendarRepository;
     private final Activity activity;
     private final ISettingsReader settingsProvider;
-    public static final int REQUEST_CALENDAR = 1;
-    private static final String[] PERMISSIONS_CALENDAR = {Manifest.permission.READ_CALENDAR,
-            Manifest.permission.WRITE_CALENDAR};
     private final ISettingsWriter settingsWriter;
     private final INotificator fallbackNotificator;
 
-    GoogleCalendarAdvancedNotificator(
+    CalendarAdvancedNotificator(
             INotificator fallbackNotificator,
+            ICalendarRepository calendarRepository,
             ISettingsReader settingsProvider,
             ISettingsWriter settingsWriter,
             Activity activity) {
@@ -43,7 +46,7 @@ public class GoogleCalendarAdvancedNotificator implements INotificator
         this.activity = activity;
         this.settingsProvider = settingsProvider;
         this.settingsWriter = settingsWriter;
-        repository = new GoogleCalendarRepository(activity);
+        this.calendarRepository = calendarRepository;
     }
 
     @Override
@@ -53,7 +56,7 @@ public class GoogleCalendarAdvancedNotificator implements INotificator
             scheduleCalendarEvent(activity.getString(R.string.car_charged_title),
                     activity.getString(R.string.car_charged_descr),
                     millisToEvent);
-        } else if (settingsProvider.googleAdvancedNotificationsAllowed())
+        } else if (settingsProvider.calendarAdvancedNotificationsAllowed())
         {
             requestCalendarPermission();
         }
@@ -65,23 +68,23 @@ public class GoogleCalendarAdvancedNotificator implements INotificator
     }
 
     private void scheduleCalendarEvent(String title, String description, long millisToEvent) {
-        //repository.showColors();
-
-        int calendarId = repository.getPrimaryCalendarId();
+        int calendarId = calendarRepository.getPrimaryCalendarId();
         if (calendarId == -1) {
             UserMessage.showToast(activity, R.string.error_no_primary_calendar, Toast.LENGTH_LONG);
             fallbackNotificator.scheduleCarChargedNotification(millisToEvent);
         }else{
-            long epochMs = TimeHelper.now() + millisToEvent;
-            ContentValues values = createCalendarEventContent(calendarId, title, description, epochMs);
-
-            long eventId = repository.createEvent(values);
+            ContentValues eventData = createCalendarEventContent(calendarId, title, description, millisToEvent);
             int reminderMinutes = settingsProvider.getCalendarReminderMinutes();
 
-            repository.setReminder(eventId, reminderMinutes);
-
+            long eventId = createEventWithReminder(eventData, reminderMinutes);
             notifyUser_open_event(eventId);
         }
+    }
+
+    private long createEventWithReminder(ContentValues eventData, int reminderMinutes){
+        long eventId = calendarRepository.createEvent(eventData);
+        calendarRepository.setReminder(eventId, reminderMinutes);
+        return eventId;
     }
 
     private void notifyUser_open_event(final long eventId){
@@ -94,7 +97,9 @@ public class GoogleCalendarAdvancedNotificator implements INotificator
     }
 
     @NonNull
-    private ContentValues createCalendarEventContent(int calendarId, String title, String description, long eventTime) {
+    private ContentValues createCalendarEventContent(int calendarId, String title, String description, long millisToEvent) {
+        long eventTime = TimeHelper.now() + millisToEvent;
+
         ContentValues values = new ContentValues();
         values.put(CalendarContract.Events.DTSTART, eventTime);
         values.put(CalendarContract.Events.DTEND, eventTime + MS_IN_1_HOUR);
@@ -124,7 +129,7 @@ public class GoogleCalendarAdvancedNotificator implements INotificator
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        settingsWriter.saveGoogleAdvancedNotificationsAllowed(false);
+                        settingsWriter.saveCalendarAdvancedNotificationsAllowed(false);
                         //NotificationScheduler scheduler = new NotificationScheduler(activity);
                         //scheduler.schedule();
                     }
