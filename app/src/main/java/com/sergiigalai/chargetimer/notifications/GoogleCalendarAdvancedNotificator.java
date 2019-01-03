@@ -33,10 +33,14 @@ public class GoogleCalendarAdvancedNotificator implements INotificator
     private static final String[] PERMISSIONS_CALENDAR = {Manifest.permission.READ_CALENDAR,
             Manifest.permission.WRITE_CALENDAR};
     private final ISettingsWriter settingsWriter;
+    private final INotificator fallbackNotificator;
 
-    GoogleCalendarAdvancedNotificator(ISettingsReader settingsProvider,
-                                      ISettingsWriter settingsWriter,
-                                      Activity activity) {
+    GoogleCalendarAdvancedNotificator(
+            INotificator fallbackNotificator,
+            ISettingsReader settingsProvider,
+            ISettingsWriter settingsWriter,
+            Activity activity) {
+        this.fallbackNotificator = fallbackNotificator;
         this.activity = activity;
         this.settingsProvider = settingsProvider;
         this.settingsWriter = settingsWriter;
@@ -47,10 +51,9 @@ public class GoogleCalendarAdvancedNotificator implements INotificator
     public void scheduleCarChargedNotification(long millisToEvent) {
         if (calendarPermissionsGranted())
         {
-            long epochMs = TimeHelper.now() + millisToEvent;
             scheduleCalendarEvent(activity.getString(R.string.car_charged_title),
                     activity.getString(R.string.car_charged_descr),
-                    epochMs);
+                    millisToEvent);
         } else if (settingsProvider.googleAdvancedNotificationsAllowed())
         {
             requestCalendarPermission();
@@ -62,14 +65,16 @@ public class GoogleCalendarAdvancedNotificator implements INotificator
                 && ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED ;
     }
 
-    private void scheduleCalendarEvent(String title, String description, long eventTime) {
+    private void scheduleCalendarEvent(String title, String description, long millisToEvent) {
         //repository.showColors();
 
         int calendarId = repository.getPrimaryCalendarId();
         if (calendarId == -1) {
             UserMessage.showToast(activity, R.string.error_no_primary_calendar, Toast.LENGTH_LONG);
+            fallbackNotificator.scheduleCarChargedNotification(millisToEvent);
         }else{
-            ContentValues values = createCalendarEventContent(calendarId, title, description, eventTime);
+            long epochMs = TimeHelper.now() + millisToEvent;
+            ContentValues values = createCalendarEventContent(calendarId, title, description, epochMs);
 
             long eventId = repository.createEvent(values);
             int reminderMinutes = settingsProvider.getCalendarReminderMinutes();

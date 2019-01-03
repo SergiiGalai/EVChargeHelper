@@ -28,10 +28,10 @@ class NotificatorFactory {
 
     INotificator tryCreate(boolean calendarPermissionsGranted){
         if(calendarPermissionsGranted && settingsProvider.googleAdvancedNotificationsAllowed()){
-            return new GoogleCalendarAdvancedNotificator(settingsProvider, settingsWriter, activity);
+            return createAdvancedNotificator();
         }else{
             if (settingsProvider.googleBasicNotificationsAllowed()){
-                return new GoogleCalendarDefaultNotificator(activity);
+                return createBasicNotificator();
             }
         }
         return null;
@@ -45,12 +45,26 @@ class NotificatorFactory {
             r.add(new ApplicationNotificator(settingsProvider, resourceProvider, activity));
         }
         if (settingsProvider.googleAdvancedNotificationsAllowed()){
-            r.add(new GoogleCalendarAdvancedNotificator(settingsProvider, settingsWriter, activity));
+            r.add(createAdvancedNotificator());
         }else{
             if (settingsProvider.googleBasicNotificationsAllowed()){
-                r.add(new GoogleCalendarDefaultNotificator(activity));
+                r.add(createBasicNotificator());
             }
         }
         return r;
-    } 
+    }
+
+    @NonNull
+    private INotificator createAdvancedNotificator() {
+        return new GoogleCalendarAdvancedNotificator(
+                createBasicNotificator(),
+                settingsProvider,
+                settingsWriter,
+                activity);
+    }
+
+    @NonNull
+    private INotificator createBasicNotificator() {
+        return new GoogleCalendarDefaultNotificator(activity);
+    }
 }
