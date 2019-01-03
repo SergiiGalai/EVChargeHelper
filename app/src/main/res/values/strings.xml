@@ -25,7 +25,7 @@
 
     <string name="pref_title_allow_asking_for_calendar_permissions">Ask for calendar permission</string>
     <string name="pref_description_allow_asking_for_calendar_permissions">Permission is required to be able to create notifications faster and easier.\n
-Allows to create notifications in one click, change reminding time, event background.
+Allows to create notifications in one click, change reminding time.
     </string>
 
     <string name="pref_title_reminder">Remind before, minutes</string>
@@ -57,6 +57,6 @@ You can change this settings anytime in application settings.
     <string name="event_created">Calendar event created</string>
     <string name="first_time_settings_activity_message">Before continue fill your battery capacity and usual power line settings for more precise time calculation.</string>
     <string name="first_time_main_activity_message">This app is NOT connected to your car and cannot get its actual charging info.
-Charge time calculation is estimated on data from this screen.</string>
+Charge time calculation is estimated.</string>
     <string name="error_no_primary_calendar">Unable to get primary calendar, opening calendar setup page</string>
 </resources>

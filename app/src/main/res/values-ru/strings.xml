@@ -15,7 +15,7 @@
     <string name="pref_description_allow_calendar_notifications">Включить уведомления с настройками по умолчанию</string>
     <string name="pref_title_allow_asking_for_calendar_permissions">Запрос на доступ к календарю</string>
     <string name="pref_description_allow_asking_for_calendar_permissions">Доступ нужен для более быстрого и удобного создания уведомлений о зарядке авто.\n
-Например, создание уведомлений в один клик, изменение времени уведомления, цвета фона.</string>
+Например, создание уведомлений в один клик, изменение времени уведомления.</string>
     <string name="car_charged_title">Автомобиль заряжен</string>
     <string name="car_charged_descr">Ваш автомобиль должен быть заряжен к етому времени</string>
     <string name="car_charged_time_desc">Ваш автомобиль должен быть заряжен к %s</string>
@@ -42,6 +42,6 @@
     <string name="event_created">Уведомление в календаре создано</string>
     <string name="first_time_settings_activity_message">Заполните емкость батареи, а также напряжение и силу тока в вашей сети для более точного расчета времени</string>
     <string name="first_time_main_activity_message">Программа НЕ подключена к вашему авто и не может использовать его актуальные данные.
-Расчет времени зарядки основан на данных, введенных на данном екране.</string>
+Расчет времени зарядки является приблизительным.</string>
     <string name="error_no_primary_calendar">Невозможно открыть основной календарь. Открываю страницу установки календаря</string>
 </resources>
