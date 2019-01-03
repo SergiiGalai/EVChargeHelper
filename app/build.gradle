@@ -22,15 +22,15 @@ android {
             debuggable true
         }
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.freeCert
         }
     }
     flavorDimensions "default"
     defaultConfig {
-        versionCode 3
-        versionName "0.1"
+        versionCode 4
+        versionName "0.5"
         applicationId "com.sergiigalai.chargetimer"
         minSdkVersion 21
         targetSdkVersion 27
