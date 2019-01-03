@@ -17,19 +17,23 @@ android {
     compileSdkVersion 27
     buildToolsVersion '28.0.3'
     buildTypes {
+        debug {
+            testCoverageEnabled false
+            debuggable true
+        }
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.freeCert
         }
     }
     flavorDimensions "default"
     defaultConfig {
-        applicationId "com.example.dell.chargetimer"
+        versionCode 4
+        versionName "0.5"
+        applicationId "com.sergiigalai.chargetimer"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     productFlavors {

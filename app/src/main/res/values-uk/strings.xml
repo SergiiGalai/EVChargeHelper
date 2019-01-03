@@ -2,19 +2,20 @@
 <resources>
     <string name="title_activity_settings">Налаштування</string>
     <string name="title_activity_bugreport">Повідомлення про помилку</string>
+    <string name="value_not_empty">Значення не може бути пустим</string>
     <string name="pref_header_charging">Батарея і зарядка</string>
-    <string name="pref_title_voltage">Напруга у мережі за замовчуванням, В</string>
-    <string name="pref_title_amperage">Сила струму у мережі за замовчуванням, А</string>
-    <string name="pref_title_charging_loss">Втрати при заряджанні батареї, %</string>
-    <string name="pref_title_battery_capacity">Корисна ємкість батареї, кВт*г</string>
+    <string name="pref_title_voltage">Напруга зарядки за замовчуванням, В</string>
+    <string name="pref_title_amperage">Сила струму зарядки за замовчуванням, А</string>
+    <string name="pref_title_charge_loss">Втрати при заряді, %</string>
+    <string name="pref_title_battery_capacity">Корисна ємкість батареї, кВт\u22C5г</string>
     <string name="pref_header_notifications">Налаштування сповіщень</string>
-    <string name="pref_title_allow_app_notifications">Використовувати власні сповіщення програми</string>
+    <string name="pref_title_allow_app_notifications">Власні сповіщення</string>
     <string name="pref_description_allow_app_notifications">Використовується звук, відмінний від стандартного, щоб було легше його відрізнити від стандартних сповіщень</string>
-    <string name="pref_title_allow_calendar_notifications">Використовувати Google календар для сповіщень</string>
+    <string name="pref_title_allow_calendar_notifications">Сповіщення в календарі</string>
     <string name="pref_description_allow_calendar_notifications">Увімкнути сповіщення з нагадуваннями за замовчуванням</string>
-    <string name="pref_title_allow_asking_for_calendar_permissions">Дозволити запит на доступ до календаря</string>
-    <string name="pref_description_allow_asking_for_calendar_permissions">Доступ до календаря потрібен для швидшого і зручнішого створення нагадувань у календарі.\n
-Наприклад, створення нагадувань за один клік, зміни часу нагадування, кольору фона.</string>
+    <string name="pref_title_allow_asking_for_calendar_permissions">Запит на доступ до календаря</string>
+    <string name="pref_description_allow_asking_for_calendar_permissions">Доступ потрібен для швидшого і зручнішого створення нагадувань у календарі.\n
+Наприклад, створення нагадувань за один клік, зміни часу нагадування.</string>
     <string name="car_charged_title">Авто заряджене</string>
     <string name="car_charged_descr">Ваше авто має бути зарядженим до цього часу</string>
     <string name="car_charged_time_desc">Ваше авто має бути зарядженим до %s</string>
@@ -26,7 +27,8 @@
     <string name="current_description_title">Налаштування мережі:</string>
     <string name="amperage_title">А</string>
     <string name="voltage_title">В</string>
-    <string name="should_be_charged_prefix_title">Авто має бути заряджено через %dгод %02dхв</string>
+    <string name="should_be_charged_in_days_title">Авто має бути заряджено за %dд %02dг %02dхв</string>
+    <string name="should_be_charged_in_hours_title">Авто має бути заряджено за %dгод %02dхв</string>
     <string name="pref_title_reminder">Повідомити за, хвилин</string>
     <string name="pref_title_reminder_validation_error">Значення занадто велике. Ми не дозволяємо значення для нагадування більшим за %d хвилин.</string>
 
@@ -40,5 +42,6 @@
     <string name="event_created">Нагадування у календарі створено</string>
     <string name="first_time_settings_activity_message">Заповніть ємність батареї, а також напругу і силу струму в вашій мережі для точнішого розрахунку часу.</string>
     <string name="first_time_main_activity_message">Програма НЕ підключена до вашого авто і не може отримувати з нього актуальні дані.
-Розрахунок часу зарядки побудований на даних, введених на цьому екрані.</string>
+Розрахунок часу зарядки є приблизним.</string>
+    <string name="error_no_primary_calendar">Неможливо відкрити основний календар. Відкриваю сторінку установки календаря</string>
 </resources>

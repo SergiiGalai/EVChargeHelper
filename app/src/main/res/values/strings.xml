@@ -4,27 +4,28 @@
     <string name="title_activity_bugreport">Bug Report</string>
 
     <!-- Strings related to Settings -->
+    <string name="value_not_empty">Value cannot be empty</string>
 
     <!-- Example settings for Charging -->
     <string name="pref_header_charging">Battery and charging</string>
 
     <string name="pref_title_voltage">Default voltage in network, V</string>
     <string name="pref_title_amperage">Default consuming amperage, A</string>
-    <string name="pref_title_charging_loss">Battery charging loss, %</string>
+    <string name="pref_title_charge_loss">Charge loss, %</string>
     <string name="pref_title_battery_capacity">Usable battery capacity, kWh</string>
 
     <!-- Example settings for Notifications -->
     <string name="pref_header_notifications">Notification settings</string>
 
-    <string name="pref_title_allow_app_notifications">Use application own notifications</string>
+    <string name="pref_title_allow_app_notifications">Application notifications</string>
     <string name="pref_description_allow_app_notifications">Custom sound is used to make it easier to distinguish from other notifications</string>
 
-    <string name="pref_title_allow_calendar_notifications">Use Google calendar notifications</string>
+    <string name="pref_title_allow_calendar_notifications">Calendar notifications</string>
     <string name="pref_description_allow_calendar_notifications">Enable notifications with default reminders.</string>
 
-    <string name="pref_title_allow_asking_for_calendar_permissions">Allow asking for calendar permission</string>
-    <string name="pref_description_allow_asking_for_calendar_permissions">Calendar permission is needed to be able to create notifications faster and with more comfort.\n
-Allows to create notifications in one click, change reminding time, event background.
+    <string name="pref_title_allow_asking_for_calendar_permissions">Ask for calendar permission</string>
+    <string name="pref_description_allow_asking_for_calendar_permissions">Permission is required to be able to create notifications faster and easier.\n
+Allows to create notifications in one click, change reminding time.
     </string>
 
     <string name="pref_title_reminder">Remind before, minutes</string>
@@ -51,9 +52,11 @@ You can change this settings anytime in application settings.
     <string name="current_description_title">Power line options:</string>
     <string name="amperage_title">A</string>
     <string name="voltage_title">V</string>
-    <string name="should_be_charged_prefix_title">Car should be charged in %dh %02dm</string>
+    <string name="should_be_charged_in_days_title">Car should be charged for %dd %02dh %02dm</string>
+    <string name="should_be_charged_in_hours_title">Car should be charged for %dh %02dm</string>
     <string name="event_created">Calendar event created</string>
     <string name="first_time_settings_activity_message">Before continue fill your battery capacity and usual power line settings for more precise time calculation.</string>
     <string name="first_time_main_activity_message">This app is NOT connected to your car and cannot get its actual charging info.
-Charge time calculation is based on data entered on this screen.</string>
+Charge time calculation is estimated.</string>
+    <string name="error_no_primary_calendar">Unable to get primary calendar, opening calendar setup page</string>
 </resources>
