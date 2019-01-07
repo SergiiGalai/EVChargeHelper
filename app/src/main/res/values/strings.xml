@@ -25,7 +25,7 @@
 
     <string name="pref_title_allow_asking_for_calendar_permissions">Ask for calendar permission</string>
     <string name="pref_description_allow_asking_for_calendar_permissions">Permission is required to be able to create notifications faster and easier.\n
-Allows to create notifications in one click, change reminding time.
+Allows to create notifications in one click, change reminding time or background color.
     </string>
 
     <string name="pref_title_reminder">Remind before, minutes</string>

@@ -15,7 +15,7 @@
     <string name="pref_description_allow_calendar_notifications">Включить уведомления с настройками по умолчанию</string>
     <string name="pref_title_allow_asking_for_calendar_permissions">Запрос на доступ к календарю</string>
     <string name="pref_description_allow_asking_for_calendar_permissions">Доступ нужен для более быстрого и удобного создания уведомлений о зарядке авто.\n
-Например, создание уведомлений в один клик, изменение времени уведомления.</string>
+Например, создание уведомлений в один клик, изменение времени уведомления или цвета фона.</string>
     <string name="car_charged_title">Автомобиль заряжен</string>
     <string name="car_charged_descr">Ваш автомобиль должен быть заряжен к етому времени</string>
     <string name="car_charged_time_desc">Ваш автомобиль должен быть заряжен к %s</string>

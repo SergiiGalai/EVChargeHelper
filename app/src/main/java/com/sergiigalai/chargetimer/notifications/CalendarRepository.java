@@ -23,6 +23,26 @@ class CalendarRepository implements ICalendarRepository {
         this.activity = activity;
     }
 
+    public boolean customColorsSupported(){
+        Cursor cursor = activity
+                .getContentResolver()
+                .query(CalendarContract.Colors.CONTENT_URI,
+                        new String[]{
+                                CalendarContract.Colors._ID,
+                                CalendarContract.Colors.COLOR_KEY,
+                                CalendarContract.Colors.COLOR
+                        },
+                        null, null, null);
+        if (cursor == null)
+            return false;
+        try {
+            return cursor.moveToFirst();
+        }
+        finally {
+            cursor.close();
+        }
+    }
+
     public long createEvent(ContentValues values){
         ContentResolver cr = activity.getContentResolver();
 

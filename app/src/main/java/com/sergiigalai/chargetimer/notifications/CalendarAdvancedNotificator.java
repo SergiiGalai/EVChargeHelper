@@ -24,6 +24,7 @@ import java.util.Calendar;
 public class CalendarAdvancedNotificator implements INotificator
 {
     public static final int REQUEST_CALENDAR = 1;
+    private static final int EVENT_COLOR = CalendarEventColor.VIOLET;
     private static final int MS_IN_1_HOUR = 60 * 60 * 1000;
     private static final String[] PERMISSIONS_CALENDAR = {
             Manifest.permission.READ_CALENDAR,
@@ -108,6 +109,9 @@ public class CalendarAdvancedNotificator implements INotificator
         values.put(CalendarContract.Events.CALENDAR_ID, calendarId);
         values.put(CalendarContract.Events.EVENT_TIMEZONE,
                 Calendar.getInstance().getTimeZone().getID());
+
+        if (calendarRepository.customColorsSupported())
+            values.put(CalendarContract.Events.EVENT_COLOR_KEY, EVENT_COLOR);
 
         return values;
     }

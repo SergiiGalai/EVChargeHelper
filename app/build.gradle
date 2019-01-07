@@ -29,7 +29,7 @@ android {
     }
     flavorDimensions "default"
     defaultConfig {
-        versionCode 4
+        versionCode 5
         versionName "0.5"
         applicationId "com.sergiigalai.chargetimer"
         minSdkVersion 21
