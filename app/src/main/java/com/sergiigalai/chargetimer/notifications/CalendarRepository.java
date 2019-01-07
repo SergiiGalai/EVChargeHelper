@@ -93,29 +93,20 @@ class CalendarRepository implements ICalendarRepository {
     public int getPrimaryCalendarId(){
         long calendarId = -1;
 
-        final int projection_id = 0;
-        final int projection_name = 1;
-        final int projection_primary = 2;
-
         Cursor cursor = activity
                 .getContentResolver()
                 .query(CalendarContract.Calendars.CONTENT_URI,
                         new String[]{
                                 CalendarContract.Calendars._ID,
-                                CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,
-                                CalendarContract.Calendars.IS_PRIMARY,
+                                CalendarContract.Calendars.CALENDAR_DISPLAY_NAME
                         },
-                        null, null, null);
+                        CalendarContract.Calendars.IS_PRIMARY + "=1", null, null);
 
         if (cursor != null)
         {
             try {
-                while (cursor.moveToNext()){
-                    calendarId = cursor.getLong(projection_id);
-                    String name = cursor.getString(projection_name);
-                    String primary = cursor.getString(projection_primary);
-                    if ("1".equals(primary))
-                        return (int)calendarId;
+                if (cursor.moveToNext()){
+                    calendarId = cursor.getLong(0);
                 }
             }
             finally {
@@ -124,6 +115,40 @@ class CalendarRepository implements ICalendarRepository {
         }
 
         return (int)calendarId;
+    }
+
+    public String getAvailableCalendars(){
+        StringBuilder sb = new StringBuilder();
+        Cursor cur = activity
+                .getContentResolver()
+                .query(CalendarContract.Calendars.CONTENT_URI,
+                        new String[]{
+                                CalendarContract.Calendars._ID,
+                                CalendarContract.Calendars.ACCOUNT_NAME,
+                                CalendarContract.Calendars.ACCOUNT_TYPE,
+                                CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,
+                                CalendarContract.Calendars.IS_PRIMARY,
+                        },
+                        null, null, null);
+
+        if (cur == null)
+            return sb.toString();
+
+        try{
+            while (cur.moveToNext()){
+                long id = cur.getLong(0);
+                String accName = cur.getString(1);
+                String accType = cur.getString(2);
+                String name = cur.getString(3);
+                String primary = cur.getString(4);
+
+                sb.append(String.format("%d:acc=%s, type=%s, name=%s, prim=%s;  ", id, accName, accType, name, primary));
+            }
+            return sb.toString();
+        }
+        finally {
+            cur.close();
+        }
     }
 
     public void showColors(){

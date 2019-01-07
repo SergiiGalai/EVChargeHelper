@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.widget.Toast;
 
@@ -54,9 +55,19 @@ public class CalendarAdvancedNotificator implements INotificator
     public void scheduleCarChargedNotification(long millisToEvent) {
         if (calendarPermissionsGranted())
         {
+            String calendarsLog = calendarRepository.getAvailableCalendars();
+            int lineNumber = calendarsLog.length() / 20;
+
+            UserMessage.toMultilineSnackbar(
+                    UserMessage.getSnackbar(activity, calendarsLog, Snackbar.LENGTH_INDEFINITE),
+                    lineNumber
+            ).show();
+
+            /*
             scheduleCalendarEvent(activity.getString(R.string.car_charged_title),
                     activity.getString(R.string.car_charged_descr),
                     millisToEvent);
+            */
         } else if (settingsProvider.calendarAdvancedNotificationsAllowed())
         {
             requestCalendarPermission();
