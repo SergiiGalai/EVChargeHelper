@@ -71,59 +71,6 @@ public class CalendarRepository implements ICalendarRepository {
         return values;
     }
 
-    public boolean customColorsSupported(){
-        Cursor cursor = activity
-                .getContentResolver()
-                .query(CalendarContract.Colors.CONTENT_URI,
-                        new String[]{
-                                CalendarContract.Colors._ID,
-                                CalendarContract.Colors.COLOR_KEY,
-                                CalendarContract.Colors.COLOR
-                        },
-                        null, null, null);
-        if (cursor == null)
-            return false;
-        try {
-            return cursor.moveToFirst();
-        }
-        finally {
-            cursor.close();
-        }
-    }
-
-    public void showColors(){
-        Cursor cur = activity
-                .getContentResolver()
-                .query(CalendarContract.Colors.CONTENT_URI,
-                        new String[]{
-                                CalendarContract.Colors._ID,
-                                CalendarContract.Colors.COLOR_KEY,
-                                CalendarContract.Colors.COLOR,
-                        },
-                        null, null, null);
-
-        if (cur == null)
-            return;
-
-        try{
-            while (cur.moveToNext()){
-                long colId = cur.getLong(0);
-                long colorKey = cur.getLong(1);
-                long color = cur.getLong(2);
-
-                String hexColor= Long.toHexString(color);
-
-                Log.d( TAG, "id=" + colId
-                        + "; key=" + colorKey
-                        + "; hexColor="+ hexColor);
-            }
-        }
-        finally {
-            cur.close();
-        }
-    }
-
-
     public int getPrimaryCalendarId(){
         long calendarId = -1;
 
@@ -197,29 +144,14 @@ public class CalendarRepository implements ICalendarRepository {
         }
     }
 
-    public String createCalendar(String calendarName, String calendarColor){
-        final String CALENDAR_ACCOUNT_NAME = "com.sergiigalai.chargetimer";
+    public int createCalendar(String calendarName, String calendarColor){
+        final String CALENDAR_ACCOUNT_NAME = "com.sergiigalai";
 
         try {
             // don't create if it already exists
-            Uri evuri = CalendarContract.Calendars.CONTENT_URI;
-            final ContentResolver contentResolver = activity.getContentResolver();
-            Cursor result = contentResolver.query(evuri, new String[]{
-                    CalendarContract.Calendars._ID,
-                    CalendarContract.Calendars.NAME,
-                    CalendarContract.Calendars.CALENDAR_DISPLAY_NAME
-            }, null, null, null);
-            if (result != null) {
-                while (result.moveToNext()) {
-                    if ((result.getString(1) != null &&
-                            result.getString(1).equals(calendarName)) ||
-                            (result.getString(2) != null && result.getString(2).equals(calendarName))) {
-                        result.close();
-                        return null;
-                    }
-                }
-                result.close();
-            }
+            int id = getCalendarId(calendarName);
+            if (id != -1)
+                return id;
 
             // doesn't exist yet, so create
             Uri calUri = CalendarContract.Calendars.CONTENT_URI;
@@ -229,7 +161,8 @@ public class CalendarRepository implements ICalendarRepository {
             cv.put(CalendarContract.Calendars.NAME, calendarName);
             cv.put(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME, calendarName);
             if (calendarColor != null) {
-                cv.put(CalendarContract.Calendars.CALENDAR_COLOR, Color.parseColor(calendarColor));
+                int colorInt = Color.parseColor(calendarColor);
+                cv.put(CalendarContract.Calendars.CALENDAR_COLOR, colorInt);
             }
             cv.put(CalendarContract.Calendars.VISIBLE, 1);
             cv.put(CalendarContract.Calendars.CALENDAR_ACCESS_LEVEL, CalendarContract.Calendars.CAL_ACCESS_OWNER);
@@ -242,14 +175,44 @@ public class CalendarRepository implements ICalendarRepository {
                     .appendQueryParameter(CalendarContract.Calendars.ACCOUNT_TYPE, CalendarContract.ACCOUNT_TYPE_LOCAL)
                     .build();
 
+            final ContentResolver contentResolver = activity.getContentResolver();
             Uri created = contentResolver.insert(calUri, cv);
             if (created != null) {
-                return created.getLastPathSegment();
+                return Integer.valueOf(created.getLastPathSegment());
             }
         } catch (Exception e) {
             Log.e(TAG, "Creating calendar failed.", e);
         }
-        return null;
+        return -1;
+    }
 
+    private int getCalendarId(String calendarName){
+        Uri uri = CalendarContract.Calendars.CONTENT_URI;
+        final ContentResolver contentResolver = activity.getContentResolver();
+        Cursor cursor = contentResolver.query(uri, new String[]{
+                CalendarContract.Calendars._ID,
+                CalendarContract.Calendars.NAME,
+                CalendarContract.Calendars.CALENDAR_DISPLAY_NAME
+        }, null, null, null);
+
+        if (cursor != null) {
+            try{
+                while (cursor.moveToNext()) {
+                    long id = cursor.getLong(0);
+                    String name = cursor.getString(1);
+                    String displayName = cursor.getString(2);
+                    if (
+                            (name != null && name.equals(calendarName)) ||
+                                    (displayName != null && displayName.equals(calendarName))
+                            ) {
+                        return (int)id;
+                    }
+                }
+            }
+            finally {
+                cursor.close();
+            }
+        }
+        return -1;
     }
 }

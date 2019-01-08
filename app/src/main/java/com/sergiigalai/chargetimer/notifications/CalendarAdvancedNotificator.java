@@ -24,7 +24,9 @@ import java.util.Calendar;
 public class CalendarAdvancedNotificator implements INotificator
 {
     public static final int REQUEST_CALENDAR = 1;
-    private static final int EVENT_COLOR = CalendarEventColor.VIOLET;
+    private static final String CALENDAR_NAME = "com.sergiigalai.chargetimer";
+    private static final String CALENDAR_COLOR = "purple";
+
     private static final int MS_IN_1_HOUR = 60 * 60 * 1000;
     private static final String[] PERMISSIONS_CALENDAR = {
             Manifest.permission.READ_CALENDAR,
@@ -52,13 +54,17 @@ public class CalendarAdvancedNotificator implements INotificator
 
     @Override
     public void scheduleCarChargedNotification(long millisToEvent) {
-        if (calendarPermissionsGranted())
-        {
-            scheduleCalendarEvent(activity.getString(R.string.car_charged_title),
+        if (calendarPermissionsGranted()) {
+            int calendarId = calendarRepository.createCalendar(CALENDAR_NAME, CALENDAR_COLOR);
+            if (calendarId == -1){
+                calendarId = calendarRepository.getPrimaryCalendarId();
+            }
+
+            scheduleCalendarEvent(calendarId,
+                    activity.getString(R.string.car_charged_title),
                     activity.getString(R.string.car_charged_descr),
                     millisToEvent);
-        } else if (settingsProvider.calendarAdvancedNotificationsAllowed())
-        {
+        } else if (settingsProvider.calendarAdvancedNotificationsAllowed()) {
             requestCalendarPermission();
         }
     }
@@ -68,8 +74,7 @@ public class CalendarAdvancedNotificator implements INotificator
                 && ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED ;
     }
 
-    private void scheduleCalendarEvent(String title, String description, long millisToEvent) {
-        int calendarId = calendarRepository.getPrimaryCalendarId();
+    private void scheduleCalendarEvent(int calendarId, String title, String description, long millisToEvent) {
         if (calendarId == -1) {
             UserMessage.showToast(activity, R.string.error_no_primary_calendar, Toast.LENGTH_LONG);
             fallbackNotificator.scheduleCarChargedNotification(millisToEvent);
@@ -109,9 +114,6 @@ public class CalendarAdvancedNotificator implements INotificator
         values.put(CalendarContract.Events.CALENDAR_ID, calendarId);
         values.put(CalendarContract.Events.EVENT_TIMEZONE,
                 Calendar.getInstance().getTimeZone().getID());
-
-        if (calendarRepository.customColorsSupported())
-            values.put(CalendarContract.Events.EVENT_COLOR_KEY, EVENT_COLOR);
 
         return values;
     }
