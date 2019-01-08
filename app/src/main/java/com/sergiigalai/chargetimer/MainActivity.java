@@ -1,5 +1,6 @@
 package com.sergiigalai.chargetimer;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -23,6 +24,8 @@ import com.sergiigalai.chargetimer.charge.PowerLine;
 import com.sergiigalai.chargetimer.controls.StepNumberPicker;
 import com.sergiigalai.chargetimer.helpers.TimeHelper;
 import com.sergiigalai.chargetimer.notifications.CalendarAdvancedNotificator;
+import com.sergiigalai.chargetimer.notifications.CalendarRepository;
+import com.sergiigalai.chargetimer.notifications.ICalendarRepository;
 import com.sergiigalai.chargetimer.notifications.NotificationScheduler;
 import com.sergiigalai.chargetimer.settings.ISettingsReader;
 
@@ -40,19 +43,23 @@ public class MainActivity extends BaseActivity
     private StepNumberPicker voltagePicker;
     private TextView chargedInTitle;
     private Button remindButton;
+    private Button showCalendarsButton;
 
     private ViewModel viewModel = new ViewModel(this);
     private ISettingsReader settingsProvider;
     private NotificationScheduler scheduler;
+    private ICalendarRepository calendarRepository;
 
     private void initializeVariables() {
         settingsProvider = Factory.createSettingsReader(this);
         scheduler = Factory.createScheduler(this);
+        calendarRepository = new CalendarRepository(this);
 
         remainingEnergySeekBar = findViewById(R.id.remainingEnergySeekBar);
         remainingEnergyTitle = findViewById(R.id.remainingEnergyTitle);
         chargedInTitle = findViewById(R.id.chargedInTitle);
         remindButton = findViewById(R.id.remindButton);
+        showCalendarsButton = findViewById(R.id.showCalendarsButton);
 
         int defaultAmperage = settingsProvider.getDefaultAmperage();
         amperagePicker = new StepNumberPicker(this, R.id.amperageValue);
@@ -184,6 +191,8 @@ public class MainActivity extends BaseActivity
     }
 
     private void initializeChangeListeners(){
+        final Activity activity = this;
+
         voltagePicker.setOnValueChangedListener(textWatcher);
         amperagePicker.setOnValueChangedListener(textWatcher);
 
@@ -209,6 +218,20 @@ public class MainActivity extends BaseActivity
             public void onClick(View v) {
                 updateControls();
                 scheduler.schedule(viewModel.getMillisToCharge());
+            }
+        });
+
+        showCalendarsButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                String calendarsLog = calendarRepository.getAvailableCalendars();
+                int lineNumber = calendarsLog.length() / 20;
+
+                UserMessage.toMultilineSnackbar(
+                        UserMessage.getSnackbar(activity, calendarsLog, Snackbar.LENGTH_INDEFINITE),
+                        lineNumber
+                ).show();
             }
         });
     }

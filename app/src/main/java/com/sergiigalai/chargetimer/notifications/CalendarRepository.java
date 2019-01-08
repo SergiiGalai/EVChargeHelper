@@ -16,11 +16,11 @@ import android.widget.Toast;
 import com.sergiigalai.chargetimer.UserMessage;
 
 @SuppressLint("MissingPermission")
-class CalendarRepository implements ICalendarRepository {
+public class CalendarRepository implements ICalendarRepository {
     private static final String TAG = "CalendarRepository";
     private Activity activity;
 
-    CalendarRepository(Activity activity) {
+    public CalendarRepository(Activity activity) {
         this.activity = activity;
     }
 

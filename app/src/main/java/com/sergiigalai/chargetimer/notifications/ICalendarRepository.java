@@ -2,7 +2,7 @@ package com.sergiigalai.chargetimer.notifications;
 
 import android.content.ContentValues;
 
-interface ICalendarRepository {
+public interface ICalendarRepository {
     boolean customColorsSupported();
     int getPrimaryCalendarId();
     String getAvailableCalendars();
