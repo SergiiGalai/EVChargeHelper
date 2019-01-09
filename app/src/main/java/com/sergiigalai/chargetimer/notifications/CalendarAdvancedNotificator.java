@@ -24,8 +24,6 @@ import java.util.Calendar;
 public class CalendarAdvancedNotificator implements INotificator
 {
     public static final int REQUEST_CALENDAR = 1;
-    private static final String CALENDAR_NAME = "com.sergiigalai.chargetimer";
-    private static final String CALENDAR_COLOR = "purple";
 
     private static final int MS_IN_1_HOUR = 60 * 60 * 1000;
     private static final String[] PERMISSIONS_CALENDAR = {
@@ -55,7 +53,10 @@ public class CalendarAdvancedNotificator implements INotificator
     @Override
     public void scheduleCarChargedNotification(long millisToEvent) {
         if (calendarPermissionsGranted()) {
-            int calendarId = calendarRepository.createCalendar(CALENDAR_NAME, CALENDAR_COLOR);
+            String calendarName = activity.getString(R.string.calendar_name);
+            String calendarColor = activity.getString(R.string.calendar_color);
+
+            int calendarId = calendarRepository.createCalendar(calendarName, calendarColor);
             if (calendarId == -1){
                 calendarId = calendarRepository.getPrimaryCalendarId();
             }
