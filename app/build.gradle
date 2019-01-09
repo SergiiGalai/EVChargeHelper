@@ -31,7 +31,7 @@ android {
     defaultConfig {
         versionCode 11
         versionName "0.5"
-        applicationId "com.sergiigalai.chargetimer"
+        applicationId "com.chebuso.chargetimer"
         minSdkVersion 21
         targetSdkVersion 27
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
