@@ -144,9 +144,7 @@ public class CalendarRepository implements ICalendarRepository {
         }
     }
 
-    public int createCalendar(String calendarName, String calendarColor){
-        final String CALENDAR_ACCOUNT_NAME = "com.sergiigalai";
-
+    public int createCalendar(String calendarName, String calendarColor, String accountName){
         try {
             // don't create if it already exists
             int id = getCalendarId(calendarName);
@@ -156,7 +154,7 @@ public class CalendarRepository implements ICalendarRepository {
             // doesn't exist yet, so create
             Uri calUri = CalendarContract.Calendars.CONTENT_URI;
             ContentValues cv = new ContentValues();
-            cv.put(CalendarContract.Calendars.ACCOUNT_NAME, CALENDAR_ACCOUNT_NAME);
+            cv.put(CalendarContract.Calendars.ACCOUNT_NAME, accountName);
             cv.put(CalendarContract.Calendars.ACCOUNT_TYPE, CalendarContract.ACCOUNT_TYPE_LOCAL);
             cv.put(CalendarContract.Calendars.NAME, calendarName);
             cv.put(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME, calendarName);
@@ -166,12 +164,12 @@ public class CalendarRepository implements ICalendarRepository {
             }
             cv.put(CalendarContract.Calendars.VISIBLE, 1);
             cv.put(CalendarContract.Calendars.CALENDAR_ACCESS_LEVEL, CalendarContract.Calendars.CAL_ACCESS_OWNER);
-            cv.put(CalendarContract.Calendars.OWNER_ACCOUNT, CALENDAR_ACCOUNT_NAME );
+            cv.put(CalendarContract.Calendars.OWNER_ACCOUNT, accountName );
             cv.put(CalendarContract.Calendars.SYNC_EVENTS, 0);
 
             calUri = calUri.buildUpon()
                     .appendQueryParameter(CalendarContract.CALLER_IS_SYNCADAPTER, "true")
-                    .appendQueryParameter(CalendarContract.Calendars.ACCOUNT_NAME, CALENDAR_ACCOUNT_NAME)
+                    .appendQueryParameter(CalendarContract.Calendars.ACCOUNT_NAME, accountName)
                     .appendQueryParameter(CalendarContract.Calendars.ACCOUNT_TYPE, CalendarContract.ACCOUNT_TYPE_LOCAL)
                     .build();
 

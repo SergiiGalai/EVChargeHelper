@@ -55,8 +55,9 @@ public class CalendarAdvancedNotificator implements INotificator
         if (calendarPermissionsGranted()) {
             String calendarName = activity.getString(R.string.calendar_name);
             String calendarColor = activity.getString(R.string.calendar_color);
+            String accountName = activity.getString(R.string.calendar_account_name);
 
-            int calendarId = calendarRepository.createCalendar(calendarName, calendarColor);
+            int calendarId = calendarRepository.createCalendar(calendarName, calendarColor, accountName);
             if (calendarId == -1){
                 calendarId = calendarRepository.getPrimaryCalendarId();
             }
