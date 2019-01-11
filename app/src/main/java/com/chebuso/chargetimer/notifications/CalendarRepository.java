@@ -3,6 +3,7 @@ package com.chebuso.chargetimer.notifications;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDoneException;
@@ -142,6 +143,15 @@ public class CalendarRepository implements ICalendarRepository {
         finally {
             cur.close();
         }
+    }
+
+    public int deleteCalendar(String calendarName){
+        int id = getCalendarId(calendarName);
+        Uri calUri = CalendarContract.Calendars.CONTENT_URI;
+        Uri deleteUri = ContentUris.withAppendedId(calUri, id);
+
+        final ContentResolver contentResolver = activity.getContentResolver();
+        return contentResolver.delete(deleteUri, null, null);
     }
 
     public int createCalendar(String calendarName, String calendarColor, String accountName){

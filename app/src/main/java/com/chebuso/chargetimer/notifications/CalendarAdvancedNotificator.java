@@ -57,9 +57,9 @@ public class CalendarAdvancedNotificator implements INotificator
             String calendarColor = activity.getString(R.string.calendar_color);
             String accountName = activity.getString(R.string.calendar_account_name);
 
-            int calendarId = calendarRepository.createCalendar(calendarName, calendarColor, accountName);
+            int calendarId = calendarRepository.getPrimaryCalendarId();
             if (calendarId == -1){
-                calendarId = calendarRepository.getPrimaryCalendarId();
+                calendarId = calendarRepository.createCalendar(calendarName, calendarColor, accountName);
             }
 
             scheduleCalendarEvent(calendarId,
