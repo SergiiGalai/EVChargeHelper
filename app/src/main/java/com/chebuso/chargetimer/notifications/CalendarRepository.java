@@ -73,30 +73,47 @@ public class CalendarRepository implements ICalendarRepository {
     }
 
     public int getPrimaryCalendarId(){
-        long calendarId = -1;
+        long calendarId;
+        String calendarName;
 
-        Cursor cursor = activity
+        Cursor cur = activity
                 .getContentResolver()
                 .query(CalendarContract.Calendars.CONTENT_URI,
-                        new String[]{
-                                CalendarContract.Calendars._ID,
-                                CalendarContract.Calendars.CALENDAR_DISPLAY_NAME
-                        },
-                        CalendarContract.Calendars.IS_PRIMARY + "=1", null, null);
+                        null, null, null, null);
 
-        if (cursor != null)
+        if (cur != null)
         {
             try {
-                if (cursor.moveToNext()){
-                    calendarId = cursor.getLong(0);
+                while (cur.moveToNext()){
+                    int idIndex = cur.getColumnIndex(CalendarContract.Calendars._ID);
+                    int accountNameIndex = cur.getColumnIndex(CalendarContract.Calendars.ACCOUNT_NAME);
+                    int ownerAccountIndex = cur.getColumnIndex(CalendarContract.Calendars.OWNER_ACCOUNT);
+                    int displayViewIndex = cur.getColumnIndex(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME);
+                    int visibleIndex = cur.getColumnIndex(CalendarContract.Calendars.VISIBLE);
+                    int isPrimaryIndex = cur.getColumnIndex(CalendarContract.Calendars.IS_PRIMARY);
+                    if (isPrimaryIndex == -1) {
+                        isPrimaryIndex = cur.getColumnIndex("COALESCE(isPrimary, ownerAccount = account_name)");
+                    }
+
+                    calendarId = cur.getLong(idIndex);
+                    String accName = cur.getString(accountNameIndex);
+                    String owner = cur.getString(ownerAccountIndex);
+                    calendarName = cur.getString(displayViewIndex);
+                    String visible = cur.getString(visibleIndex);
+                    Integer isPrimary = isPrimaryIndex== -1 ? null : cur.getInt(isPrimaryIndex);
+
+                    if (
+                            (isPrimary != null && isPrimary == 1) ||
+                            (isPrimary == null && accName.equals(owner)))
+                        return (int)calendarId;
                 }
             }
             finally {
-                cursor.close();
+                cur.close();
             }
         }
 
-        return (int)calendarId;
+        return -1;
     }
 
     public String getAvailableCalendars(){
@@ -104,36 +121,33 @@ public class CalendarRepository implements ICalendarRepository {
         Cursor cur = activity
                 .getContentResolver()
                 .query(CalendarContract.Calendars.CONTENT_URI,
-                        new String[]{
-                                CalendarContract.Calendars._ID,
-                                CalendarContract.Calendars.ACCOUNT_NAME,
-                                CalendarContract.Calendars.OWNER_ACCOUNT,
-                                CalendarContract.Calendars.ACCOUNT_TYPE,
-                                CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,
-                                CalendarContract.Calendars.VISIBLE,
-                                CalendarContract.Calendars.IS_PRIMARY,
-                        },
-                        null, null, null);
+                        null, null, null, null);
 
         if (cur == null)
             return sb.toString();
 
-        int primaryColumnIndex;
+        int isPrimaryIndex;
 
         try{
             while (cur.moveToNext()){
-                long id = cur.getLong(0);
-                String accName = cur.getString(1);
-                String owner = cur.getString(2);
-                String accType = cur.getString(3);
-                String name = cur.getString(4);
-                String visible = cur.getString(5);
-
-                primaryColumnIndex = cur.getColumnIndex(CalendarContract.Calendars.IS_PRIMARY);
-                if (primaryColumnIndex == -1) {
-                    primaryColumnIndex = cur.getColumnIndex("COALESCE(isPrimary, ownerAccount = account_name)");
+                int idIndex = cur.getColumnIndex(CalendarContract.Calendars._ID);
+                int accountNameIndex = cur.getColumnIndex(CalendarContract.Calendars.ACCOUNT_NAME);
+                int ownerAccountIndex = cur.getColumnIndex(CalendarContract.Calendars.OWNER_ACCOUNT);
+                int accountTypeIndex = cur.getColumnIndex(CalendarContract.Calendars.ACCOUNT_TYPE);
+                int displayViewIndex = cur.getColumnIndex(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME);
+                int visibleIndex = cur.getColumnIndex(CalendarContract.Calendars.VISIBLE);
+                isPrimaryIndex = cur.getColumnIndex(CalendarContract.Calendars.IS_PRIMARY);
+                if (isPrimaryIndex == -1) {
+                    isPrimaryIndex = cur.getColumnIndex("COALESCE(isPrimary, ownerAccount = account_name)");
                 }
-                String isPrimary = cur.getString(primaryColumnIndex);
+
+                long id = cur.getLong(idIndex);
+                String accName = cur.getString(accountNameIndex);
+                String owner = cur.getString(ownerAccountIndex);
+                String accType = cur.getString(accountTypeIndex);
+                String name = cur.getString(displayViewIndex);
+                String visible = cur.getString(visibleIndex);
+                Integer isPrimary = isPrimaryIndex== -1 ? null : cur.getInt(isPrimaryIndex);
 
                 sb.append(String.format("%d:type=%s, acc=%s, owner=%s, name=%s, prim=%s, vis=%s;  ",
                         id, accType, accName, owner, name, isPrimary, visible));
@@ -147,6 +161,9 @@ public class CalendarRepository implements ICalendarRepository {
 
     public int deleteCalendar(String calendarName){
         int id = getCalendarId(calendarName);
+        if (id == -1)
+            return -1;
+
         Uri calUri = CalendarContract.Calendars.CONTENT_URI;
         Uri deleteUri = ContentUris.withAppendedId(calUri, id);
 

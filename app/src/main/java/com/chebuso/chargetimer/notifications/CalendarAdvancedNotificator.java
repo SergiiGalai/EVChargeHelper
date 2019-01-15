@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.widget.Toast;
 
 import com.chebuso.chargetimer.UserMessage;
+import com.chebuso.chargetimer.helpers.PermissionHelper;
 import com.chebuso.chargetimer.settings.ISettingsReader;
 import com.chebuso.chargetimer.R;
 import com.chebuso.chargetimer.helpers.TimeHelper;
@@ -52,15 +53,15 @@ public class CalendarAdvancedNotificator implements INotificator
 
     @Override
     public void scheduleCarChargedNotification(long millisToEvent) {
-        if (calendarPermissionsGranted()) {
-            String calendarName = activity.getString(R.string.calendar_name);
-            String calendarColor = activity.getString(R.string.calendar_color);
-            String accountName = activity.getString(R.string.calendar_account_name);
+        if (PermissionHelper.isFullCalendarPermissionsGranted(activity)) {
+//            String calendarName = activity.getString(R.string.calendar_name);
+//            String calendarColor = activity.getString(R.string.calendar_color);
+//            String accountName = activity.getString(R.string.calendar_account_name);
 
             int calendarId = calendarRepository.getPrimaryCalendarId();
-            if (calendarId == -1){
-                calendarId = calendarRepository.createCalendar(calendarName, calendarColor, accountName);
-            }
+//            if (calendarId == -1){
+//                calendarId = calendarRepository.createCalendar(calendarName, calendarColor, accountName);
+//            }
 
             scheduleCalendarEvent(calendarId,
                     activity.getString(R.string.car_charged_title),
@@ -69,11 +70,6 @@ public class CalendarAdvancedNotificator implements INotificator
         } else if (settingsProvider.calendarAdvancedNotificationsAllowed()) {
             requestCalendarPermission();
         }
-    }
-
-    private boolean calendarPermissionsGranted() {
-        return ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED ;
     }
 
     private void scheduleCalendarEvent(int calendarId, String title, String description, long millisToEvent) {

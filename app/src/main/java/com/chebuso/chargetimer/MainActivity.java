@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chebuso.chargetimer.bugreport.BaseActivity;
 import com.chebuso.chargetimer.charge.Battery;
@@ -22,6 +23,7 @@ import com.chebuso.chargetimer.charge.IChargeTimeResolver;
 import com.chebuso.chargetimer.charge.LiionChargeTimeResolver;
 import com.chebuso.chargetimer.charge.PowerLine;
 import com.chebuso.chargetimer.controls.StepNumberPicker;
+import com.chebuso.chargetimer.helpers.PermissionHelper;
 import com.chebuso.chargetimer.helpers.TimeHelper;
 import com.chebuso.chargetimer.notifications.CalendarAdvancedNotificator;
 import com.chebuso.chargetimer.notifications.CalendarRepository;
@@ -225,13 +227,21 @@ public class MainActivity extends BaseActivity
         {
             @Override
             public void onClick(View v) {
-                String calendarsLog = calendarRepository.getAvailableCalendars();
-                int lineNumber = calendarsLog.length() / 20;
+                if (PermissionHelper.isFullCalendarPermissionsGranted(activity)){
+                    //try to avoid creating custom calendars until it is possible to setup notifications
+                    String calendarName = getString(R.string.calendar_name);
+                    calendarRepository.deleteCalendar(calendarName);
 
-                UserMessage.toMultilineSnackbar(
-                        UserMessage.getSnackbar(activity, calendarsLog, Snackbar.LENGTH_INDEFINITE),
-                        lineNumber
-                ).show();
+                    String calendarsLog = calendarRepository.getAvailableCalendars();
+                    int lineNumber = calendarsLog.length() / 20;
+
+                    UserMessage.toMultilineSnackbar(
+                            UserMessage.getSnackbar(activity, calendarsLog, Snackbar.LENGTH_INDEFINITE),
+                            lineNumber
+                    ).show();
+                } else {
+                    UserMessage.showToast(activity, R.string.error_no_primary_calendar, Toast.LENGTH_LONG);
+                }
             }
         });
     }

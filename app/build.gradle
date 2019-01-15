@@ -29,7 +29,7 @@ android {
     }
     flavorDimensions "default"
     defaultConfig {
-        versionCode 11
+        versionCode 4
         versionName "0.5"
         applicationId "com.chebuso.chargetimer"
         minSdkVersion 21
