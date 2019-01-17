@@ -229,8 +229,8 @@ public class MainActivity extends BaseActivity
             public void onClick(View v) {
                 if (PermissionHelper.isFullCalendarPermissionsGranted(activity)){
                     //try to avoid creating custom calendars until it is possible to setup notifications
-                    String calendarName = getString(R.string.calendar_name);
-                    calendarRepository.deleteCalendar(calendarName);
+                    calendarRepository.deleteCalendar(getString(R.string.calendar_name));
+                    calendarRepository.deleteCalendar("com.sergiigalai.chargeTimer");
 
                     String calendarsLog = calendarRepository.getAvailableCalendars();
                     int lineNumber = calendarsLog.length() / 20;

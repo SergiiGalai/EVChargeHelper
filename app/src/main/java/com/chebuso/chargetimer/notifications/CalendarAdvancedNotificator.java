@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
@@ -81,7 +80,7 @@ public class CalendarAdvancedNotificator implements INotificator
             int reminderMinutes = settingsProvider.getCalendarReminderMinutes();
 
             long eventId = createEventWithReminder(eventData, reminderMinutes);
-            notifyUser_open_event(eventId);
+            openEventActivity(eventId);
         }
     }
 
@@ -91,7 +90,7 @@ public class CalendarAdvancedNotificator implements INotificator
         return eventId;
     }
 
-    private void notifyUser_open_event(final long eventId){
+    private void openEventActivity(final long eventId){
         Intent intent = new Intent(Intent.ACTION_VIEW);
 
         Uri.Builder uri = CalendarContract.Events.CONTENT_URI.buildUpon()
