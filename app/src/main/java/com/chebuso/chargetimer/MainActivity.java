@@ -1,7 +1,6 @@
 package com.chebuso.chargetimer;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -47,7 +46,7 @@ public class MainActivity extends BaseActivity
     private Button remindButton;
     private Button showCalendarsButton;
 
-    private ViewModel viewModel = new ViewModel(this);
+    private ViewModel viewModel = new ViewModel();
     private ISettingsReader settingsProvider;
     private NotificationScheduler scheduler;
     private ICalendarRepository calendarRepository;
@@ -133,7 +132,6 @@ public class MainActivity extends BaseActivity
     }
 
     private class ViewModel{
-        private Context context;
         private String remainingEnergyText;
         private String chargedInText;
         private String remindButtonText;
@@ -143,8 +141,7 @@ public class MainActivity extends BaseActivity
         private final Battery battery;
         private IChargeTimeResolver chargeTimeResolver;
 
-        ViewModel(Context context) {
-            this.context = context;
+        ViewModel() {
             powerLine = new PowerLine();
             battery = new Battery();
             chargeTimeResolver = new LiionChargeTimeResolver(powerLine, battery);

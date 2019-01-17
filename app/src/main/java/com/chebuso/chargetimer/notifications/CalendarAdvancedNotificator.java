@@ -77,17 +77,13 @@ public class CalendarAdvancedNotificator implements INotificator
             fallbackNotificator.scheduleCarChargedNotification(millisToEvent);
         }else{
             ContentValues eventData = createCalendarEventContent(calendarId, title, description, millisToEvent);
-            int reminderMinutes = settingsProvider.getCalendarReminderMinutes();
+            long eventId = calendarRepository.createEvent(eventData);
 
-            long eventId = createEventWithReminder(eventData, reminderMinutes);
+            int reminderMinutes = settingsProvider.getCalendarReminderMinutes();
+            calendarRepository.setReminder(eventId, reminderMinutes);
+
             openEventActivity(eventId);
         }
-    }
-
-    private long createEventWithReminder(ContentValues eventData, int reminderMinutes){
-        long eventId = calendarRepository.createEvent(eventData);
-        calendarRepository.setReminder(eventId, reminderMinutes);
-        return eventId;
     }
 
     private void openEventActivity(final long eventId){
