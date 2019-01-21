@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.chebuso.chargetimer.helpers.PreferenceHelper;
+import com.chebuso.chargetimer.helpers.StringHelper;
 
 import java.util.List;
 
@@ -138,7 +139,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity
                     public boolean onPreferenceChange(Preference preference, Object value) {
                         String stringValue = value.toString().trim();
 
-                        if ("".equals(stringValue)) {
+                        if (StringHelper.isNullOrEmpty(stringValue)) {
                             Context context = preference.getContext();
                             UserMessage.showToast(context, R.string.value_not_empty, Toast.LENGTH_LONG);
                             return false;

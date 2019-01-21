@@ -56,10 +56,6 @@ public class CalendarAdvancedNotificator implements INotificator
     @Override
     public void scheduleCarChargedNotification(long millisToEvent) {
         if (PermissionHelper.isFullCalendarPermissionsGranted(activity)) {
-//            String calendarName = activity.getString(R.string.calendar_name);
-//            String calendarColor = activity.getString(R.string.calendar_color);
-//            String accountName = activity.getString(R.string.calendar_account_name);
-
             CalendarEntity calendar = calendarRepository.getPrimaryCalendar();
             CalendarEventEntity event = new CalendarEventEntity(
                     activity.getString(R.string.car_charged_title),
@@ -79,10 +75,15 @@ public class CalendarAdvancedNotificator implements INotificator
         }else{
             ContentValues eventData = createCalendarEventContent(calendar.id, event);
             long eventId = calendarRepository.createEvent(eventData);
+            if (eventId == -1)
+            {
+                UserMessage.showToast(activity, R.string.error_no_primary_calendar, Toast.LENGTH_LONG);
+                fallbackNotificator.scheduleCarChargedNotification(event.millisToStart);
+                return;
+            }
 
             int reminderMinutes = settingsProvider.getCalendarReminderMinutes();
             calendarRepository.setReminder(eventId, reminderMinutes);
-
             openEventActivity(eventId);
         }
     }
@@ -130,8 +131,6 @@ public class CalendarAdvancedNotificator implements INotificator
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         settingsWriter.saveCalendarAdvancedNotificationsAllowed(false);
-                        //NotificationScheduler scheduler = new NotificationScheduler(activity);
-                        //scheduler.schedule();
                     }
                 });
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, activity.getString(R.string.permission_dialog_allow),

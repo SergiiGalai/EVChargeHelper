@@ -228,21 +228,18 @@ public class MainActivity extends BaseActivity
             @Override
             public void onClick(View v) {
                 if (PermissionHelper.isFullCalendarPermissionsGranted(activity)){
-                    //try to avoid creating custom calendars until it is possible to setup notifications
-                    calendarRepository.deleteCalendar(getString(R.string.calendar_name));
-                    calendarRepository.deleteCalendar("com.sergiigalai.chargeTimer");
-
                     List<CalendarEntity> calendars = calendarRepository.getAvailableCalendars();
                     StringBuilder sb = new StringBuilder();
 
-                    for (CalendarEntity calendar :
-                            calendars) {
-                        sb.append(String.format("%d:name=%s, acc=%s, owner=%s, prim=%s;  ",
+                    for (CalendarEntity calendar : calendars) {
+                        sb.append(String.format("%d:name=%s, prim=%s, acc='%s', owner='%s', type='%s';  ",
                                 calendar.id,
                                 calendar.displayName,
+                                calendar.isPrimary,
                                 calendar.accountName,
                                 calendar.ownerAccount,
-                                calendar.isPrimary));
+                                calendar.accountType
+                                ));
                     }
 
                     String calendarsLog = sb.toString();

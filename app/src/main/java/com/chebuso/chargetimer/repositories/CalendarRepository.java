@@ -11,10 +11,12 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.chebuso.chargetimer.UserMessage;
+import com.chebuso.chargetimer.helpers.StringHelper;
 import com.chebuso.chargetimer.models.CalendarEntity;
 
 import java.util.ArrayList;
@@ -38,12 +40,12 @@ public class CalendarRepository implements ICalendarRepository {
             Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
 
             String lastSegment = uri == null ? "" : uri.getLastPathSegment();
-            String event = lastSegment == null ? "" : lastSegment;
+            String event = StringHelper.emptyIfNull(lastSegment);
             return Long.parseLong(event);
         }catch(SQLiteDoneException ex) {
             UserMessage.showToast(activity, ex.getMessage(), Toast.LENGTH_LONG);
             Log.e(TAG, ex.getMessage());
-            return 0;
+            return -1;
         }
     }
 
@@ -78,6 +80,7 @@ public class CalendarRepository implements ICalendarRepository {
         return values;
     }
 
+    @Nullable
     public CalendarEntity getPrimaryCalendar(){
 
         Cursor cur = activity
@@ -87,15 +90,23 @@ public class CalendarRepository implements ICalendarRepository {
 
         if (cur != null)
         {
+            List<CalendarEntity> calendars = new ArrayList<>();
+
             try {
                 while (cur.moveToNext()){
                     CalendarEntity calendar = entityReader.fromCursorPosition(cur);
                     if (calendar.isPrimary)
                         return calendar;
+                    calendars.add(calendar);
                 }
             }
             finally {
                 cur.close();
+            }
+
+            for (CalendarEntity calendar : calendars ) {
+                if (calendar.isPrimaryAlternative())
+                    return calendar;
             }
         }
 

@@ -27,11 +27,9 @@ class CalendarEntityReader {
         result.displayName = cur.getString(displayViewIndex);
         result.visible = cur.getInt(visibleIndex) == 1;
 
-        int isPrimary = isPrimaryIndex== -1 ? -1 : cur.getInt(isPrimaryIndex);
-        if (isPrimary == -1 && result.accountName.equals(result.ownerAccount))
-            isPrimary = 1;
-
+        int isPrimary = isPrimaryIndex== -1 ? 0 : cur.getInt(isPrimaryIndex);
         result.isPrimary = isPrimary == 1;
+
         return result;
     }
 }
