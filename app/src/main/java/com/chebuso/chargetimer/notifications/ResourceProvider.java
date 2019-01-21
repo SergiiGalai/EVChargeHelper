@@ -6,7 +6,7 @@ import android.net.Uri;
 import com.chebuso.chargetimer.R;
 
 public class ResourceProvider implements IResourceProvider {
-    private Activity activity;
+    private final Activity activity;
 
     public ResourceProvider(Activity activity) {
         this.activity = activity;

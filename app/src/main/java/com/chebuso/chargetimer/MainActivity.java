@@ -19,22 +19,25 @@ import com.chebuso.chargetimer.bugreport.BaseActivity;
 import com.chebuso.chargetimer.charge.Battery;
 import com.chebuso.chargetimer.charge.ChargeValuesProvider;
 import com.chebuso.chargetimer.charge.IChargeTimeResolver;
-import com.chebuso.chargetimer.charge.LiionChargeTimeResolver;
+import com.chebuso.chargetimer.charge.LiIonChargeTimeResolver;
 import com.chebuso.chargetimer.charge.PowerLine;
 import com.chebuso.chargetimer.controls.StepNumberPicker;
 import com.chebuso.chargetimer.helpers.PermissionHelper;
 import com.chebuso.chargetimer.helpers.TimeHelper;
+import com.chebuso.chargetimer.models.CalendarEntity;
 import com.chebuso.chargetimer.notifications.CalendarAdvancedNotificator;
-import com.chebuso.chargetimer.notifications.CalendarRepository;
-import com.chebuso.chargetimer.notifications.ICalendarRepository;
+import com.chebuso.chargetimer.repositories.CalendarRepository;
+import com.chebuso.chargetimer.repositories.ICalendarRepository;
 import com.chebuso.chargetimer.notifications.NotificationScheduler;
 import com.chebuso.chargetimer.settings.ISettingsReader;
 
 import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends BaseActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback
 {
+    @SuppressWarnings("unused")
     private final static String TAG = "MainActivity";
     private final static int SETTINGS_REQUEST_CODE = 9000;
 
@@ -46,7 +49,7 @@ public class MainActivity extends BaseActivity
     private Button remindButton;
     private Button showCalendarsButton;
 
-    private ViewModel viewModel = new ViewModel();
+    private final ViewModel viewModel = new ViewModel();
     private ISettingsReader settingsProvider;
     private NotificationScheduler scheduler;
     private ICalendarRepository calendarRepository;
@@ -123,7 +126,7 @@ public class MainActivity extends BaseActivity
                 Factory.createSettingsWriter(this).setFirstApplicationRunCompleted();
 
                 UserMessage.toMultilineSnackbar(
-                        UserMessage.getSnackbar(this, R.string.first_time_main_activity_message, Snackbar.LENGTH_INDEFINITE),
+                        UserMessage.getSnackbar(this, R.string.first_time_main_activity_message),
                         4
                 ).show();
             }
@@ -139,12 +142,12 @@ public class MainActivity extends BaseActivity
         private long millisToCharge;
         private final PowerLine powerLine;
         private final Battery battery;
-        private IChargeTimeResolver chargeTimeResolver;
+        private final IChargeTimeResolver chargeTimeResolver;
 
         ViewModel() {
             powerLine = new PowerLine();
             battery = new Battery();
-            chargeTimeResolver = new LiionChargeTimeResolver(powerLine, battery);
+            chargeTimeResolver = new LiIonChargeTimeResolver(powerLine, battery);
         }
 
         void refresh() {
@@ -229,7 +232,20 @@ public class MainActivity extends BaseActivity
                     calendarRepository.deleteCalendar(getString(R.string.calendar_name));
                     calendarRepository.deleteCalendar("com.sergiigalai.chargeTimer");
 
-                    String calendarsLog = calendarRepository.getAvailableCalendars();
+                    List<CalendarEntity> calendars = calendarRepository.getAvailableCalendars();
+                    StringBuilder sb = new StringBuilder();
+
+                    for (CalendarEntity calendar :
+                            calendars) {
+                        sb.append(String.format("%d:name=%s, acc=%s, owner=%s, prim=%s;  ",
+                                calendar.id,
+                                calendar.displayName,
+                                calendar.accountName,
+                                calendar.ownerAccount,
+                                calendar.isPrimary));
+                    }
+
+                    String calendarsLog = sb.toString();
                     int lineNumber = calendarsLog.length() / 20;
 
                     UserMessage.toMultilineSnackbar(
@@ -243,7 +259,7 @@ public class MainActivity extends BaseActivity
         });
     }
 
-    private NumberPicker.OnValueChangeListener textWatcher = new NumberPicker.OnValueChangeListener(){
+    private final NumberPicker.OnValueChangeListener textWatcher = new NumberPicker.OnValueChangeListener(){
         @Override
         public void onValueChange(NumberPicker numberPicker, int i, int i1) {
             updateControls();

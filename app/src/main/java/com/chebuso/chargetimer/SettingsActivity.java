@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.view.MenuItem;
@@ -43,7 +42,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity
         if (extras != null && extras.containsKey(EXTRA_LOAD_FRAGMENT_MESSAGE_ID))
         {
             int messageId = extras.getInt(EXTRA_LOAD_FRAGMENT_MESSAGE_ID);
-            UserMessage.getSnackbar(this, messageId, Snackbar.LENGTH_INDEFINITE).show();
+            UserMessage.getSnackbar(this, messageId).show();
             getFragmentManager().beginTransaction().replace(android.R.id.content,
                     new ChargingPreferenceFragment()).commit();
         }

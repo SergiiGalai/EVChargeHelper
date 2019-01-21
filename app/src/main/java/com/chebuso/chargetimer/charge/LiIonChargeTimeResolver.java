@@ -1,12 +1,12 @@
 package com.chebuso.chargetimer.charge;
 
-public class LiionChargeTimeResolver implements IChargeTimeResolver
+public class LiIonChargeTimeResolver implements IChargeTimeResolver
 {
     private static final short LINEAR_CHARGING_THRESHOLD_PCT = 80;
     private final PowerLine powerLine;
     private final Battery battery;
 
-    public LiionChargeTimeResolver(PowerLine powerLine, Battery battery) {
+    public LiIonChargeTimeResolver(PowerLine powerLine, Battery battery) {
         this.powerLine = powerLine;
         this.battery = battery;
     }

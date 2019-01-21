@@ -9,13 +9,14 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public final class UserMessage {
     public static void showSnackbar(@NonNull Activity activity, @NonNull String description) {
         getSnackbar(activity, description, Snackbar.LENGTH_LONG).show();
     }
 
-    static Snackbar getSnackbar(@NonNull Activity activity, @StringRes int messageId, int snackbarTimeLength) {
-        return Snackbar.make(activity.findViewById(android.R.id.content), messageId, snackbarTimeLength);
+    static Snackbar getSnackbar(@NonNull Activity activity, @StringRes int messageId) {
+        return Snackbar.make(activity.findViewById(android.R.id.content), messageId, Snackbar.LENGTH_INDEFINITE);
     }
 
     public static Snackbar getSnackbar(@NonNull Activity activity, @NonNull String description, int snackbarTimeLength) {

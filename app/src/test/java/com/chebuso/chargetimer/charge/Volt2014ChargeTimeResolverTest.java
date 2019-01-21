@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 
 public class Volt2014ChargeTimeResolverTest
 {
-    private LiionChargeTimeResolver timeResolver;
+    private LiIonChargeTimeResolver timeResolver;
     private PowerLine power;
     private Battery battery;
 
@@ -24,7 +24,7 @@ public class Volt2014ChargeTimeResolverTest
         battery.ChargingLossPct = 12;
         battery.UsableCapacityKWh = 10.5;
 
-        timeResolver = new LiionChargeTimeResolver(power, battery);
+        timeResolver = new LiIonChargeTimeResolver(power, battery);
     }
 
     @Test()

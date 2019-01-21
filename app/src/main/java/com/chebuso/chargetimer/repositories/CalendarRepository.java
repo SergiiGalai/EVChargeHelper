@@ -1,4 +1,4 @@
-package com.chebuso.chargetimer.notifications;
+package com.chebuso.chargetimer.repositories;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -15,14 +15,20 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.chebuso.chargetimer.UserMessage;
+import com.chebuso.chargetimer.models.CalendarEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressLint("MissingPermission")
 public class CalendarRepository implements ICalendarRepository {
     private static final String TAG = "CalendarRepository";
-    private Activity activity;
+    private final Activity activity;
+    private final CalendarEntityReader entityReader;
 
     public CalendarRepository(Activity activity) {
         this.activity = activity;
+        entityReader = new CalendarEntityReader();
     }
 
     public long createEvent(ContentValues values){
@@ -72,9 +78,7 @@ public class CalendarRepository implements ICalendarRepository {
         return values;
     }
 
-    public int getPrimaryCalendarId(){
-        long calendarId;
-        String calendarName;
+    public CalendarEntity getPrimaryCalendar(){
 
         Cursor cur = activity
                 .getContentResolver()
@@ -85,27 +89,9 @@ public class CalendarRepository implements ICalendarRepository {
         {
             try {
                 while (cur.moveToNext()){
-                    int idIndex = cur.getColumnIndex(CalendarContract.Calendars._ID);
-                    int accountNameIndex = cur.getColumnIndex(CalendarContract.Calendars.ACCOUNT_NAME);
-                    int ownerAccountIndex = cur.getColumnIndex(CalendarContract.Calendars.OWNER_ACCOUNT);
-                    int displayViewIndex = cur.getColumnIndex(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME);
-                    int visibleIndex = cur.getColumnIndex(CalendarContract.Calendars.VISIBLE);
-                    int isPrimaryIndex = cur.getColumnIndex(CalendarContract.Calendars.IS_PRIMARY);
-                    if (isPrimaryIndex == -1) {
-                        isPrimaryIndex = cur.getColumnIndex("COALESCE(isPrimary, ownerAccount = account_name)");
-                    }
-
-                    calendarId = cur.getLong(idIndex);
-                    String accName = cur.getString(accountNameIndex);
-                    String owner = cur.getString(ownerAccountIndex);
-                    calendarName = cur.getString(displayViewIndex);
-                    String visible = cur.getString(visibleIndex);
-                    Integer isPrimary = isPrimaryIndex== -1 ? null : cur.getInt(isPrimaryIndex);
-
-                    if (
-                            (isPrimary != null && isPrimary == 1) ||
-                            (isPrimary == null && accName.equals(owner)))
-                        return (int)calendarId;
+                    CalendarEntity calendar = entityReader.fromCursorPosition(cur);
+                    if (calendar.isPrimary)
+                        return calendar;
                 }
             }
             finally {
@@ -113,46 +99,27 @@ public class CalendarRepository implements ICalendarRepository {
             }
         }
 
-        return -1;
+        return null;
     }
 
-    public String getAvailableCalendars(){
-        StringBuilder sb = new StringBuilder();
+    @NonNull
+    public List<CalendarEntity> getAvailableCalendars(){
         Cursor cur = activity
                 .getContentResolver()
                 .query(CalendarContract.Calendars.CONTENT_URI,
                         null, null, null, null);
 
-        if (cur == null)
-            return sb.toString();
+        List<CalendarEntity> result = new ArrayList<>();
 
-        int isPrimaryIndex;
+        if (cur == null)
+            return result;
 
         try{
             while (cur.moveToNext()){
-                int idIndex = cur.getColumnIndex(CalendarContract.Calendars._ID);
-                int accountNameIndex = cur.getColumnIndex(CalendarContract.Calendars.ACCOUNT_NAME);
-                int ownerAccountIndex = cur.getColumnIndex(CalendarContract.Calendars.OWNER_ACCOUNT);
-                int accountTypeIndex = cur.getColumnIndex(CalendarContract.Calendars.ACCOUNT_TYPE);
-                int displayViewIndex = cur.getColumnIndex(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME);
-                int visibleIndex = cur.getColumnIndex(CalendarContract.Calendars.VISIBLE);
-                isPrimaryIndex = cur.getColumnIndex(CalendarContract.Calendars.IS_PRIMARY);
-                if (isPrimaryIndex == -1) {
-                    isPrimaryIndex = cur.getColumnIndex("COALESCE(isPrimary, ownerAccount = account_name)");
-                }
-
-                long id = cur.getLong(idIndex);
-                String accName = cur.getString(accountNameIndex);
-                String owner = cur.getString(ownerAccountIndex);
-                String accType = cur.getString(accountTypeIndex);
-                String name = cur.getString(displayViewIndex);
-                String visible = cur.getString(visibleIndex);
-                Integer isPrimary = isPrimaryIndex== -1 ? null : cur.getInt(isPrimaryIndex);
-
-                sb.append(String.format("%d:type=%s, acc=%s, owner=%s, name=%s, prim=%s, vis=%s;  ",
-                        id, accType, accName, owner, name, isPrimary, visible));
+                CalendarEntity calendar = entityReader.fromCursorPosition(cur);
+                result.add(calendar);
             }
-            return sb.toString();
+            return result;
         }
         finally {
             cur.close();
@@ -171,39 +138,41 @@ public class CalendarRepository implements ICalendarRepository {
         return contentResolver.delete(deleteUri, null, null);
     }
 
-    public int createCalendar(String calendarName, String calendarColor, String accountName){
+    public int createCalendar(CalendarEntity calendar, String calendarColor){
         try {
             // don't create if it already exists
-            int id = getCalendarId(calendarName);
+            int id = getCalendarId(calendar.displayName);
             if (id != -1)
                 return id;
 
             // doesn't exist yet, so create
             Uri calUri = CalendarContract.Calendars.CONTENT_URI;
             ContentValues cv = new ContentValues();
-            cv.put(CalendarContract.Calendars.ACCOUNT_NAME, accountName);
+            cv.put(CalendarContract.Calendars.ACCOUNT_NAME, calendar.accountName);
             cv.put(CalendarContract.Calendars.ACCOUNT_TYPE, CalendarContract.ACCOUNT_TYPE_LOCAL);
-            cv.put(CalendarContract.Calendars.NAME, calendarName);
-            cv.put(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME, calendarName);
+            cv.put(CalendarContract.Calendars.NAME, calendar.displayName);
+            cv.put(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME, calendar.displayName);
             if (calendarColor != null) {
                 int colorInt = Color.parseColor(calendarColor);
                 cv.put(CalendarContract.Calendars.CALENDAR_COLOR, colorInt);
             }
             cv.put(CalendarContract.Calendars.VISIBLE, 1);
             cv.put(CalendarContract.Calendars.CALENDAR_ACCESS_LEVEL, CalendarContract.Calendars.CAL_ACCESS_OWNER);
-            cv.put(CalendarContract.Calendars.OWNER_ACCOUNT, accountName );
+            cv.put(CalendarContract.Calendars.OWNER_ACCOUNT, calendar.accountName );
             cv.put(CalendarContract.Calendars.SYNC_EVENTS, 0);
 
             calUri = calUri.buildUpon()
                     .appendQueryParameter(CalendarContract.CALLER_IS_SYNCADAPTER, "true")
-                    .appendQueryParameter(CalendarContract.Calendars.ACCOUNT_NAME, accountName)
+                    .appendQueryParameter(CalendarContract.Calendars.ACCOUNT_NAME, calendar.accountName)
                     .appendQueryParameter(CalendarContract.Calendars.ACCOUNT_TYPE, CalendarContract.ACCOUNT_TYPE_LOCAL)
                     .build();
 
             final ContentResolver contentResolver = activity.getContentResolver();
             Uri created = contentResolver.insert(calUri, cv);
             if (created != null) {
-                return Integer.valueOf(created.getLastPathSegment());
+                String lastSegment = created.getLastPathSegment();
+                if (lastSegment != null)
+                    return Integer.valueOf(lastSegment);
             }
         } catch (Exception e) {
             Log.e(TAG, "Creating calendar failed.", e);

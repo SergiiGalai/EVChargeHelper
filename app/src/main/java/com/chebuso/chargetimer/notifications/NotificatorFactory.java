@@ -3,6 +3,7 @@ package com.chebuso.chargetimer.notifications;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 
+import com.chebuso.chargetimer.repositories.CalendarRepository;
 import com.chebuso.chargetimer.settings.ISettingsReader;
 import com.chebuso.chargetimer.settings.ISettingsWriter;
 
@@ -14,7 +15,7 @@ class NotificatorFactory {
     private final ISettingsReader settingsProvider;
     private final Activity activity;
     private final IResourceProvider resourceProvider;
-    private ISettingsWriter settingsWriter;
+    private final ISettingsWriter settingsWriter;
 
     NotificatorFactory(Activity activity,
                        ISettingsReader settingsProvider,

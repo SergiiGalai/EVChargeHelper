@@ -10,21 +10,20 @@ import static org.junit.Assert.assertEquals;
 
 public class Leaf24ChargeTimeResolverTest
 {
-    private LiionChargeTimeResolver timeResolver;
+    private LiIonChargeTimeResolver timeResolver;
     private PowerLine power;
-    private Battery battery;
 
     @Before
     public void setUp() {
         power = new PowerLine();
-        battery = new Battery();
+        Battery battery = new Battery();
 
         power.Voltage = 220;
         power.Amperage = 32;
         battery.ChargingLossPct = 12;
         battery.UsableCapacityKWh = 22;
 
-        timeResolver = new LiionChargeTimeResolver(power, battery);
+        timeResolver = new LiIonChargeTimeResolver(power, battery);
     }
 
     @Test

@@ -14,6 +14,9 @@ import android.widget.Toast;
 
 import com.chebuso.chargetimer.UserMessage;
 import com.chebuso.chargetimer.helpers.PermissionHelper;
+import com.chebuso.chargetimer.models.CalendarEntity;
+import com.chebuso.chargetimer.models.CalendarEventEntity;
+import com.chebuso.chargetimer.repositories.ICalendarRepository;
 import com.chebuso.chargetimer.settings.ISettingsReader;
 import com.chebuso.chargetimer.R;
 import com.chebuso.chargetimer.helpers.TimeHelper;
@@ -57,26 +60,24 @@ public class CalendarAdvancedNotificator implements INotificator
 //            String calendarColor = activity.getString(R.string.calendar_color);
 //            String accountName = activity.getString(R.string.calendar_account_name);
 
-            int calendarId = calendarRepository.getPrimaryCalendarId();
-//            if (calendarId == -1){
-//                calendarId = calendarRepository.createCalendar(calendarName, calendarColor, accountName);
-//            }
-
-            scheduleCalendarEvent(calendarId,
+            CalendarEntity calendar = calendarRepository.getPrimaryCalendar();
+            CalendarEventEntity event = new CalendarEventEntity(
                     activity.getString(R.string.car_charged_title),
                     activity.getString(R.string.car_charged_descr),
                     millisToEvent);
+
+            scheduleCalendarEvent(calendar, event);
         } else if (settingsProvider.calendarAdvancedNotificationsAllowed()) {
             requestCalendarPermission();
         }
     }
 
-    private void scheduleCalendarEvent(int calendarId, String title, String description, long millisToEvent) {
-        if (calendarId == -1) {
+    private void scheduleCalendarEvent(CalendarEntity calendar, @NonNull CalendarEventEntity event) {
+        if (calendar == null) {
             UserMessage.showToast(activity, R.string.error_no_primary_calendar, Toast.LENGTH_LONG);
-            fallbackNotificator.scheduleCarChargedNotification(millisToEvent);
+            fallbackNotificator.scheduleCarChargedNotification(event.millisToStart);
         }else{
-            ContentValues eventData = createCalendarEventContent(calendarId, title, description, millisToEvent);
+            ContentValues eventData = createCalendarEventContent(calendar.id, event);
             long eventId = calendarRepository.createEvent(eventData);
 
             int reminderMinutes = settingsProvider.getCalendarReminderMinutes();
@@ -96,14 +97,14 @@ public class CalendarAdvancedNotificator implements INotificator
     }
 
     @NonNull
-    private ContentValues createCalendarEventContent(int calendarId, String title, String description, long millisToEvent) {
-        long eventTime = TimeHelper.now() + millisToEvent;
+    private ContentValues createCalendarEventContent(long calendarId, @NonNull CalendarEventEntity event) {
+        long eventTime = TimeHelper.now() + event.millisToStart;
 
         ContentValues values = new ContentValues();
         values.put(CalendarContract.Events.DTSTART, eventTime);
         values.put(CalendarContract.Events.DTEND, eventTime + MS_IN_1_HOUR);
-        values.put(CalendarContract.Events.TITLE, title);
-        values.put(CalendarContract.Events.DESCRIPTION, description);
+        values.put(CalendarContract.Events.TITLE, event.title);
+        values.put(CalendarContract.Events.DESCRIPTION, event.description);
         values.put(CalendarContract.Events.CALENDAR_ID, calendarId);
         values.put(CalendarContract.Events.EVENT_TIMEZONE,
                 Calendar.getInstance().getTimeZone().getID());
