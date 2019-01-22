@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.widget.Toast;
 
@@ -62,13 +63,13 @@ public class CalendarAdvancedNotificator implements INotificator
                     activity.getString(R.string.car_charged_descr),
                     millisToEvent);
 
-            scheduleCalendarEvent(calendar, event);
+            scheduleCalendarEvent(event, calendar);
         } else if (settingsProvider.calendarAdvancedNotificationsAllowed()) {
             requestCalendarPermission();
         }
     }
 
-    private void scheduleCalendarEvent(CalendarEntity calendar, @NonNull CalendarEventEntity event) {
+    private void scheduleCalendarEvent(CalendarEventEntity event, @Nullable CalendarEntity calendar) {
         if (calendar == null) {
             UserMessage.showToast(activity, R.string.error_no_primary_calendar, Toast.LENGTH_LONG);
             fallbackNotificator.scheduleCarChargedNotification(event.millisToStart);
@@ -98,7 +99,7 @@ public class CalendarAdvancedNotificator implements INotificator
     }
 
     @NonNull
-    private ContentValues createCalendarEventContent(long calendarId, @NonNull CalendarEventEntity event) {
+    private ContentValues createCalendarEventContent(long calendarId, CalendarEventEntity event) {
         long eventTime = TimeHelper.now() + event.millisToStart;
 
         ContentValues values = new ContentValues();
