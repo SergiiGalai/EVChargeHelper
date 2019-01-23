@@ -78,7 +78,7 @@ public class CalendarAdvancedNotificator implements INotificator
             long eventId = calendarRepository.createEvent(eventData);
             if (eventId == -1)
             {
-                UserMessage.showToast(activity, R.string.error_no_primary_calendar, Toast.LENGTH_LONG);
+                UserMessage.showToast(activity, R.string.error_creating_calendar_event, Toast.LENGTH_LONG);
                 fallbackNotificator.scheduleCarChargedNotification(event.millisToStart);
                 return;
             }
