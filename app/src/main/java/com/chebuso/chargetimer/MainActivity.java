@@ -47,6 +47,7 @@ public class MainActivity extends BaseActivity
     private StepNumberPicker voltagePicker;
     private TextView chargedInTitle;
     private Button remindButton;
+    private Button showCalendarsButton;
 
     private final ViewModel viewModel = new ViewModel();
     private ISettingsReader settingsProvider;
@@ -62,6 +63,7 @@ public class MainActivity extends BaseActivity
         remainingEnergyTitle = findViewById(R.id.remainingEnergyTitle);
         chargedInTitle = findViewById(R.id.chargedInTitle);
         remindButton = findViewById(R.id.remindButton);
+        showCalendarsButton = findViewById(R.id.showCalendarsButton);
 
         int defaultAmperage = settingsProvider.getDefaultAmperage();
         amperagePicker = new StepNumberPicker(this, R.id.amperageValue);
@@ -218,6 +220,38 @@ public class MainActivity extends BaseActivity
             public void onClick(View v) {
                 updateControls();
                 scheduler.schedule(viewModel.getMillisToCharge());
+            }
+        });
+
+        showCalendarsButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                if (PermissionHelper.isFullCalendarPermissionsGranted(activity)){
+                    List<CalendarEntity> calendars = calendarRepository.getAvailableCalendars();
+                    StringBuilder sb = new StringBuilder();
+
+                    for (CalendarEntity calendar : calendars) {
+                        sb.append(String.format("%d:name=%s, prim=%s, acc='%s', owner='%s', type='%s';  ",
+                                calendar.id,
+                                calendar.displayName,
+                                calendar.isPrimary,
+                                calendar.accountName,
+                                calendar.ownerAccount,
+                                calendar.accountType
+                                ));
+                    }
+
+                    String calendarsLog = sb.toString();
+                    int lineNumber = calendarsLog.length() / 20;
+
+                    UserMessage.toMultilineSnackbar(
+                            UserMessage.getSnackbar(activity, calendarsLog, Snackbar.LENGTH_INDEFINITE),
+                            lineNumber
+                    ).show();
+                } else {
+                    UserMessage.showToast(activity, R.string.error_no_primary_calendar, Toast.LENGTH_LONG);
+                }
             }
         });
     }

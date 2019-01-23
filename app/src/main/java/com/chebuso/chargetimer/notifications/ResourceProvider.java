@@ -13,8 +13,8 @@ public class ResourceProvider implements IResourceProvider {
         this.activity = activity;
     }
 
-    @Override
     @NonNull
+    @Override
     public Uri getApplicationNotificationSoundUri() {
         return Uri.parse("android.resource://" + activity.getPackageName() + "/" + R.raw.carhorn4);
     }
