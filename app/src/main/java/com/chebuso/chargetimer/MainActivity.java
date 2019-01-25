@@ -1,10 +1,12 @@
 package com.chebuso.chargetimer;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,24 +14,32 @@ import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chebuso.chargetimer.bugreport.BaseActivity;
 import com.chebuso.chargetimer.charge.Battery;
 import com.chebuso.chargetimer.charge.ChargeValuesProvider;
 import com.chebuso.chargetimer.charge.IChargeTimeResolver;
-import com.chebuso.chargetimer.charge.LiionChargeTimeResolver;
+import com.chebuso.chargetimer.charge.LiIonChargeTimeResolver;
 import com.chebuso.chargetimer.charge.PowerLine;
 import com.chebuso.chargetimer.controls.StepNumberPicker;
+import com.chebuso.chargetimer.helpers.PermissionHelper;
 import com.chebuso.chargetimer.helpers.TimeHelper;
+import com.chebuso.chargetimer.models.CalendarEntity;
 import com.chebuso.chargetimer.notifications.CalendarAdvancedNotificator;
+import com.chebuso.chargetimer.repositories.CalendarRepository;
+import com.chebuso.chargetimer.repositories.ICalendarRepository;
 import com.chebuso.chargetimer.notifications.NotificationScheduler;
 import com.chebuso.chargetimer.settings.ISettingsReader;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends BaseActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback
 {
+    @SuppressWarnings("unused")
     private final static String TAG = "MainActivity";
     private final static int SETTINGS_REQUEST_CODE = 9000;
 
@@ -39,19 +49,23 @@ public class MainActivity extends BaseActivity
     private StepNumberPicker voltagePicker;
     private TextView chargedInTitle;
     private Button remindButton;
+    private Button showCalendarsButton;
 
-    private ViewModel viewModel = new ViewModel(this);
+    private final ViewModel viewModel = new ViewModel();
     private ISettingsReader settingsProvider;
     private NotificationScheduler scheduler;
+    private ICalendarRepository calendarRepository;
 
     private void initializeVariables() {
         settingsProvider = Factory.createSettingsReader(this);
         scheduler = Factory.createScheduler(this);
+        calendarRepository = new CalendarRepository(this);
 
         remainingEnergySeekBar = findViewById(R.id.remainingEnergySeekBar);
         remainingEnergyTitle = findViewById(R.id.remainingEnergyTitle);
         chargedInTitle = findViewById(R.id.chargedInTitle);
         remindButton = findViewById(R.id.remindButton);
+        showCalendarsButton = findViewById(R.id.showCalendarsButton);
 
         int defaultAmperage = settingsProvider.getDefaultAmperage();
         amperagePicker = new StepNumberPicker(this, R.id.amperageValue);
@@ -112,14 +126,17 @@ public class MainActivity extends BaseActivity
             updateControls();
             if (settingsProvider.firstApplicationRun()){
                 Factory.createSettingsWriter(this).setFirstApplicationRunCompleted();
-                UserMessage.showMultilineSnackbar(this, R.string.first_time_main_activity_message, 4);
+
+                UserMessage.toMultilineSnackbar(
+                        UserMessage.getSnackbar(this, R.string.first_time_main_activity_message),
+                        4
+                ).show();
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
     private class ViewModel{
-        private Context context;
         private String remainingEnergyText;
         private String chargedInText;
         private String remindButtonText;
@@ -127,16 +144,16 @@ public class MainActivity extends BaseActivity
         private long millisToCharge;
         private final PowerLine powerLine;
         private final Battery battery;
-        private IChargeTimeResolver chargeTimeResolver;
+        private final IChargeTimeResolver chargeTimeResolver;
 
-        ViewModel(Context context) {
-            this.context = context;
+        ViewModel() {
             powerLine = new PowerLine();
             battery = new Battery();
-            chargeTimeResolver = new LiionChargeTimeResolver(powerLine, battery);
+            chargeTimeResolver = new LiIonChargeTimeResolver(powerLine, battery);
         }
 
         void refresh() {
+            Log.d(TAG, "ViewModel.refresh");
             powerLine.Amperage = Integer.valueOf(amperagePicker.getValue());
             powerLine.Voltage = Integer.valueOf(voltagePicker.getValue());
             battery.UsableCapacityKWh = settingsProvider.getBatteryCapacity();
@@ -151,6 +168,7 @@ public class MainActivity extends BaseActivity
             Date dateChargedAt = TimeHelper.toDate(TimeHelper.now() + millisToCharge);
             Time time = TimeHelper.toTime(millisToCharge);
 
+            Log.d(TAG,"ViewModel.refresh." + time.toString());
             if (time.days > 0){
                 chargedInText = String.format(getString(R.string.should_be_charged_in_days_title),
                         time.days, time.hours, time.minutes);
@@ -165,11 +183,15 @@ public class MainActivity extends BaseActivity
         }
 
         private byte getRemainingEnergyPercentage(){
-            return (byte) (remainingEnergySeekBar.getProgress() * 5);
+            byte value = (byte) (remainingEnergySeekBar.getProgress() * 5);
+            Log.d(TAG, "ViewModel.getRemainingEnergyPercentage=" + value);
+            return value;
         }
 
         private double getRemainingEnergyKWh(byte remainingEnergyPct){
-            return battery.UsableCapacityKWh * remainingEnergyPct / 100;
+            double value = battery.UsableCapacityKWh * remainingEnergyPct / 100;
+            Log.d(TAG, "ViewModel.getRemainingEnergyKWh=" + value);
+            return value;
         }
 
         long getMillisToCharge() { return millisToCharge; }
@@ -179,6 +201,8 @@ public class MainActivity extends BaseActivity
     }
 
     private void initializeChangeListeners(){
+        final Activity activity = this;
+
         voltagePicker.setOnValueChangedListener(textWatcher);
         amperagePicker.setOnValueChangedListener(textWatcher);
 
@@ -186,6 +210,7 @@ public class MainActivity extends BaseActivity
         {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
+                Log.d(TAG, "remainingEnergySeekBar.onProgressChanged");
                 updateControls();
             }
 
@@ -202,21 +227,68 @@ public class MainActivity extends BaseActivity
         {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "remindButton.onClick");
                 updateControls();
                 scheduler.schedule(viewModel.getMillisToCharge());
             }
         });
+
+        showCalendarsButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "showCalendarsButton.onClick");
+                if (PermissionHelper.isFullCalendarPermissionsGranted(activity)){
+                    List<CalendarEntity> calendars = calendarRepository.getAvailableCalendars();
+                    String calendarsLog = calendarsToString(calendars);
+                    int lineNumber = calendarsLog.length() / 20;
+
+                    UserMessage.toMultilineSnackbar(
+                            UserMessage.getSnackbar(activity, calendarsLog, Snackbar.LENGTH_INDEFINITE),
+                            lineNumber
+                    ).show();
+                } else {
+                    UserMessage.showToast(activity, R.string.error_no_primary_calendar, Toast.LENGTH_LONG);
+                }
+            }
+        });
     }
 
-    private NumberPicker.OnValueChangeListener textWatcher = new NumberPicker.OnValueChangeListener(){
+    private static String calendarsToString(List<CalendarEntity> calendars) {
+        Log.d(TAG, "calendarsToString");
+
+        StringBuilder sb = new StringBuilder();
+
+        if (calendars.isEmpty()){
+            sb.append("No calendars found");
+        }else{
+            for (CalendarEntity calendar : calendars) {
+                sb.append(String.format(Locale.US,
+                        "%d:name=%s, prim=%s, acc='%s', owner='%s', type='%s';  ",
+                        calendar.id,
+                        calendar.displayName,
+                        calendar.isPrimary,
+                        calendar.accountName,
+                        calendar.ownerAccount,
+                        calendar.accountType
+                ));
+            }
+        }
+
+        return sb.toString();
+    }
+
+    private final NumberPicker.OnValueChangeListener textWatcher = new NumberPicker.OnValueChangeListener(){
         @Override
         public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+            Log.d(TAG, numberPicker.getId() + ".onValueChange");
             updateControls();
         }
     };
 
     private void updateControls()
     {
+        Log.d(TAG, "updateControls");
         viewModel.refresh();
         remainingEnergyTitle.setText(viewModel.getRemainingEnergyText());
         chargedInTitle.setText(viewModel.getChargedInText());
@@ -224,11 +296,13 @@ public class MainActivity extends BaseActivity
     }
 
     private void startSettingsActivity(){
+        Log.d(TAG, "startSettingsActivity");
         Intent i = new Intent(this, SettingsActivity.class);
         startActivityForResult(i, SETTINGS_REQUEST_CODE);
     }
 
     private void startChargingSettingsActivity(){
+        Log.d(TAG, "startChargingSettingsActivity");
         Intent i = new Intent(this, SettingsActivity.class);
         i.putExtra(SettingsActivity.EXTRA_LOAD_FRAGMENT_MESSAGE_ID, R.string.first_time_settings_activity_message);
         startActivityForResult(i, SETTINGS_REQUEST_CODE);

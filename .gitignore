@@ -1,6 +1,11 @@
 .gradle
 /local.properties
 
+docs/
+backup.bat
+uploadApk.bat
+backup.sh
+
 #IntelliJ
 *.iml
 .idea/workspace.xml
@@ -10,7 +15,6 @@
 .idea/dictionaries
 .idea/libraries
 .idea/caches
-/.idea/caches/build_file_checksums.ser
 
 .DS_Store
 /build

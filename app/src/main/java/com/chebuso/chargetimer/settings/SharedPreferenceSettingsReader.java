@@ -3,8 +3,10 @@ package com.chebuso.chargetimer.settings;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 
 import com.chebuso.chargetimer.R;
+import com.chebuso.chargetimer.helpers.StringHelper;
 
 public class SharedPreferenceSettingsReader implements ISettingsReader
 {
@@ -76,13 +78,13 @@ public class SharedPreferenceSettingsReader implements ISettingsReader
                 context.getString(R.string.pref_default_calendar_permission_reminder_minutes));
     }
 
-    private Integer parseInteger(String key, String valueWhenEmpty){
+    private Integer parseInteger(@NonNull String key, @NonNull String valueWhenEmpty){
         final String value = preferences.getString(key, String.valueOf(valueWhenEmpty));
-        return Integer.parseInt("".equals(value) ? valueWhenEmpty : value);
+        return Integer.parseInt(StringHelper.isNullOrEmpty(value) ? valueWhenEmpty : value);
     }
 
-    private double parseDouble(String key, String valueWhenEmpty){
+    private double parseDouble(@NonNull String key, @NonNull String valueWhenEmpty){
         final String value = preferences.getString(key, String.valueOf(valueWhenEmpty));
-        return Double.parseDouble("".equals(value) ? valueWhenEmpty : value);
+        return Double.parseDouble(StringHelper.isNullOrEmpty(value) ? valueWhenEmpty : value);
     }
 }

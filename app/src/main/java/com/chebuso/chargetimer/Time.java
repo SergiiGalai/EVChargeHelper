@@ -1,9 +1,16 @@
 package com.chebuso.chargetimer;
 
+import android.support.annotation.NonNull;
+
 import java.util.Objects;
 
 public class Time{
+    final int days;
+    final int hours;
+    final int minutes;
+
     public Time(int hours, int minutes) {
+        this.days = 0;
         this.hours = hours;
         this.minutes = minutes;
     }
@@ -13,10 +20,6 @@ public class Time{
         this.hours = hours;
         this.minutes = minutes;
     }
-
-    int days;
-    int hours;
-    int minutes;
 
     @Override
     public boolean equals(Object o) {
@@ -33,6 +36,7 @@ public class Time{
         return Objects.hash(days, hours, minutes);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Time{" +

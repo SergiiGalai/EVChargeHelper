@@ -9,22 +9,21 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public final class UserMessage {
     public static void showSnackbar(@NonNull Activity activity, @NonNull String description) {
-        Snackbar.make(activity.findViewById(android.R.id.content), description, Snackbar.LENGTH_LONG)
-                .show();
+        getSnackbar(activity, description, Snackbar.LENGTH_LONG).show();
     }
 
-    static void showSnackbar(@NonNull Activity activity, @StringRes int messageId, int snackbarTimeLength) {
-        Snackbar.make(activity.findViewById(android.R.id.content), messageId, snackbarTimeLength)
-                .show();
+    static Snackbar getSnackbar(@NonNull Activity activity, @StringRes int messageId) {
+        return Snackbar.make(activity.findViewById(android.R.id.content), messageId, Snackbar.LENGTH_INDEFINITE);
     }
 
-    static void showMultilineSnackbar(@NonNull Activity activity, @StringRes int messageId, int lineNumber) {
-        final Snackbar snackbar = Snackbar.make(activity.findViewById(android.R.id.content),
-                messageId,
-                Snackbar.LENGTH_INDEFINITE);
+    public static Snackbar getSnackbar(@NonNull Activity activity, @NonNull String description, int snackbarTimeLength) {
+        return Snackbar.make(activity.findViewById(android.R.id.content), description, snackbarTimeLength);
+    }
 
+    public static Snackbar toMultilineSnackbar(@NonNull final Snackbar snackbar, int lineNumber) {
         final TextView snackTextView = snackbar.getView()
                 .findViewById(android.support.design.R.id.snackbar_text);
         snackTextView.setMaxLines(lineNumber);
@@ -35,7 +34,7 @@ public final class UserMessage {
                 snackbar.dismiss();
             }
         });
-        snackbar.show();
+        return snackbar;
     }
 
     static void showToast(@NonNull Context context, @NonNull String description) {

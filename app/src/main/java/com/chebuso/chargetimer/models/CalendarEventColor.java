@@ -1,4 +1,4 @@
-package com.chebuso.chargetimer.notifications;
+package com.chebuso.chargetimer.models;
 
 class CalendarEventColor {
     static final int BLUE = 1;

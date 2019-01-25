@@ -9,7 +9,7 @@ import com.chebuso.chargetimer.settings.ISettingsWriter;
 
 public class NotificationScheduler
 {
-    private NotificatorFactory notificatorFactory;
+    private final NotificatorFactory notificatorFactory;
 
     public NotificationScheduler(Activity activity,
                                  ISettingsReader settingsProvider,

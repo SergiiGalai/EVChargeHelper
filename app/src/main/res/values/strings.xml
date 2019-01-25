@@ -37,13 +37,12 @@ Allows to create notifications in one click, change reminding time or background
     <string name="car_charged_channel_descr">Notifies you when your car is charged</string>
 
     <string name="calendar_permission_rationale_title">Why do we ask permission</string>
-    <string name="calendar_permission_rationale">Calendar permission is required to make reminders time customizable as well as displaying events in another color.\n
-Without this permission you will see a standard new calendar event screen.\n
-We do NOT read or change other notifications.\n
-You can change this settings anytime in application settings.
+    <string name="calendar_permission_rationale">Calendar permission is required to make reminder time customizable.
+We do NOT read your calendar events.
+You can always change this in application settings.
     </string>
-    <string name="permission_dialog_allow">Proceed</string>
-    <string name="permission_dialog_forbid">Use default</string>
+    <string name="permission_dialog_allow">Allow access</string>
+    <string name="permission_dialog_forbid">Forbid access</string>
     <string name="ok" translatable="false">OK</string>
     <string name="open">Open</string>
     <string name="calendar_permissions_not_granted">CALENDAR permissions were NOT granted.</string>
@@ -58,5 +57,6 @@ You can change this settings anytime in application settings.
     <string name="first_time_settings_activity_message">Before continue fill your battery capacity and usual power line settings for more precise time calculation.</string>
     <string name="first_time_main_activity_message">This app is NOT connected to your car and cannot get its actual charging info.
 Charge time calculation is estimated.</string>
-    <string name="error_no_primary_calendar">Unable to get primary calendar, opening calendar setup page</string>
+    <string name="error_no_primary_calendar">Unable to get calendar using permissions. Ask for calendar permission setting turned off</string>
+    <string name="error_creating_calendar_event">Unable to create calendar event. Opening default calendar</string>
 </resources>

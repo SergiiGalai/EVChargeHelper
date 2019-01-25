@@ -3,29 +3,31 @@ package com.chebuso.chargetimer.notifications;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.provider.CalendarContract;
-import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.chebuso.chargetimer.UserMessage;
+import com.chebuso.chargetimer.helpers.PermissionHelper;
+import com.chebuso.chargetimer.models.CalendarEntity;
+import com.chebuso.chargetimer.models.CalendarEventEntity;
+import com.chebuso.chargetimer.repositories.ICalendarRepository;
 import com.chebuso.chargetimer.settings.ISettingsReader;
 import com.chebuso.chargetimer.R;
-import com.chebuso.chargetimer.helpers.TimeHelper;
 import com.chebuso.chargetimer.settings.ISettingsWriter;
 
-import java.util.Calendar;
 
 public class CalendarAdvancedNotificator implements INotificator
 {
     public static final int REQUEST_CALENDAR = 1;
-    private static final int EVENT_COLOR = CalendarEventColor.VIOLET;
-    private static final int MS_IN_1_HOUR = 60 * 60 * 1000;
+    private static final String TAG = "CalAdvancedNotificator";
+
     private static final String[] PERMISSIONS_CALENDAR = {
             Manifest.permission.READ_CALENDAR,
             Manifest.permission.WRITE_CALENDAR
@@ -52,43 +54,50 @@ public class CalendarAdvancedNotificator implements INotificator
 
     @Override
     public void scheduleCarChargedNotification(long millisToEvent) {
-        if (calendarPermissionsGranted())
-        {
-            scheduleCalendarEvent(activity.getString(R.string.car_charged_title),
+        if (PermissionHelper.isFullCalendarPermissionsGranted(activity)) {
+            Log.d(TAG, "Full calendar permissions granted");
+
+            CalendarEntity calendar = calendarRepository.getPrimaryCalendar();
+            CalendarEventEntity event = new CalendarEventEntity(
+                    activity.getString(R.string.car_charged_title),
                     activity.getString(R.string.car_charged_descr),
                     millisToEvent);
-        } else if (settingsProvider.calendarAdvancedNotificationsAllowed())
-        {
+
+            scheduleCalendarEvent(event, calendar);
+        } else if (settingsProvider.calendarAdvancedNotificationsAllowed()) {
+            Log.d(TAG, "Calendar permissions not granted");
             requestCalendarPermission();
         }
     }
 
-    private boolean calendarPermissionsGranted() {
-        return ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED ;
-    }
-
-    private void scheduleCalendarEvent(String title, String description, long millisToEvent) {
-        int calendarId = calendarRepository.getPrimaryCalendarId();
-        if (calendarId == -1) {
-            UserMessage.showToast(activity, R.string.error_no_primary_calendar, Toast.LENGTH_LONG);
-            fallbackNotificator.scheduleCarChargedNotification(millisToEvent);
+    private void scheduleCalendarEvent(CalendarEventEntity event, @Nullable CalendarEntity calendar) {
+        if (calendar == null) {
+            disableAdvancedNotification();
+            scheduleEventUsingDefaultNotificator(event.millisToStart, R.string.error_no_primary_calendar);
         }else{
-            ContentValues eventData = createCalendarEventContent(calendarId, title, description, millisToEvent);
-            int reminderMinutes = settingsProvider.getCalendarReminderMinutes();
+            long eventId = calendarRepository.createEvent(calendar.id, event);
+            if (eventId == -1)
+            {
+                scheduleEventUsingDefaultNotificator(event.millisToStart, R.string.error_creating_calendar_event);
+                return;
+            }
 
-            long eventId = createEventWithReminder(eventData, reminderMinutes);
-            notifyUser_open_event(eventId);
+            int reminderMinutes = settingsProvider.getCalendarReminderMinutes();
+            calendarRepository.setReminder(eventId, reminderMinutes);
+            openEventActivity(eventId);
         }
     }
 
-    private long createEventWithReminder(ContentValues eventData, int reminderMinutes){
-        long eventId = calendarRepository.createEvent(eventData);
-        calendarRepository.setReminder(eventId, reminderMinutes);
-        return eventId;
+    private void disableAdvancedNotification() {
+        settingsWriter.saveCalendarAdvancedNotificationsAllowed(false);
     }
 
-    private void notifyUser_open_event(final long eventId){
+    private void scheduleEventUsingDefaultNotificator(long millisToEvent, @StringRes int messageId) {
+        UserMessage.showToast(activity, messageId, Toast.LENGTH_LONG);
+        fallbackNotificator.scheduleCarChargedNotification(millisToEvent);
+    }
+
+    private void openEventActivity(final long eventId){
         Intent intent = new Intent(Intent.ACTION_VIEW);
 
         Uri.Builder uri = CalendarContract.Events.CONTENT_URI.buildUpon()
@@ -97,30 +106,13 @@ public class CalendarAdvancedNotificator implements INotificator
         activity.startActivity(intent);
     }
 
-    @NonNull
-    private ContentValues createCalendarEventContent(int calendarId, String title, String description, long millisToEvent) {
-        long eventTime = TimeHelper.now() + millisToEvent;
-
-        ContentValues values = new ContentValues();
-        values.put(CalendarContract.Events.DTSTART, eventTime);
-        values.put(CalendarContract.Events.DTEND, eventTime + MS_IN_1_HOUR);
-        values.put(CalendarContract.Events.TITLE, title);
-        values.put(CalendarContract.Events.DESCRIPTION, description);
-        values.put(CalendarContract.Events.CALENDAR_ID, calendarId);
-        values.put(CalendarContract.Events.EVENT_TIMEZONE,
-                Calendar.getInstance().getTimeZone().getID());
-
-        if (calendarRepository.customColorsSupported())
-            values.put(CalendarContract.Events.EVENT_COLOR_KEY, EVENT_COLOR);
-
-        return values;
-    }
-
     private void requestCalendarPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
                 Manifest.permission.WRITE_CALENDAR)){
+            Log.d(TAG, "Show permissions rationale");
             showRationaleDialog();
         } else {
+            Log.d(TAG, "Request calendar permissions");
             ActivityCompat.requestPermissions(activity, PERMISSIONS_CALENDAR, REQUEST_CALENDAR);
         }
     }
@@ -133,9 +125,7 @@ public class CalendarAdvancedNotificator implements INotificator
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        settingsWriter.saveCalendarAdvancedNotificationsAllowed(false);
-                        //NotificationScheduler scheduler = new NotificationScheduler(activity);
-                        //scheduler.schedule();
+                        disableAdvancedNotification();
                     }
                 });
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, activity.getString(R.string.permission_dialog_allow),

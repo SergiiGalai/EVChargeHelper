@@ -9,13 +9,13 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.chebuso.chargetimer.helpers.PreferenceHelper;
+import com.chebuso.chargetimer.helpers.StringHelper;
 
 import java.util.List;
 
@@ -43,7 +43,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity
         if (extras != null && extras.containsKey(EXTRA_LOAD_FRAGMENT_MESSAGE_ID))
         {
             int messageId = extras.getInt(EXTRA_LOAD_FRAGMENT_MESSAGE_ID);
-            UserMessage.showSnackbar(this, messageId, Snackbar.LENGTH_INDEFINITE);
+            UserMessage.getSnackbar(this, messageId).show();
             getFragmentManager().beginTransaction().replace(android.R.id.content,
                     new ChargingPreferenceFragment()).commit();
         }
@@ -139,7 +139,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity
                     public boolean onPreferenceChange(Preference preference, Object value) {
                         String stringValue = value.toString().trim();
 
-                        if ("".equals(stringValue)) {
+                        if (StringHelper.isNullOrEmpty(stringValue)) {
                             Context context = preference.getContext();
                             UserMessage.showToast(context, R.string.value_not_empty, Toast.LENGTH_LONG);
                             return false;
