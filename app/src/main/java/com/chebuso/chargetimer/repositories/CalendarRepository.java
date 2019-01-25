@@ -73,6 +73,30 @@ public class CalendarRepository implements ICalendarRepository {
         return values;
     }
 
+    private boolean customColorsSupported(){
+        Log.d(TAG, "customColorsSupported");
+        Cursor cursor = activity
+                .getContentResolver()
+                .query(CalendarContract.Colors.CONTENT_URI,
+                        new String[]{
+                                CalendarContract.Colors.COLOR_KEY,
+                                CalendarContract.Colors.COLOR
+                        },
+                        null, null, null);
+        if (cursor == null)
+            return false;
+
+        try {
+            boolean result = cursor.moveToFirst();
+            Log.d(TAG, "customColorsSupported. result=" + result);
+            return result;
+        }
+        finally {
+            cursor.close();
+        }
+    }
+
+
     public void setReminder(long eventId, int minutesBefore) {
         Log.d(TAG, "setReminder. eventId=" + eventId);
 
