@@ -33,7 +33,7 @@
     <string name="pref_title_reminder_validation_error">Мы не разрешаем значение для уведомления больше %d минут</string>
 
     <string name="calendar_permission_rationale_title">Для чего нужен доступ</string>
-    <string name="calendar_permission_rationale">Доступ к календарю требуется для настроки времени уведомления и цвета сообщения.
+    <string name="calendar_permission_rationale">Доступ к календарю требуется для настроки времени уведомления.
 Мы не читаем ваши события.
 Вы всегда можете изменить это в настройках приложения</string>
     <string name="permission_dialog_allow">Разрешить доступ</string>

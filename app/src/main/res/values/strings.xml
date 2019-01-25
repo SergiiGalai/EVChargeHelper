@@ -37,7 +37,7 @@ Allows to create notifications in one click, change reminding time or background
     <string name="car_charged_channel_descr">Notifies you when your car is charged</string>
 
     <string name="calendar_permission_rationale_title">Why do we ask permission</string>
-    <string name="calendar_permission_rationale">Calendar permission is required to make reminder time customizable and to display events in different color.
+    <string name="calendar_permission_rationale">Calendar permission is required to make reminder time customizable.
 We do NOT read your calendar events.
 You can always change this in application settings.
     </string>
