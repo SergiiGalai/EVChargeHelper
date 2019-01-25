@@ -58,6 +58,6 @@ You can change this settings anytime in application settings.
     <string name="first_time_settings_activity_message">Before continue fill your battery capacity and usual power line settings for more precise time calculation.</string>
     <string name="first_time_main_activity_message">This app is NOT connected to your car and cannot get its actual charging info.
 Charge time calculation is estimated.</string>
-    <string name="error_no_primary_calendar">Unable to get primary calendar, opening default calendar</string>
-    <string name="error_creating_calendar_event">Unable to create calendar event, opening default calendar</string>
+    <string name="error_no_primary_calendar">Unable to get calendar using permissions. Opening default calendar</string>
+    <string name="error_creating_calendar_event">Unable to create calendar event. Opening default calendar</string>
 </resources>

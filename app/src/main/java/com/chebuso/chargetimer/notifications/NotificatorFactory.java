@@ -2,6 +2,7 @@ package com.chebuso.chargetimer.notifications;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.chebuso.chargetimer.repositories.CalendarRepository;
 import com.chebuso.chargetimer.settings.ISettingsReader;
@@ -27,6 +28,7 @@ class NotificatorFactory {
         this.activity = activity;
     }
 
+    @Nullable
     INotificator tryCreate(boolean calendarPermissionsGranted){
         if(calendarPermissionsGranted && settingsProvider.calendarAdvancedNotificationsAllowed()){
             return createAdvancedNotificator();

@@ -43,6 +43,6 @@
     <string name="first_time_settings_activity_message">Заповніть ємність батареї, а також напругу і силу струму в вашій мережі для точнішого розрахунку часу.</string>
     <string name="first_time_main_activity_message">Програма НЕ підключена до вашого авто і не може отримувати з нього актуальні дані.
 Розрахунок часу зарядки є приблизним.</string>
-    <string name="error_no_primary_calendar">Неможливо відкрити основний календар. Відкриваю календар за замовчуванням</string>
+    <string name="error_no_primary_calendar">Неможливо відкрити календар, використовуючи права. Відкриваю календар за замовчуванням</string>
     <string name="error_creating_calendar_event">Неможливо створити подію в календарі. Відкриваю календар за замовчуванням</string>
 </resources>
