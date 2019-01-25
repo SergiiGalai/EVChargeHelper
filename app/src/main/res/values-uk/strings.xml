@@ -33,16 +33,15 @@
     <string name="pref_title_reminder_validation_error">Значення занадто велике. Ми не дозволяємо значення для нагадування більшим за %d хвилин.</string>
 
     <string name="calendar_permission_rationale_title">Для чого потрібен доступ</string>
-    <string name="calendar_permission_rationale">Доступ до календаря потрібен для швидшого і зручнішого створення нагадувань у календарі.\n
-Без доступу Ви будете бачити стандартний екран нового нагадування календаря.\n
-Ми не читаємо і не змінюємо інші нагадування.\n
-Ви можете змінити дане значення будь-коли у налаштуваннях програми</string>
-    <string name="permission_dialog_allow">Продовжити</string>
-    <string name="permission_dialog_forbid">Стандартний</string>
+    <string name="calendar_permission_rationale">Доступ до календаря потрібен для налаштування часу нагадування та кольору повідомлення
+Ми не читаємо події в календарі.
+Ви завжди можете змінити це у налаштуваннях програми</string>
+    <string name="permission_dialog_allow">Дозволити доступ</string>
+    <string name="permission_dialog_forbid">Заборонити доступ</string>
     <string name="event_created">Нагадування у календарі створено</string>
     <string name="first_time_settings_activity_message">Заповніть ємність батареї, а також напругу і силу струму в вашій мережі для точнішого розрахунку часу.</string>
     <string name="first_time_main_activity_message">Програма НЕ підключена до вашого авто і не може отримувати з нього актуальні дані.
 Розрахунок часу зарядки є приблизним.</string>
-    <string name="error_no_primary_calendar">Неможливо відкрити календар, використовуючи права. Відкриваю календар за замовчуванням</string>
+    <string name="error_no_primary_calendar">Неможливо відкрити календар, використовуючи права. Запит на доступ до календаря відключено</string>
     <string name="error_creating_calendar_event">Неможливо створити подію в календарі. Відкриваю календар за замовчуванням</string>
 </resources>

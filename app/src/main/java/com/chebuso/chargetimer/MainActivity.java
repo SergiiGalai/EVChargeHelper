@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,6 +34,7 @@ import com.chebuso.chargetimer.settings.ISettingsReader;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends BaseActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback
@@ -151,6 +153,7 @@ public class MainActivity extends BaseActivity
         }
 
         void refresh() {
+            Log.d(TAG, "ViewModel.refresh");
             powerLine.Amperage = Integer.valueOf(amperagePicker.getValue());
             powerLine.Voltage = Integer.valueOf(voltagePicker.getValue());
             battery.UsableCapacityKWh = settingsProvider.getBatteryCapacity();
@@ -165,6 +168,7 @@ public class MainActivity extends BaseActivity
             Date dateChargedAt = TimeHelper.toDate(TimeHelper.now() + millisToCharge);
             Time time = TimeHelper.toTime(millisToCharge);
 
+            Log.d(TAG,"ViewModel.refresh." + time.toString());
             if (time.days > 0){
                 chargedInText = String.format(getString(R.string.should_be_charged_in_days_title),
                         time.days, time.hours, time.minutes);
@@ -179,11 +183,15 @@ public class MainActivity extends BaseActivity
         }
 
         private byte getRemainingEnergyPercentage(){
-            return (byte) (remainingEnergySeekBar.getProgress() * 5);
+            byte value = (byte) (remainingEnergySeekBar.getProgress() * 5);
+            Log.d(TAG, "ViewModel.getRemainingEnergyPercentage=" + value);
+            return value;
         }
 
         private double getRemainingEnergyKWh(byte remainingEnergyPct){
-            return battery.UsableCapacityKWh * remainingEnergyPct / 100;
+            double value = battery.UsableCapacityKWh * remainingEnergyPct / 100;
+            Log.d(TAG, "ViewModel.getRemainingEnergyKWh=" + value);
+            return value;
         }
 
         long getMillisToCharge() { return millisToCharge; }
@@ -202,6 +210,7 @@ public class MainActivity extends BaseActivity
         {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
+                Log.d(TAG, "remainingEnergySeekBar.onProgressChanged");
                 updateControls();
             }
 
@@ -218,6 +227,7 @@ public class MainActivity extends BaseActivity
         {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "remindButton.onClick");
                 updateControls();
                 scheduler.schedule(viewModel.getMillisToCharge());
             }
@@ -227,22 +237,10 @@ public class MainActivity extends BaseActivity
         {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "showCalendarsButton.onClick");
                 if (PermissionHelper.isFullCalendarPermissionsGranted(activity)){
                     List<CalendarEntity> calendars = calendarRepository.getAvailableCalendars();
-                    StringBuilder sb = new StringBuilder();
-
-                    for (CalendarEntity calendar : calendars) {
-                        sb.append(String.format("%d:name=%s, prim=%s, acc='%s', owner='%s', type='%s';  ",
-                                calendar.id,
-                                calendar.displayName,
-                                calendar.isPrimary,
-                                calendar.accountName,
-                                calendar.ownerAccount,
-                                calendar.accountType
-                                ));
-                    }
-
-                    String calendarsLog = sb.toString();
+                    String calendarsLog = calendarsToString(calendars);
                     int lineNumber = calendarsLog.length() / 20;
 
                     UserMessage.toMultilineSnackbar(
@@ -256,15 +254,41 @@ public class MainActivity extends BaseActivity
         });
     }
 
+    private static String calendarsToString(List<CalendarEntity> calendars) {
+        Log.d(TAG, "calendarsToString");
+
+        StringBuilder sb = new StringBuilder();
+
+        if (calendars.isEmpty()){
+            sb.append("No calendars found");
+        }else{
+            for (CalendarEntity calendar : calendars) {
+                sb.append(String.format(Locale.US,
+                        "%d:name=%s, prim=%s, acc='%s', owner='%s', type='%s';  ",
+                        calendar.id,
+                        calendar.displayName,
+                        calendar.isPrimary,
+                        calendar.accountName,
+                        calendar.ownerAccount,
+                        calendar.accountType
+                ));
+            }
+        }
+
+        return sb.toString();
+    }
+
     private final NumberPicker.OnValueChangeListener textWatcher = new NumberPicker.OnValueChangeListener(){
         @Override
         public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+            Log.d(TAG, numberPicker.getId() + ".onValueChange");
             updateControls();
         }
     };
 
     private void updateControls()
     {
+        Log.d(TAG, "updateControls");
         viewModel.refresh();
         remainingEnergyTitle.setText(viewModel.getRemainingEnergyText());
         chargedInTitle.setText(viewModel.getChargedInText());
@@ -272,11 +296,13 @@ public class MainActivity extends BaseActivity
     }
 
     private void startSettingsActivity(){
+        Log.d(TAG, "startSettingsActivity");
         Intent i = new Intent(this, SettingsActivity.class);
         startActivityForResult(i, SETTINGS_REQUEST_CODE);
     }
 
     private void startChargingSettingsActivity(){
+        Log.d(TAG, "startChargingSettingsActivity");
         Intent i = new Intent(this, SettingsActivity.class);
         i.putExtra(SettingsActivity.EXTRA_LOAD_FRAGMENT_MESSAGE_ID, R.string.first_time_settings_activity_message);
         startActivityForResult(i, SETTINGS_REQUEST_CODE);

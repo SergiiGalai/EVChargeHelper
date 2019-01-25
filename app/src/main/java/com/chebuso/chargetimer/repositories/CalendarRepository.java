@@ -39,6 +39,7 @@ public class CalendarRepository implements ICalendarRepository {
     }
 
     public long createEvent(long calendarId, CalendarEventEntity event){
+        Log.d(TAG, "createEvent. calendarId=" + calendarId);
         ContentResolver cr = activity.getContentResolver();
 
         try {
@@ -47,6 +48,7 @@ public class CalendarRepository implements ICalendarRepository {
 
             String lastSegment = uri == null ? "" : uri.getLastPathSegment();
             String eventId = StringHelper.emptyIfNull(lastSegment);
+
             return Long.parseLong(eventId);
         }catch(SQLiteDoneException ex) {
             UserMessage.showToast(activity, ex.getMessage(), Toast.LENGTH_LONG);
@@ -71,17 +73,19 @@ public class CalendarRepository implements ICalendarRepository {
         return values;
     }
 
-    public void setReminder(long eventID, int minutesBefore) {
+    public void setReminder(long eventId, int minutesBefore) {
+        Log.d(TAG, "setReminder. eventId=" + eventId);
+
         ContentResolver cr = activity.getContentResolver();
-        ContentValues reminderValues = createReminderValues(eventID, minutesBefore);
+        ContentValues reminderValues = createReminderValues(eventId, minutesBefore);
 
         try {
             cr.insert(CalendarContract.Reminders.CONTENT_URI, reminderValues);
 
-            try (Cursor cursor = CalendarContract.Reminders.query(cr, eventID,
+            try (Cursor cursor = CalendarContract.Reminders.query(cr, eventId,
                     new String[]{CalendarContract.Reminders.MINUTES})) {
                 if (cursor.moveToFirst()) {
-                    Log.i(TAG, "calendar"
+                    Log.i(TAG, "calendar "
                             + cursor.getInt(cursor.getColumnIndex(CalendarContract.Reminders.MINUTES)));
                 }
             }
@@ -104,7 +108,7 @@ public class CalendarRepository implements ICalendarRepository {
 
     @Nullable
     public CalendarEntity getPrimaryCalendar(){
-
+        Log.d(TAG, "getPrimaryCalendar");
         Cursor cur = activity
                 .getContentResolver()
                 .query(CalendarContract.Calendars.CONTENT_URI,
@@ -118,7 +122,10 @@ public class CalendarRepository implements ICalendarRepository {
                 while (cur.moveToNext()){
                     CalendarEntity calendar = entityReader.fromCursorPosition(cur);
                     if (calendar.isPrimary)
+                    {
+                        Log.d(TAG, "getPrimaryCalendar. Found id=" + calendar.id);
                         return calendar;
+                    }
                     calendars.add(calendar);
                 }
             }
@@ -126,9 +133,13 @@ public class CalendarRepository implements ICalendarRepository {
                 cur.close();
             }
 
+            Log.d(TAG, "getPrimaryCalendar. Circle through the calendar list");
             for (CalendarEntity calendar : calendars ) {
                 if (calendar.isPrimaryAlternative())
+                {
+                    Log.d(TAG, "getPrimaryCalendar. Found id=" + calendar.id);
                     return calendar;
+                }
             }
         }
 
@@ -137,6 +148,8 @@ public class CalendarRepository implements ICalendarRepository {
 
     @NonNull
     public List<CalendarEntity> getAvailableCalendars(){
+        Log.d(TAG, "getAvailableCalendars");
+
         Cursor cur = activity
                 .getContentResolver()
                 .query(CalendarContract.Calendars.CONTENT_URI,
@@ -152,6 +165,7 @@ public class CalendarRepository implements ICalendarRepository {
                 CalendarEntity calendar = entityReader.fromCursorPosition(cur);
                 result.add(calendar);
             }
+
             return result;
         }
         finally {
@@ -160,6 +174,8 @@ public class CalendarRepository implements ICalendarRepository {
     }
 
     public int deleteCalendar(String calendarName){
+        Log.d(TAG, "deleteCalendar " + calendarName);
+
         int id = getCalendarId(calendarName);
         if (id == -1)
             return -1;
@@ -173,6 +189,8 @@ public class CalendarRepository implements ICalendarRepository {
 
     public int createCalendar(CalendarEntity calendar, String calendarColor){
         try {
+            Log.d(TAG, "createCalendar " + calendar.displayName);
+
             // don't create if it already exists
             int id = getCalendarId(calendar.displayName);
             if (id != -1)
@@ -231,9 +249,8 @@ public class CalendarRepository implements ICalendarRepository {
                     if (
                             (name != null && name.equals(calendarName)) ||
                                     (displayName != null && displayName.equals(calendarName))
-                            ) {
+                            )
                         return (int)id;
-                    }
                 }
             }
             finally {
