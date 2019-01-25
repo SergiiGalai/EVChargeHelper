@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.chebuso.chargetimer.R;
 import com.chebuso.chargetimer.helpers.TimeHelper;
@@ -13,6 +14,8 @@ import java.util.Date;
 
 public class CalendarDefaultNotificator implements INotificator
 {
+    private static final String TAG = "CalDefaultNotificator";
+
     private final Context context;
 
     CalendarDefaultNotificator(Context context) {
@@ -21,9 +24,21 @@ public class CalendarDefaultNotificator implements INotificator
 
     @Override
     public void scheduleCarChargedNotification(long millisToEvent) {
-        scheduleCalendarEvent(context.getString(R.string.car_charged_title),
+        Log.d(TAG, "scheduleCarChargedNotification");
+
+        Intent intent = getInsertIntent(context.getString(R.string.car_charged_title),
                 context.getString(R.string.car_charged_descr),
                 getCalendar(millisToEvent));
+        scheduleCalendarEvent(intent);
+    }
+
+    @NonNull
+    private Intent getInsertIntent(String title, String description, Calendar beginTime) {
+        return new Intent(Intent.ACTION_INSERT)
+                    .setData(CalendarContract.Events.CONTENT_URI)
+                    .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.getTimeInMillis())
+                    .putExtra(CalendarContract.Events.TITLE, title)
+                    .putExtra(CalendarContract.Events.DESCRIPTION, description);
     }
 
     @NonNull
@@ -34,13 +49,7 @@ public class CalendarDefaultNotificator implements INotificator
         return beginTime;
     }
 
-    private void scheduleCalendarEvent(String title, String description, Calendar beginTime) {
-        Intent intent = new Intent(Intent.ACTION_INSERT)
-                .setData(CalendarContract.Events.CONTENT_URI)
-                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.getTimeInMillis())
-                .putExtra(CalendarContract.Events.TITLE, title)
-                .putExtra(CalendarContract.Events.DESCRIPTION, description);
-
+    private void scheduleCalendarEvent(Intent intent) {
         context.startActivity(intent);
     }
 }

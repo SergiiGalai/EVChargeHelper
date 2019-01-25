@@ -3,14 +3,13 @@ package com.chebuso.chargetimer.notifications;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.CalendarContract;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.chebuso.chargetimer.UserMessage;
@@ -20,16 +19,14 @@ import com.chebuso.chargetimer.models.CalendarEventEntity;
 import com.chebuso.chargetimer.repositories.ICalendarRepository;
 import com.chebuso.chargetimer.settings.ISettingsReader;
 import com.chebuso.chargetimer.R;
-import com.chebuso.chargetimer.helpers.TimeHelper;
 import com.chebuso.chargetimer.settings.ISettingsWriter;
 
-import java.util.Calendar;
 
 public class CalendarAdvancedNotificator implements INotificator
 {
     public static final int REQUEST_CALENDAR = 1;
+    private static final String TAG = "CalAdvancedNotificator";
 
-    private static final int MS_IN_1_HOUR = 60 * 60 * 1000;
     private static final String[] PERMISSIONS_CALENDAR = {
             Manifest.permission.READ_CALENDAR,
             Manifest.permission.WRITE_CALENDAR
@@ -57,6 +54,7 @@ public class CalendarAdvancedNotificator implements INotificator
     @Override
     public void scheduleCarChargedNotification(long millisToEvent) {
         if (PermissionHelper.isFullCalendarPermissionsGranted(activity)) {
+            Log.d(TAG, "Full calendar permissions granted");
             CalendarEntity calendar = calendarRepository.getPrimaryCalendar();
             CalendarEventEntity event = new CalendarEventEntity(
                     activity.getString(R.string.car_charged_title),
@@ -65,6 +63,7 @@ public class CalendarAdvancedNotificator implements INotificator
 
             scheduleCalendarEvent(event, calendar);
         } else if (settingsProvider.calendarAdvancedNotificationsAllowed()) {
+            Log.d(TAG, "Calendar permissions not granted");
             requestCalendarPermission();
         }
     }
@@ -74,8 +73,7 @@ public class CalendarAdvancedNotificator implements INotificator
             UserMessage.showToast(activity, R.string.error_no_primary_calendar, Toast.LENGTH_LONG);
             fallbackNotificator.scheduleCarChargedNotification(event.millisToStart);
         }else{
-            ContentValues eventData = createCalendarEventContent(calendar.id, event);
-            long eventId = calendarRepository.createEvent(eventData);
+            long eventId = calendarRepository.createEvent(calendar.id, event);
             if (eventId == -1)
             {
                 UserMessage.showToast(activity, R.string.error_creating_calendar_event, Toast.LENGTH_LONG);
@@ -98,27 +96,13 @@ public class CalendarAdvancedNotificator implements INotificator
         activity.startActivity(intent);
     }
 
-    @NonNull
-    private ContentValues createCalendarEventContent(long calendarId, CalendarEventEntity event) {
-        long eventTime = TimeHelper.now() + event.millisToStart;
-
-        ContentValues values = new ContentValues();
-        values.put(CalendarContract.Events.DTSTART, eventTime);
-        values.put(CalendarContract.Events.DTEND, eventTime + MS_IN_1_HOUR);
-        values.put(CalendarContract.Events.TITLE, event.title);
-        values.put(CalendarContract.Events.DESCRIPTION, event.description);
-        values.put(CalendarContract.Events.CALENDAR_ID, calendarId);
-        values.put(CalendarContract.Events.EVENT_TIMEZONE,
-                Calendar.getInstance().getTimeZone().getID());
-
-        return values;
-    }
-
     private void requestCalendarPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
                 Manifest.permission.WRITE_CALENDAR)){
+            Log.d(TAG, "Show permissions rationale");
             showRationaleDialog();
         } else {
+            Log.d(TAG, "Request calendar permissions");
             ActivityCompat.requestPermissions(activity, PERMISSIONS_CALENDAR, REQUEST_CALENDAR);
         }
     }

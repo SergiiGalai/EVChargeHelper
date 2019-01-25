@@ -17,14 +17,19 @@ import android.widget.Toast;
 
 import com.chebuso.chargetimer.UserMessage;
 import com.chebuso.chargetimer.helpers.StringHelper;
+import com.chebuso.chargetimer.helpers.TimeHelper;
 import com.chebuso.chargetimer.models.CalendarEntity;
+import com.chebuso.chargetimer.models.CalendarEventEntity;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @SuppressLint("MissingPermission")
 public class CalendarRepository implements ICalendarRepository {
     private static final String TAG = "CalendarRepository";
+    private static final int MS_IN_1_HOUR = 60 * 60 * 1000;
+
     private final Activity activity;
     private final CalendarEntityReader entityReader;
 
@@ -33,20 +38,37 @@ public class CalendarRepository implements ICalendarRepository {
         entityReader = new CalendarEntityReader();
     }
 
-    public long createEvent(ContentValues values){
+    public long createEvent(long calendarId, CalendarEventEntity event){
         ContentResolver cr = activity.getContentResolver();
 
         try {
+            ContentValues values = createCalendarEventContent(calendarId, event);
             Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
 
             String lastSegment = uri == null ? "" : uri.getLastPathSegment();
-            String event = StringHelper.emptyIfNull(lastSegment);
-            return Long.parseLong(event);
+            String eventId = StringHelper.emptyIfNull(lastSegment);
+            return Long.parseLong(eventId);
         }catch(SQLiteDoneException ex) {
             UserMessage.showToast(activity, ex.getMessage(), Toast.LENGTH_LONG);
             Log.e(TAG, ex.getMessage());
             return -1;
         }
+    }
+
+    @NonNull
+    private ContentValues createCalendarEventContent(long calendarId, CalendarEventEntity event) {
+        long eventTime = TimeHelper.now() + event.millisToStart;
+
+        ContentValues values = new ContentValues();
+        values.put(CalendarContract.Events.CALENDAR_ID, calendarId);
+        values.put(CalendarContract.Events.TITLE, event.title);
+        values.put(CalendarContract.Events.DESCRIPTION, event.description);
+        values.put(CalendarContract.Events.DTSTART, eventTime);
+        values.put(CalendarContract.Events.DTEND, eventTime + MS_IN_1_HOUR);
+        values.put(CalendarContract.Events.EVENT_TIMEZONE,
+                Calendar.getInstance().getTimeZone().getID());
+
+        return values;
     }
 
     public void setReminder(long eventID, int minutesBefore) {
@@ -59,7 +81,7 @@ public class CalendarRepository implements ICalendarRepository {
             try (Cursor cursor = CalendarContract.Reminders.query(cr, eventID,
                     new String[]{CalendarContract.Reminders.MINUTES})) {
                 if (cursor.moveToFirst()) {
-                    System.out.println("calendar"
+                    Log.i(TAG, "calendar"
                             + cursor.getInt(cursor.getColumnIndex(CalendarContract.Reminders.MINUTES)));
                 }
             }
