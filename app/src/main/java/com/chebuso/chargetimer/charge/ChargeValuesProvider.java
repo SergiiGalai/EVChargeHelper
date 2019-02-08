@@ -50,22 +50,28 @@ public class ChargeValuesProvider {
     }
 
     public static List<String> getAllowedVoltage(int defaultVoltage){
-        final int MAX_US_VOLTAGE = 140;
-        final int MAX_DELTA = 40;
-        final int DELTA_US = 20;
+        final int VOLTAGE_STEP = 5;
 
-        final int delta = defaultVoltage < MAX_DELTA
-                ? defaultVoltage : defaultVoltage < MAX_US_VOLTAGE
-                ? DELTA_US : MAX_DELTA;
+        int delta = getMinMaxVoltageDelta(defaultVoltage);
+        if (delta > defaultVoltage) delta = defaultVoltage;
 
-        return getAllowedVoltage(defaultVoltage, delta, 10);
+        final int min = defaultVoltage - delta;
+        final int max = defaultVoltage + delta;
+
+        return getAllowedVoltages(min, max, VOLTAGE_STEP);
     }
 
-    private static List<String> getAllowedVoltage(int defaultVoltage, int delta, int step){
-        int min = defaultVoltage - delta;
-        int max = defaultVoltage + delta;
+    private static int getMinMaxVoltageDelta(int defaultVoltage){
+        final int MAX_US_VOLTAGE = 140;
+        final int US_DELTA = 20;
+        final int DEFAULT_DELTA = 40;
 
-        return generateSequence(min, max, step);
+        final boolean isUSVoltage = defaultVoltage < MAX_US_VOLTAGE;
+        return isUSVoltage ? US_DELTA : DEFAULT_DELTA;
+    }
+
+    private static List<String> getAllowedVoltages(int minVoltage, int maxVoltage, int step){
+        return generateSequence(minVoltage, maxVoltage, step);
     }
 
     private static List<String> generateSequence(int min, int max, int step){
