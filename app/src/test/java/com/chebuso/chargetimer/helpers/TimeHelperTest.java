@@ -23,13 +23,6 @@ public class TimeHelperTest {
     }
 
     @Test
-    public void converting_within_3_hours(){
-
-        Time actual = TimeHelper.toTime(282698181);
-        assertEquals(new Time( 3, 0), actual);
-    }
-
-    @Test
     public void converting_within_4_hours(){
 
         Time actual = TimeHelper.toTime(15119999);

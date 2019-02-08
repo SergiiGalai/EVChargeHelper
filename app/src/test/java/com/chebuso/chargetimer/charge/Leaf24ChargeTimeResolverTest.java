@@ -46,7 +46,7 @@ public class Leaf24ChargeTimeResolverTest
     public void return_time_when_calculating_for_80pct_battery(){
         long actual = timeResolver.getMillisToCharge((byte) 80);
         Time actualTime = TimeHelper.toTime(actual);
-        assertEquals(new Time(1, 27), actualTime);
+        assertEquals(new Time(1, 23), actualTime);
     }
 
 }

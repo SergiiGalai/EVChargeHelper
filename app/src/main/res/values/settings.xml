@@ -1,5 +1,5 @@
 <resources>
-    <bool name="pref_default_allow_app_notifications">false</bool>
+    <bool name="pref_default_allow_app_notifications">true</bool>
     <bool name="pref_default_allow_calendar_notifications">true</bool>
     <bool name="pref_default_allow_calendar_permission_notifications">true</bool>
     <string name="pref_default_app_notification_reminder_minutes" translatable="false">10</string>
