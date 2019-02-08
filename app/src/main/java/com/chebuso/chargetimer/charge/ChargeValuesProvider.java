@@ -34,13 +34,26 @@ public class ChargeValuesProvider {
         if (!values.contains(String.valueOf(defaultAmperage)))
             values.add(String.valueOf(defaultAmperage));
 
+        values.add("22");
         values.add("32");
+        values.add("64");
         return values;
     }
 
     private static List<String> getAllowedAmperageForPublicChargers(int defaultAmperage) {
         List<String> values = generateSequence(8, MAX_HOME_SOCKET_AMPERAGE, 4);
-        List<String> additionalValues = generateSequence(defaultAmperage - 10, defaultAmperage + 10, 2);
+        values.add(String.valueOf(defaultAmperage));
+
+        final int MAX_STEPS = 8;
+
+        int minAmperage = defaultAmperage / 2;
+        if (minAmperage < MAX_HOME_SOCKET_AMPERAGE)
+            minAmperage = MAX_HOME_SOCKET_AMPERAGE;
+
+        final int maxAmperage = defaultAmperage * 2;
+        final int step = (maxAmperage - minAmperage) / MAX_STEPS;
+
+        List<String> additionalValues = generateSequence(minAmperage, maxAmperage, step);
 
         for (String tmpValue : additionalValues) {
             if (!values.contains(tmpValue))
