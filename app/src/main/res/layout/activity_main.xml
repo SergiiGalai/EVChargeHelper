@@ -27,6 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:focusable="false"
             app:layout_constraintLeft_toLeftOf="@id/currentDescription"
             app:layout_constraintTop_toBottomOf="@+id/currentDescription"/>
 
@@ -36,7 +37,6 @@
             android:layout_height="wrap_content"
             android:text="@string/voltage_title"
             android:labelFor="@id/voltageValue"
-            android:layout_marginStart="5dp"
             android:layout_marginBottom="75dp"
             android:textSize="17sp"
             app:layout_constraintLeft_toRightOf="@id/voltageValue"
@@ -47,7 +47,8 @@
             android:id="@+id/amperageValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="20dp"
+            android:focusable="false"
             app:layout_constraintLeft_toRightOf="@id/textView4"
             app:layout_constraintBottom_toBottomOf="@id/voltageValue"/>
 
@@ -57,7 +58,6 @@
             android:layout_height="wrap_content"
             android:text="@string/amperage_title"
             android:labelFor="@id/amperageValue"
-            android:layout_marginStart="5dp"
             android:textSize="17sp"
             app:layout_constraintLeft_toRightOf="@id/amperageValue"
             app:layout_constraintBaseline_toBaselineOf="@id/textView4"/>
