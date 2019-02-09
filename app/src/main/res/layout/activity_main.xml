@@ -97,6 +97,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/remainingEnergySeekBar"/>
 
+        <TextView
+            android:id="@+id/estimateTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/estimate"
+            app:layout_constraintLeft_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="@id/chargedInTitle"
+            app:layout_constraintTop_toBottomOf="@id/chargedInTitle"/>
+
         <Button
             android:id="@+id/remindButton"
             android:layout_width="wrap_content"
@@ -107,7 +116,7 @@
             android:background="@color/colorPrimaryDark"
             android:textColor="@color/colorText"
             app:layout_constraintLeft_toLeftOf="@id/chargedInTitle"
-            app:layout_constraintTop_toBottomOf="@id/chargedInTitle"/>
+            app:layout_constraintTop_toBottomOf="@id/estimateTitle"/>
 
         <Button
             android:id="@+id/showCalendarsButton"
