@@ -81,6 +81,7 @@
             android:max="19"
             android:progress="5"
             android:thumb="@drawable/seekbar_thumb"
+            android:progressDrawable="@drawable/seekbar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/remainingEnergyTitle"/>
