@@ -24,12 +24,12 @@
     <string name="calendar_permissions_not_granted">Доступ до КАЛЕНДАРЯ заборонено</string>
     <string name="remind_me_button_title">Нагадати о %s</string>
     <string name="remaining_energy_title">Лишилося %d%% заряду (%.1f з %.1fкВтг)</string>
-    <string name="current_description_title">Налаштування мережі:</string>
+    <string name="current_description_title">Параметри зарядки:</string>
     <string name="amperage_title">А</string>
     <string name="voltage_title">В</string>
     <string name="should_be_charged_in_days_title">Авто зарядиться за %dд %02dг %02dхв</string>
     <string name="should_be_charged_in_hours_title">Авто зарядиться за %dгод %02dхв</string>
-    <string name="estimate">приблизно</string>
+    <string name="estimate">* приблизно</string>
     <string name="pref_title_reminder">Повідомити за, хвилин</string>
     <string name="pref_title_reminder_validation_error">Значення занадто велике. Ми не дозволяємо значення для нагадування більшим за %d хвилин.</string>
 

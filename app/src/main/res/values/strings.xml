@@ -48,12 +48,12 @@ You can always change this in application settings.
     <string name="calendar_permissions_not_granted">CALENDAR permissions were NOT granted.</string>
     <string name="remind_me_button_title">Remind me at %s</string>
     <string name="remaining_energy_title">%d%% battery remaining (%.1f of %.1fkWh)</string>
-    <string name="current_description_title">Power line options:</string>
+    <string name="current_description_title">EVSE parameters:</string>
     <string name="amperage_title">A</string>
     <string name="voltage_title">V</string>
     <string name="should_be_charged_in_days_title">Car will change in %dd %02dh %02dm</string>
     <string name="should_be_charged_in_hours_title">Car will change in %dh %02dm</string>
-    <string name="estimate">estimate</string>
+    <string name="estimate">* estimate</string>
     <string name="event_created">Calendar event created</string>
     <string name="first_time_settings_activity_message">Before continue fill your battery capacity and usual power line settings for more precise time calculation.</string>
     <string name="first_time_main_activity_message">This app is NOT connected to your car and cannot get its actual charging info.
