@@ -5,7 +5,7 @@
             <stroke android:color="@color/seekbar_progress" android:width="1dp"/>
             <gradient
                 android:startColor="@color/seekbar_thumb"
-                android:centerColor="#B5ECBA"
+                android:centerColor="@color/seekbar_thumb_center"
                 android:endColor="@color/seekbar_thumb"
                 android:angle="-90" />
             <size android:height="30dp" android:width="10dp"/>

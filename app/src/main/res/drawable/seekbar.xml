@@ -3,9 +3,9 @@
     <item android:id="@android:id/background">
         <shape android:shape="rectangle">
             <gradient
-                android:startColor="#B4B4B4"
-                android:centerColor="#E0DFDF"
-                android:endColor="#B4B4B4"
+                android:startColor="@color/seekbar_background"
+                android:centerColor="@color/seekbar_background_center"
+                android:endColor="@color/seekbar_background"
                 android:angle="-90" />
             <corners android:radius="5dp"/>
         </shape>
@@ -15,7 +15,7 @@
             <shape android:shape="rectangle">
                 <gradient
                     android:startColor="@color/seekbar_progress"
-                    android:centerColor="#B5ECBA"
+                    android:centerColor="@color/seekbar_progress_center"
                     android:endColor="@color/seekbar_progress"
                     android:angle="-90" />
                 <corners android:radius="5dp"/>

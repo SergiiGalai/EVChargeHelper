@@ -6,7 +6,10 @@
     <color name="colorAccent">#F1AF50</color>
     <color name="colorSecondary">#6C628F</color>
 
-    <color name="seekbar_background">#C9DBC8</color>
+    <color name="seekbar_background">#B4B4B4</color>
+    <color name="seekbar_background_center">#E0DFDF</color>
     <color name="seekbar_progress">#1CA014</color>
+    <color name="seekbar_progress_center">#B5ECBA</color>
     <color name="seekbar_thumb">#036F09</color>
+    <color name="seekbar_thumb_center">#B5ECBA</color>
 </resources>
