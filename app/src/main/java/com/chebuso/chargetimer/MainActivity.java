@@ -239,6 +239,8 @@ public class MainActivity extends BaseActivity
             public void onClick(View v) {
                 Log.d(TAG, "showCalendarsButton.onClick");
                 if (PermissionHelper.isFullCalendarPermissionsGranted(activity)){
+                    deleteDebugCalendars();
+
                     List<CalendarEntity> calendars = calendarRepository.getAvailableCalendars();
                     String calendarsLog = calendarsToString(calendars);
                     int lineNumber = calendarsLog.length() / 20;
@@ -252,6 +254,12 @@ public class MainActivity extends BaseActivity
                 }
             }
         });
+    }
+
+    private void deleteDebugCalendars(){
+        Log.d(TAG, "deleteDebugCalendars");
+        calendarRepository.deleteCalendar("Charge EV");
+        calendarRepository.deleteCalendar("com.sergiigalai.chargeTimer");
     }
 
     private static String calendarsToString(List<CalendarEntity> calendars) {

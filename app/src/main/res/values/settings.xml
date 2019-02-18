@@ -8,8 +8,4 @@
     <string name="pref_default_amperage" translatable="false">16</string>
     <string name="pref_default_battery_capacity" translatable="false">10.5</string>
     <string name="pref_default_charging_loss" translatable="false">12</string>
-
-    <string name="calendar_name" translatable="false">Charge EV</string>
-    <string name="calendar_color" translatable="false">purple</string>
-    <string name="calendar_account_name" translatable="false">com.chebuso</string>
 </resources>
