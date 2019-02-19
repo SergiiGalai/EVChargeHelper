@@ -109,8 +109,8 @@ public class CalendarRepository implements ICalendarRepository {
             try (Cursor cursor = CalendarContract.Reminders.query(cr, eventId,
                     new String[]{CalendarContract.Reminders.MINUTES})) {
                 if (cursor.moveToFirst()) {
-                    Log.i(TAG, "calendar "
-                            + cursor.getInt(cursor.getColumnIndex(CalendarContract.Reminders.MINUTES)));
+                    int minutes = cursor.getInt(cursor.getColumnIndex(CalendarContract.Reminders.MINUTES));
+                    Log.i(TAG, "calendar " + minutes);
                 }
             }
         }catch(SQLiteDoneException ex) {
