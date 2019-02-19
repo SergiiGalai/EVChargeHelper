@@ -125,7 +125,7 @@ public class CalendarRepository implements ICalendarRepository {
 
         values.put(CalendarContract.Reminders.MINUTES, minutesBefore);
         values.put(CalendarContract.Reminders.EVENT_ID, eventID);
-        values.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_DEFAULT);
+        values.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
 
         return values;
     }
