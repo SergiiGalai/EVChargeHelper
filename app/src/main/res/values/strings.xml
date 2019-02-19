@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">EV Charge Timer</string>
+    <string name="app_name">EV Charge Time Calculator &amp; Reminder</string>
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_bugreport">Bug Report</string>
 

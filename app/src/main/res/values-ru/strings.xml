@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Зарядка Электромобиля: Калькулятор и Напоминания</string>
     <string name="title_activity_settings">Настройки</string>
     <string name="title_activity_bugreport">Сообщение об ошибке</string>
     <string name="value_not_empty">Значение не может быть пустым</string>
