@@ -42,8 +42,8 @@
     <string name="permission_dialog_forbid">Запретить доступ</string>
     <string name="event_created">Уведомление в календаре создано</string>
     <string name="first_time_settings_activity_message">Заполните емкость батареи, а также напряжение и силу тока в вашей сети для более точного расчета времени</string>
-    <string name="first_time_main_activity_message">Программа НЕ подключена к вашему авто и не может использовать его актуальные данные.
-Расчет времени зарядки является приблизительным.</string>
+    <string name="first_time_main_activity_message">Расчет времени зарядки является приблизительным.
+Программа НЕ подключена к вашему авто.</string>
     <string name="error_no_primary_calendar">Невозможно открыть календарь, используя права. Запрос на доступ к календарю отключен</string>
     <string name="error_creating_calendar_event">Невозможно создать событие календаря. Открываю календарь по-умолчанию</string>
 </resources>

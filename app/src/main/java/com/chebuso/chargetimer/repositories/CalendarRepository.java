@@ -109,8 +109,8 @@ public class CalendarRepository implements ICalendarRepository {
             try (Cursor cursor = CalendarContract.Reminders.query(cr, eventId,
                     new String[]{CalendarContract.Reminders.MINUTES})) {
                 if (cursor.moveToFirst()) {
-                    Log.i(TAG, "calendar "
-                            + cursor.getInt(cursor.getColumnIndex(CalendarContract.Reminders.MINUTES)));
+                    int minutes = cursor.getInt(cursor.getColumnIndex(CalendarContract.Reminders.MINUTES));
+                    Log.i(TAG, "calendar " + minutes);
                 }
             }
         }catch(SQLiteDoneException ex) {
@@ -125,7 +125,7 @@ public class CalendarRepository implements ICalendarRepository {
 
         values.put(CalendarContract.Reminders.MINUTES, minutesBefore);
         values.put(CalendarContract.Reminders.EVENT_ID, eventID);
-        values.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_DEFAULT);
+        values.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
 
         return values;
     }

@@ -8,8 +8,8 @@
                 android:centerColor="@color/seekbar_thumb_center"
                 android:endColor="@color/seekbar_thumb"
                 android:angle="-90" />
-            <size android:height="30dp" android:width="10dp"/>
-            <corners android:radius="2dp"/>
+            <size android:height="42dp" android:width="15dp"/>
+            <corners android:radius="3dp"/>
         </shape>
     </item>
 </selector>
