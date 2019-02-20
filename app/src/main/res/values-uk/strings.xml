@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Зарядка Електромобіля: Калькулятор та Нагадування</string>
+    <string name="app_name">Зарядка Електромобіля</string>
     <string name="title_activity_settings">Налаштування</string>
     <string name="title_activity_bugreport">Повідомлення про помилку</string>
     <string name="value_not_empty">Значення не може бути пустим</string>
