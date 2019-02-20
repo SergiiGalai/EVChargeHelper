@@ -257,7 +257,6 @@ public class MainActivity extends BaseActivity
 
     private void deleteDebugCalendars(){
         Log.d(TAG, "deleteDebugCalendars");
-        calendarRepository.deleteCalendar("Charge EV");
         calendarRepository.deleteCalendar("com.sergiigalai.chargetimer");
     }
 
