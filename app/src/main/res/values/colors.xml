@@ -6,10 +6,10 @@
     <color name="colorAccent">#F1AF50</color>
     <color name="colorSecondary">#6C628F</color>
 
-    <color name="seekbar_background">#DBDBDB</color>
+    <color name="seekbar_background">#C9DBC8</color>
     <color name="seekbar_background_center">#FFFFFF</color>
-    <color name="seekbar_progress">#2CBDFD</color>
-    <color name="seekbar_progress_center">#D5EFFD</color>
-    <color name="seekbar_thumb">#0398DA</color>
-    <color name="seekbar_thumb_center">#B1D0DF</color>
+    <color name="seekbar_progress">#038E26</color>
+    <color name="seekbar_progress_center">#74F54A</color>
+    <color name="seekbar_thumb">#038E26</color>
+    <color name="seekbar_thumb_center">#74F54A</color>
 </resources>
