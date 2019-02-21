@@ -28,7 +28,8 @@
 Allows to create notifications in one click, change reminding time or background color.
     </string>
 
-    <string name="pref_title_reminder">Remind before, minutes</string>
+    <string name="pref_title_app_reminder">Remind in app before, minutes</string>
+    <string name="pref_title_calendar_reminder">Remind in calendar before, minutes</string>
     <string name="pref_title_reminder_validation_error">It seems too big. We don\'t allow value for reminder more than %d minutes.</string>
 
     <string name="car_charged_title">Car charged</string>

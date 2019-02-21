@@ -31,7 +31,8 @@
     <string name="should_be_charged_in_days_title">Авто зарядиться за %dд %02dг %02dхв</string>
     <string name="should_be_charged_in_hours_title">Авто зарядиться за %dгод %02dхв</string>
     <string name="estimate">* приблизно</string>
-    <string name="pref_title_reminder">Повідомити за, хвилин</string>
+    <string name="pref_title_app_reminder">Повідомити в програмі за, хв</string>
+    <string name="pref_title_calendar_reminder">Повідомити в календарі за, хв</string>
     <string name="pref_title_reminder_validation_error">Значення занадто велике. Ми не дозволяємо значення для нагадування більшим за %d хвилин.</string>
 
     <string name="calendar_permission_rationale_title">Для чого потрібен доступ</string>
