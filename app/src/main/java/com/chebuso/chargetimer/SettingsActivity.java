@@ -116,6 +116,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity
                     findPreference("battery_capacity"),
                     findPreference("default_voltage"),
                     findPreference("default_amperage"),
+                    findPreference("default_public_voltage"),
+                    findPreference("default_public_amperage"),
             }) {
                 PreferenceHelper.setChangeListenerAndTriggerChange(preference, listSummaryToValueListener);
             }

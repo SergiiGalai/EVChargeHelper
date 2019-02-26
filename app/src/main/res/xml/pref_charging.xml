@@ -9,22 +9,40 @@
     <!--android:title="@string/pref_title_car_list"/>-->
 
     <EditTextPreference
-        android:defaultValue="@string/pref_default_voltage"
+        android:defaultValue="@string/pref_default_home_voltage"
         android:inputType="number"
         android:key="default_voltage"
         android:maxLines="1"
         android:selectAllOnFocus="true"
         android:singleLine="true"
-        android:title="@string/pref_title_voltage"/>
+        android:title="@string/pref_title_home_voltage"/>
 
     <EditTextPreference
-        android:defaultValue="@string/pref_default_amperage"
+        android:defaultValue="@string/pref_default_home_amperage"
         android:inputType="number"
         android:key="default_amperage"
         android:maxLines="1"
         android:selectAllOnFocus="true"
         android:singleLine="true"
-        android:title="@string/pref_title_amperage"/>
+        android:title="@string/pref_title_home_amperage"/>
+
+    <EditTextPreference
+        android:defaultValue="@string/pref_default_public_voltage"
+        android:inputType="number"
+        android:key="default_public_voltage"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_title_public_voltage"/>
+
+    <EditTextPreference
+        android:defaultValue="@string/pref_default_public_amperage"
+        android:inputType="number"
+        android:key="default_public_amperage"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_title_public_amperage"/>
 
     <EditTextPreference
         android:defaultValue="@string/pref_default_battery_capacity"

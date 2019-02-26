@@ -61,6 +61,13 @@
             app:layout_constraintLeft_toRightOf="@id/amperageValue"
             app:layout_constraintBaseline_toBaselineOf="@id/textView4"/>
 
+        <Switch
+            android:id="@+id/isFastChargeSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/public_charge_title"
+            app:layout_constraintLeft_toLeftOf="@id/remindButton"
+            app:layout_constraintTop_toBottomOf="@id/voltageValue"/>
 
         <TextView
             android:id="@+id/remainingEnergyTitle"
@@ -70,7 +77,7 @@
             android:labelFor="@id/remainingEnergySeekBar"
             android:text="@string/remaining_energy_title"
             app:layout_constraintLeft_toLeftOf="@id/remindButton"
-            app:layout_constraintTop_toBottomOf="@id/amperageValue"/>
+            app:layout_constraintTop_toBottomOf="@id/isFastChargeSwitch"/>
 
         <SeekBar
             android:id="@+id/remainingEnergySeekBar"

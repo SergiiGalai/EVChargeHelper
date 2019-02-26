@@ -5,8 +5,10 @@
     <string name="title_activity_bugreport">Повідомлення про помилку</string>
     <string name="value_not_empty">Значення не може бути пустим</string>
     <string name="pref_header_charging">Батарея і зарядка</string>
-    <string name="pref_title_voltage">Напруга зарядки за замовчуванням, В</string>
-    <string name="pref_title_amperage">Сила струму зарядки за замовчуванням, А</string>
+    <string name="pref_title_home_voltage">Напруга зарядки вдома за замовч., В</string>
+    <string name="pref_title_home_amperage">Сила струму зарядки вдома за замовч., А</string>
+    <string name="pref_title_public_voltage">Напруга на публ. зарядці за замовч., В</string>
+    <string name="pref_title_public_amperage">Сила струму на публ. зарядці за замовч., А</string>
     <string name="pref_title_charge_loss">Втрати при заряді, %</string>
     <string name="pref_title_battery_capacity">Корисна ємкість батареї, кВт\u22C5г</string>
     <string name="pref_header_notifications">Налаштування сповіщень</string>
@@ -25,6 +27,7 @@
     <string name="calendar_permissions_not_granted">Доступ до КАЛЕНДАРЯ заборонено</string>
     <string name="remind_me_button_title">Нагадати о %s</string>
     <string name="remaining_energy_title">Лишилося %d%% заряду (%.1f з %.1fкВтг)</string>
+    <string name="public_charge_title">Публічна зарядка</string>
     <string name="current_description_title">Параметри зарядки:</string>
     <string name="amperage_title">А</string>
     <string name="voltage_title">В</string>

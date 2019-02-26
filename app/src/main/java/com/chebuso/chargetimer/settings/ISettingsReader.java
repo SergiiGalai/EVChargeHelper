@@ -4,20 +4,18 @@ public interface ISettingsReader {
     boolean firstApplicationRun();
 
     boolean applicationNotificationsAllowed();
-
     boolean calendarBasicNotificationsAllowed();
-
     boolean calendarAdvancedNotificationsAllowed();
 
     double getBatteryCapacity();
-
     int getChargingLossPct();
 
-    int getDefaultAmperage();
+    int getDefaultHomeVoltage();
+    int getDefaultHomeAmperage();
 
-    int getDefaultVoltage();
+    int getDefaultPublicVoltage();
+    int getDefaultPublicAmperage();
 
     int getApplicationReminderMinutes();
-
     int getCalendarReminderMinutes();
 }
