@@ -9,10 +9,10 @@
     <!-- Example settings for Charging -->
     <string name="pref_header_charging">Battery and charging</string>
 
-    <string name="pref_title_home_voltage">Default voltage in home network, V</string>
-    <string name="pref_title_home_amperage">Default consuming amperage at home, A</string>
-    <string name="pref_title_public_voltage">Default voltage in public network, V</string>
-    <string name="pref_title_public_amperage">Default consuming amperage on public charge, A</string>
+    <string name="pref_title_home_voltage">Default voltage at home, V</string>
+    <string name="pref_title_home_amperage">Default consumption at home, A</string>
+    <string name="pref_title_public_voltage">Default voltage on public charge, V</string>
+    <string name="pref_title_public_amperage">Default consumption on public charge, A</string>
     <string name="pref_title_charge_loss">Charge loss, %</string>
     <string name="pref_title_battery_capacity">Usable battery capacity, kWh</string>
 

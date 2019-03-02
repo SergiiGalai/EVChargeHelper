@@ -5,10 +5,10 @@
     <string name="title_activity_bugreport">Повідомлення про помилку</string>
     <string name="value_not_empty">Значення не може бути пустим</string>
     <string name="pref_header_charging">Батарея і зарядка</string>
-    <string name="pref_title_home_voltage">Напруга зарядки вдома за замовч., В</string>
-    <string name="pref_title_home_amperage">Сила струму зарядки вдома за замовч., А</string>
-    <string name="pref_title_public_voltage">Напруга на публ. зарядці за замовч., В</string>
-    <string name="pref_title_public_amperage">Сила струму на публ. зарядці за замовч., А</string>
+    <string name="pref_title_home_voltage">Напруга при зарядці вдома, В</string>
+    <string name="pref_title_home_amperage">Сила струму при зарядці вдома, А</string>
+    <string name="pref_title_public_voltage">Напруга на публічній зарядці, В</string>
+    <string name="pref_title_public_amperage">Сила струму на публічній зарядці, А</string>
     <string name="pref_title_charge_loss">Втрати при заряді, %</string>
     <string name="pref_title_battery_capacity">Корисна ємкість батареї, кВт\u22C5г</string>
     <string name="pref_header_notifications">Налаштування сповіщень</string>
