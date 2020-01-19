@@ -26,9 +26,9 @@
             android:id="@+id/voltageValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:descendantFocusability="blocksDescendants"
             app:layout_constraintLeft_toLeftOf="@id/currentDescription"
-            app:layout_constraintTop_toBottomOf="@+id/currentDescription"/>
+            app:layout_constraintTop_toBottomOf="@id/currentDescription"/>
 
         <TextView
             android:id="@+id/textView4"
@@ -36,7 +36,6 @@
             android:layout_height="wrap_content"
             android:text="@string/voltage_title"
             android:labelFor="@id/voltageValue"
-            android:layout_marginStart="5dp"
             android:layout_marginBottom="75dp"
             android:textSize="17sp"
             app:layout_constraintLeft_toRightOf="@id/voltageValue"
@@ -47,7 +46,8 @@
             android:id="@+id/amperageValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="20dp"
+            android:descendantFocusability="blocksDescendants"
             app:layout_constraintLeft_toRightOf="@id/textView4"
             app:layout_constraintBottom_toBottomOf="@id/voltageValue"/>
 
@@ -57,7 +57,6 @@
             android:layout_height="wrap_content"
             android:text="@string/amperage_title"
             android:labelFor="@id/amperageValue"
-            android:layout_marginStart="5dp"
             android:textSize="17sp"
             app:layout_constraintLeft_toRightOf="@id/amperageValue"
             app:layout_constraintBaseline_toBaselineOf="@id/textView4"/>
@@ -67,23 +66,25 @@
             android:id="@+id/remainingEnergyTitle"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:labelFor="@id/remainingEnergySeekBar"
             android:text="@string/remaining_energy_title"
             app:layout_constraintLeft_toLeftOf="@id/remindButton"
-            app:layout_constraintTop_toBottomOf="@+id/amperageValue"/>
+            app:layout_constraintTop_toBottomOf="@id/amperageValue"/>
 
         <SeekBar
             android:id="@+id/remainingEnergySeekBar"
             style="@style/Widget.AppCompat.SeekBar.Discrete"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:max="19"
             android:progress="5"
+            android:thumb="@drawable/seekbar_thumb"
+            android:progressDrawable="@drawable/seekbar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/remainingEnergyTitle"/>
-
+            app:layout_constraintTop_toBottomOf="@id/remainingEnergyTitle"/>
 
         <TextView
             android:id="@+id/chargedInTitle"
@@ -94,7 +95,16 @@
             android:layout_marginTop="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/remainingEnergySeekBar"/>
+            app:layout_constraintTop_toBottomOf="@id/remainingEnergySeekBar"/>
+
+        <TextView
+            android:id="@+id/estimateTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/estimate"
+            app:layout_constraintLeft_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="@id/chargedInTitle"
+            app:layout_constraintTop_toBottomOf="@id/chargedInTitle"/>
 
         <Button
             android:id="@+id/remindButton"
@@ -106,7 +116,7 @@
             android:background="@color/colorPrimaryDark"
             android:textColor="@color/colorText"
             app:layout_constraintLeft_toLeftOf="@id/chargedInTitle"
-            app:layout_constraintTop_toBottomOf="@id/chargedInTitle"/>
+            app:layout_constraintTop_toBottomOf="@id/estimateTitle"/>
 
         <Button
             android:id="@+id/showCalendarsButton"
@@ -115,7 +125,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:padding="9dp"
-            android:text="Show all calendars"
+            android:text="@string/show_all_calendars"
             android:background="@color/colorSecondary"
             android:textColor="@color/colorText"
             app:layout_constraintLeft_toLeftOf="@id/remindButton"
