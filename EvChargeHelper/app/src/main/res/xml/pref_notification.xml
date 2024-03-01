@@ -1,0 +1,42 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:defaultValue="@bool/pref_default_allow_app_notifications"
+        android:key="allow_app_notifications"
+        android:summary="@string/pref_description_allow_app_notifications"
+        android:title="@string/pref_title_allow_app_notifications"/>
+
+    <EditTextPreference
+        android:defaultValue="@string/pref_default_app_notification_reminder_minutes"
+        android:inputType="number"
+        android:key="app_notification_reminder_minutes"
+        android:dependency="allow_app_notifications"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_title_reminder"/>
+
+    <SwitchPreference
+        android:defaultValue="@bool/pref_default_allow_calendar_notifications"
+        android:key="allow_calendar_notifications"
+        android:summary="@string/pref_description_allow_calendar_notifications"
+        android:title="@string/pref_title_allow_calendar_notifications"/>
+
+    <SwitchPreference
+        android:defaultValue="@bool/pref_default_allow_calendar_permission_notifications"
+        android:key="allow_calendar_permission_notifications"
+        android:dependency="allow_calendar_notifications"
+        android:summary="@string/pref_description_allow_asking_for_calendar_permissions"
+        android:title="@string/pref_title_allow_asking_for_calendar_permissions"/>
+
+    <EditTextPreference
+        android:defaultValue="@string/pref_default_calendar_permission_reminder_minutes"
+        android:inputType="number"
+        android:key="calendar_permission_reminder_minutes"
+        android:dependency="allow_calendar_permission_notifications"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_title_reminder"/>
+
+</PreferenceScreen>
