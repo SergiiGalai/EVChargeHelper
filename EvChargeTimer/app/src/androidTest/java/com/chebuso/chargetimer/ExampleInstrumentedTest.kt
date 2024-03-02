@@ -1,12 +1,15 @@
 package com.chebuso.chargetimer
 
+import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.chebuso.chargetimer.main.MainActivity
 
 import org.junit.Test
 import org.junit.runner.RunWith
 
 import org.junit.Assert.*
+import org.junit.Rule
 
 /**
  * Instrumented test, which will execute on an Android device.

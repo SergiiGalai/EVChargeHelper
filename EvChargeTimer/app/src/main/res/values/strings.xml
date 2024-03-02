@@ -33,7 +33,7 @@ Allows to create notifications in one click, change reminding time or background
 
     <string name="car_charged_title">Car charged</string>
     <string name="car_charged_descr">Your car should be charged by this time.</string>
-    <string name="car_charged_time_desc">Your car should be charged by %s.</string>
+    <string name="car_charged_time_desc">Your car should be charged by %s. You will be notified at %s</string>
     <string name="car_charged_channel_descr">Notifies you when your car is charged</string>
 
     <string name="calendar_permission_rationale_title">Why do we ask permission</string>
@@ -51,12 +51,16 @@ You can always change this in application settings.
     <string name="current_description_title">Power line options:</string>
     <string name="amperage_title">A</string>
     <string name="voltage_title">V</string>
-    <string name="should_be_charged_in_days_title">Car should be charged for %dd %02dh %02dm</string>
-    <string name="should_be_charged_in_hours_title">Car should be charged for %dh %02dm</string>
+    <string name="should_be_charged_in_days_title">Car should be charged in %dd %02dh %02dm</string>
+    <string name="should_be_charged_in_hours_title">Car should be charged in %dh %02dm</string>
     <string name="event_created">Calendar event created</string>
     <string name="first_time_settings_activity_message">Before continue fill your battery capacity and usual power line settings for more precise time calculation.</string>
     <string name="first_time_main_activity_message">This app is NOT connected to your car and cannot get its actual charging info.
 Charge time calculation is estimated.</string>
-    <string name="error_no_primary_calendar">Unable to get calendar using permissions. Ask for calendar permission setting turned off</string>
-    <string name="error_creating_calendar_event">Unable to create calendar event. Opening default calendar</string>
+    <string name="error_no_primary_calendar">Unable to get calendar using permissions.
+        Asking for calendar permission setting turned off.
+        Creating event using default calendar
+    </string>
+    <string name="error_creating_calendar_event">Unable to create calendar event.
+        Creating event using default calendar</string>
 </resources>

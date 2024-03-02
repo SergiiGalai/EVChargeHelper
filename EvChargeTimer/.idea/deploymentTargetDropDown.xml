@@ -5,6 +5,9 @@
       <entry key="app">
         <State />
       </entry>
+      <entry key="text_should_be_expected()">
+        <State />
+      </entry>
     </value>
   </component>
 </project>

@@ -1,0 +1,9 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <Preference app:title="@string/pref_header_charging"
+        app:icon="@drawable/ic_sync_black_24dp"
+        app:fragment="com.chebuso.chargetimer.settings.ui.ChargingPreferenceFragment"/>
+
+    <Preference app:title="@string/pref_header_notifications"
+        app:icon="@drawable/ic_notifications_black_24dp"
+        app:fragment="com.chebuso.chargetimer.settings.ui.NotificationPreferenceFragment"/>
+</PreferenceScreen>

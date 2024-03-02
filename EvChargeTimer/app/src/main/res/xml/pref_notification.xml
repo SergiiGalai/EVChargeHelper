@@ -1,0 +1,34 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+        <SwitchPreference
+            app:defaultValue="@bool/pref_default_allow_app_notifications"
+            app:key="allow_app_notifications"
+            app:summary="@string/pref_description_allow_app_notifications"
+            app:title="@string/pref_title_allow_app_notifications"/>
+
+        <EditTextPreference
+            app:defaultValue="@string/pref_default_app_notification_reminder_minutes"
+            app:key="app_notification_reminder_minutes"
+            app:dependency="allow_app_notifications"
+            app:useSimpleSummaryProvider="true"
+            app:title="@string/pref_title_reminder"/>
+
+        <SwitchPreference
+            app:defaultValue="@bool/pref_default_allow_calendar_notifications"
+            app:key="allow_calendar_notifications"
+            app:summary="@string/pref_description_allow_calendar_notifications"
+            app:title="@string/pref_title_allow_calendar_notifications"/>
+
+        <SwitchPreference
+            app:defaultValue="@bool/pref_default_allow_calendar_permission_notifications"
+            app:key="allow_calendar_permission_notifications"
+            app:dependency="allow_calendar_notifications"
+            app:summary="@string/pref_description_allow_asking_for_calendar_permissions"
+            app:title="@string/pref_title_allow_asking_for_calendar_permissions"/>
+
+        <EditTextPreference
+            app:defaultValue="@string/pref_default_calendar_permission_reminder_minutes"
+            app:key="calendar_permission_reminder_minutes"
+            app:dependency="allow_calendar_permission_notifications"
+            app:useSimpleSummaryProvider="true"
+            app:title="@string/pref_title_reminder"/>
+</PreferenceScreen>

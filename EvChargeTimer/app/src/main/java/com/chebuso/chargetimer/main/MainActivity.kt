@@ -1,32 +1,78 @@
 package com.chebuso.chargetimer.main
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
+import android.widget.NumberPicker.OnValueChangeListener
 import android.widget.SeekBar
+import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
-import androidx.activity.ComponentActivity
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import com.chebuso.chargetimer.R
-import com.chebuso.chargetimer.settings.Factory
-import com.chebuso.chargetimer.settings.ISettingsReader
+import com.chebuso.chargetimer.UserMessage
+import com.chebuso.chargetimer.controls.BaseActivity
+import com.chebuso.chargetimer.calendar.*
+import com.chebuso.chargetimer.calendar.dal.CalendarRepository
+import com.chebuso.chargetimer.calendar.dal.ICalendarRepository
+import com.chebuso.chargetimer.charge.*
+import com.chebuso.chargetimer.controls.StepNumberPicker
+import com.chebuso.chargetimer.helpers.PermissionHelper
+import com.chebuso.chargetimer.notifications.NotificationScheduler
+import com.chebuso.chargetimer.settings.*
+import com.chebuso.chargetimer.settings.ui.SettingsActivity
+import com.google.android.material.snackbar.Snackbar
 
-class MainActivity : ComponentActivity() {
 
-    private var remainingEnergySeekBar: SeekBar? = null
-    private var remainingEnergyTitle: TextView? = null
-    private var chargedInTitle: TextView? = null
-    private var remindButton: Button? = null
-    private var showCalendarsButton: Button? = null
+class MainActivity : BaseActivity() {
+    private lateinit var remainingEnergySeekBar: SeekBar
+    private lateinit var remainingEnergyTitle: TextView
+    private lateinit var chargedInTitle: TextView
+    private lateinit var remindButton: Button
+    private lateinit var showCalendarsButton: Button
+    private lateinit var amperagePicker: StepNumberPicker
+    private lateinit var voltagePicker: StepNumberPicker
 
-    private var settingsProvider: ISettingsReader? = null
+    private lateinit var viewModel: ViewModel
+    private lateinit var settingsReader: ISettingsReader
+    private lateinit var scheduler: NotificationScheduler
+    private lateinit var calendarRepository: ICalendarRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initializeVariables()
+        updateControls()
+        initializeChangeListeners()
+        if (settingsReader.firstApplicationRun())
+            startChargingSettingsActivity()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.app_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId){
+            R.id.settings -> {
+                startSettingsActivity()
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+
     private fun initializeVariables(){
-        settingsProvider = Factory.createSettingsReader(this)
+        settingsReader = Factory.createSettingsReader(this)
+        scheduler = Factory.createScheduler(this)
+        calendarRepository = CalendarRepository(this)
 
         remainingEnergySeekBar = findViewById(R.id.remainingEnergySeekBar)
         remainingEnergyTitle = findViewById(R.id.remainingEnergyTitle)
@@ -34,6 +80,128 @@ class MainActivity : ComponentActivity() {
         remindButton = findViewById(R.id.remindButton)
         showCalendarsButton = findViewById(R.id.showCalendarsButton)
 
+        val defaultAmperage = settingsReader.getDefaultAmperage()
+        amperagePicker = StepNumberPicker(this, R.id.amperageValue,
+            ChargeValuesProvider.getAllowedAmperage(defaultAmperage),
+            defaultAmperage.toString())
+
+        val defaultVoltage = settingsReader.getDefaultVoltage()
+        voltagePicker = StepNumberPicker(this, R.id.voltageValue,
+            ChargeValuesProvider.getAllowedVoltage(defaultVoltage),
+            defaultVoltage.toString())
     }
 
+    private fun updateControls(){
+        Log.d(TAG, "updateControls")
+        val powerLine = PowerLine(
+            voltagePicker.value.toInt(),
+            amperagePicker.value.toInt()
+        )
+        val battery = Battery(
+            settingsReader.getBatteryCapacity(),
+            settingsReader.getChargingLossPct(),
+            remainingEnergyPercentage
+        )
+        viewModel = ViewModel(this, powerLine, battery)
+        remainingEnergyTitle.text = viewModel.remainingEnergyText
+        chargedInTitle.text = viewModel.chargedInText
+        remindButton.text = viewModel.remindButtonText
+    }
+
+    private val remainingEnergyPercentage: Byte
+        get() {
+            val value = (remainingEnergySeekBar.progress * 5).toByte()
+            Log.d(TAG, "remainingEnergyPercentage=$value")
+            return value
+        }
+
+    private fun initializeChangeListeners(){
+        val activity = this
+        voltagePicker.setOnValueChangedListener(textWatcher)
+        amperagePicker.setOnValueChangedListener(textWatcher)
+
+        remainingEnergySeekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            override fun onProgressChanged(
+                seekBar: SeekBar,
+                progressValue: Int,
+                fromUser: Boolean
+            ) {
+                Log.d(TAG, "remainingEnergySeekBar.onProgressChanged")
+                updateControls()
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar) {}
+        })
+
+        remindButton.setOnClickListener {
+            Log.d(TAG, "remindButton.onClick")
+            updateControls()
+            scheduler.schedule(viewModel.millisToCharge)
+        }
+
+        showCalendarsButton.setOnClickListener {
+            Log.d(TAG, "showCalendarsButton.onClick")
+            if (PermissionHelper.isFullCalendarPermissionsGranted(activity)) {
+                deleteDebugCalendars()
+                val calendarsLog = calendarRepository.getAvailableCalendars().calendarsToString()
+                val lineNumber = calendarsLog.length / 20
+
+                UserMessage.toMultilineSnackbar(
+                    UserMessage.getSnackbar(activity, calendarsLog, Snackbar.LENGTH_INDEFINITE),
+                    lineNumber
+                ).show()
+            } else {
+                UserMessage.showToast(activity,
+                    R.string.error_no_primary_calendar,
+                    Toast.LENGTH_LONG
+                )
+            }
+        }
+    }
+
+    private val textWatcher = OnValueChangeListener { numberPicker, _, _ ->
+        Log.d(TAG, numberPicker.id.toString() + ".onValueChange")
+        updateControls()
+    }
+
+    private fun deleteDebugCalendars() {
+        Log.i(TAG, "delete DebugCalendars")
+        calendarRepository.deleteCalendar("com.sergiigalai.chargetimer")
+    }
+
+    private fun startSettingsActivity() {
+        Log.i(TAG, "start SettingsActivity")
+        val intent = Intent(this, SettingsActivity::class.java)
+        startSettingsActivityForResult.launch(intent)
+    }
+
+    private fun startChargingSettingsActivity() {
+        Log.i(TAG, "start ChargingSettingsActivity")
+        val intent = Intent(this, SettingsActivity::class.java)
+        intent.putExtra(
+            SettingsActivity.EXTRA_LOAD_FRAGMENT_MESSAGE_ID,
+            R.string.first_time_settings_activity_message
+        )
+        startSettingsActivityForResult.launch(intent)
+    }
+
+    private val startSettingsActivityForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                initializeVariables()
+                updateControls()
+                if (settingsReader.firstApplicationRun()){
+                    Factory.createSettingsWriter(this).setFirstApplicationRunCompleted()
+                    UserMessage.toMultilineSnackbar(
+                        UserMessage.getSnackbar(this, R.string.first_time_main_activity_message),
+                        4
+                    ).show()
+                }
+            }
+        }
+
+    companion object {
+        private const val TAG = "MainActivity"
+    }
 }

@@ -1,0 +1,34 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+        <!--<ListPreference-->
+        <!--app:defaultValue="-1"-->
+        <!--app:entries="@array/pref_car_list_titles"-->
+        <!--app:entryValues="@array/pref_car_list_values"-->
+        <!--app:key="car_list"-->
+        <!--app:negativeButtonText="@null"-->
+        <!--app:positiveButtonText="@null"-->
+        <!--app:title="@string/pref_title_car_list"/>-->
+
+        <EditTextPreference
+            app:defaultValue="@string/pref_default_voltage"
+            app:key="default_voltage"
+            app:useSimpleSummaryProvider="true"
+            app:title="@string/pref_title_voltage"/>
+
+        <EditTextPreference
+            app:defaultValue="@string/pref_default_amperage"
+            app:key="default_amperage"
+            app:useSimpleSummaryProvider="true"
+            app:title="@string/pref_title_amperage"/>
+
+        <EditTextPreference
+            app:defaultValue="@string/pref_default_battery_capacity"
+            app:key="battery_capacity"
+            app:useSimpleSummaryProvider="true"
+            app:title="@string/pref_title_battery_capacity"/>
+
+        <EditTextPreference
+            app:defaultValue="@string/pref_default_charging_loss"
+            app:key="charging_loss"
+            app:useSimpleSummaryProvider="true"
+            app:title="@string/pref_title_charge_loss"/>
+</PreferenceScreen>
