@@ -1,4 +1,4 @@
-package com.chebuso.chargetimer.notifications
+package com.chebuso.chargetimer.notifications.calendar
 
 
 import android.content.Context
@@ -6,9 +6,11 @@ import android.content.Intent
 import android.provider.CalendarContract
 import android.util.Log
 import com.chebuso.chargetimer.R
-import com.chebuso.chargetimer.helpers.TimeHelper.now
+import com.chebuso.chargetimer.helpers.TimeHelper
 import com.chebuso.chargetimer.helpers.TimeHelper.toDate
+import com.chebuso.chargetimer.notifications.INotificator
 import java.util.Calendar
+import java.util.Date
 
 
 class CalendarDefaultNotificator internal constructor(
@@ -17,10 +19,11 @@ class CalendarDefaultNotificator internal constructor(
 
     override fun scheduleCarChargedNotification(millisToEvent: Long) {
         Log.d(TAG, "scheduleCarChargedNotification")
+        val eventTime = getChargedAtDate(millisToEvent)
         val intent = getInsertIntent(
             context.getString(R.string.car_charged_title),
             context.getString(R.string.car_charged_descr),
-            getCalendar(millisToEvent)
+            getCalendar(eventTime)
         )
         scheduleCalendarEvent(intent)
     }
@@ -33,12 +36,14 @@ class CalendarDefaultNotificator internal constructor(
             .putExtra(CalendarContract.Events.DESCRIPTION, description)
     }
 
-    private fun getCalendar(millisToEvent: Long): Calendar {
-        val eventTime = toDate(now() + millisToEvent)
-        val beginTime = Calendar.getInstance()
-        beginTime.setTime(eventTime)
-        return beginTime
-    }
+    private fun getCalendar(eventTime: Date): Calendar =
+        Calendar.getInstance().apply {
+            setTime(eventTime)
+        }
+
+    private fun getChargedAtDate(millisToEvent: Long) = toDate(getChargedAtMillis(millisToEvent))
+
+    private fun getChargedAtMillis(millisToEvent: Long): Long = TimeHelper.now() + millisToEvent
 
     private fun scheduleCalendarEvent(intent: Intent) {
         context.startActivity(intent)
@@ -46,7 +51,7 @@ class CalendarDefaultNotificator internal constructor(
     }
 
     companion object {
-        private const val TAG = "CalendarDefaultNotificator"
+        private val TAG = CalendarDefaultNotificator::class.java.simpleName
     }
 }
 

@@ -33,8 +33,9 @@ Allows to create notifications in one click, change reminding time or background
 
     <string name="car_charged_title">Car charged</string>
     <string name="car_charged_descr">Your car should be charged by this time.</string>
-    <string name="car_charged_time_desc">Your car should be charged by %s. You will be notified at %s</string>
-    <string name="car_charged_channel_descr">Notifies you when your car is charged</string>
+    <string name="car_charged_time_desc">Your car should be charged by %s.</string>
+    <string name="car_charged_time_snackbar_desc">Your car should be charged by %s. You will be notified at %s.</string>
+    <string name="car_charged_channel_descr">Notifies you when your EV is charged</string>
 
     <string name="calendar_permission_rationale_title">Why do we ask permission</string>
     <string name="calendar_permission_rationale">Calendar permission is required to make reminder time customizable.

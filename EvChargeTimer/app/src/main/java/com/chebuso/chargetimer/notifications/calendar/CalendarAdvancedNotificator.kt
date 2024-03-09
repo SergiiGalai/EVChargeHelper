@@ -1,4 +1,4 @@
-package com.chebuso.chargetimer.notifications
+package com.chebuso.chargetimer.notifications.calendar
 
 
 import android.Manifest
@@ -18,6 +18,7 @@ import com.chebuso.chargetimer.calendar.dal.ICalendarRepository
 import com.chebuso.chargetimer.calendar.dal.IEventRepository
 import com.chebuso.chargetimer.calendar.dal.IReminderRepository
 import com.chebuso.chargetimer.helpers.PermissionHelper.isFullCalendarPermissionsGranted
+import com.chebuso.chargetimer.notifications.INotificator
 import com.chebuso.chargetimer.settings.ISettingsReader
 import com.chebuso.chargetimer.settings.ISettingsWriter
 

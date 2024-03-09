@@ -20,6 +20,11 @@ object TimeHelper {
         return DateFormat.getTimeInstance(DateFormat.SHORT).format(this)
     }
 
+    fun Date.formatAsMediumTime(): String {
+        Log.d(TAG, "formatAsMediumTime")
+        return DateFormat.getTimeInstance(DateFormat.MEDIUM).format(this)
+    }
+
     fun toTime(millis: Long): Time {
         Log.d(TAG, "toTime")
         return Time(

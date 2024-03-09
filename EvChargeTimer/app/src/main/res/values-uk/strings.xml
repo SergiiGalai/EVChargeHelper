@@ -18,8 +18,9 @@
 Наприклад, створення нагадувань за один клік, зміни часу нагадування або кольору фона.</string>
     <string name="car_charged_title">Авто заряджене</string>
     <string name="car_charged_descr">Ваше авто має бути зарядженим до цього часу</string>
-    <string name="car_charged_time_desc">Ваше авто має бути зарядженим до %s. Ви отримаєте нагадування о %s</string>
-    <string name="car_charged_channel_descr">Повідомляє, коли ваше авто повністю заряджене</string>
+    <string name="car_charged_time_desc">Ваше авто має бути зарядженим до %s.</string>
+    <string name="car_charged_time_snackbar_desc">Ваше авто має бути зарядженим до %s. Ви отримаєте нагадування о %s.</string>
+    <string name="car_charged_channel_descr">Повідомляє, коли ваш електромобіль повністю заряджений</string>
     <string name="open">Відкрити</string>
     <string name="calendar_permissions_not_granted">Доступ до КАЛЕНДАРЯ заборонено</string>
     <string name="remind_me_button_title">Нагадати о %s</string>

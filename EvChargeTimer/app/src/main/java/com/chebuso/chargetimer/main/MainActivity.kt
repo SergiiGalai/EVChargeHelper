@@ -13,6 +13,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import com.chebuso.chargetimer.Factory
 import com.chebuso.chargetimer.R
 import com.chebuso.chargetimer.UserMessage
 import com.chebuso.chargetimer.controls.BaseActivity
@@ -39,15 +40,17 @@ class MainActivity : BaseActivity() {
 
     private lateinit var viewModel: ViewModel
     private lateinit var settingsReader: ISettingsReader
-    private lateinit var scheduler: NotificationScheduler
+    private lateinit var notificationScheduler: NotificationScheduler
     private lateinit var calendarRepository: ICalendarRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         initializeVariables()
         updateControls()
         initializeChangeListeners()
+
         if (settingsReader.firstApplicationRun())
             startChargingSettingsActivity()
     }
@@ -63,15 +66,14 @@ class MainActivity : BaseActivity() {
                 startSettingsActivity()
                 true
             }
-
             else -> super.onOptionsItemSelected(item)
         }
     }
 
 
     private fun initializeVariables(){
-        settingsReader = Factory.createSettingsReader(this)
-        scheduler = Factory.createScheduler(this)
+        settingsReader = Factory.settingsReader(this)
+        notificationScheduler = Factory.notificationScheduler(this)
         calendarRepository = CalendarRepository(this)
 
         remainingEnergySeekBar = findViewById(R.id.remainingEnergySeekBar)
@@ -137,7 +139,7 @@ class MainActivity : BaseActivity() {
         remindButton.setOnClickListener {
             Log.d(TAG, "remindButton.onClick")
             updateControls()
-            scheduler.schedule(viewModel.millisToCharge)
+            notificationScheduler.schedule(viewModel.millisToCharge)
         }
 
         showCalendarsButton.setOnClickListener {
@@ -192,7 +194,7 @@ class MainActivity : BaseActivity() {
                 initializeVariables()
                 updateControls()
                 if (settingsReader.firstApplicationRun()){
-                    Factory.createSettingsWriter(this).setFirstApplicationRunCompleted()
+                    Factory.settingsWriter(this).setFirstApplicationRunCompleted()
                     UserMessage.toMultilineSnackbar(
                         UserMessage.getSnackbar(this, R.string.first_time_main_activity_message),
                         4

@@ -5,12 +5,16 @@ import android.app.Activity
 import com.chebuso.chargetimer.calendar.dal.CalendarRepository
 import com.chebuso.chargetimer.calendar.dal.EventRepository
 import com.chebuso.chargetimer.calendar.dal.ReminderRepository
+import com.chebuso.chargetimer.notifications.application.ApplicationNotificator
+import com.chebuso.chargetimer.notifications.application.NotificationAlarmScheduler
+import com.chebuso.chargetimer.notifications.application.NotificationChannelRegistrar
+import com.chebuso.chargetimer.notifications.calendar.CalendarAdvancedNotificator
+import com.chebuso.chargetimer.notifications.calendar.CalendarDefaultNotificator
 import com.chebuso.chargetimer.settings.ISettingsReader
 import com.chebuso.chargetimer.settings.ISettingsWriter
-import kotlinx.coroutines.yield
 
 
-internal class NotificatorFactory(
+class NotificatorFactory(
     private val activity: Activity,
     private val settingsProvider: ISettingsReader,
     private val resourceProvider: IResourceProvider,
@@ -19,41 +23,44 @@ internal class NotificatorFactory(
 
     fun tryCreate(calendarPermissionsGranted: Boolean): INotificator? {
         if (calendarPermissionsGranted && settingsProvider.calendarAdvancedNotificationsAllowed()) {
-            return createAdvancedNotificator()
-        } else {
-            if (settingsProvider.calendarBasicNotificationsAllowed()) {
-                return createBasicNotificator()
-            }
+            return createAdvancedCalendarNotificator()
+        }
+        if (settingsProvider.calendarBasicNotificationsAllowed()) {
+            return createBasicCalendarNotificator()
         }
         return null
     }
 
     fun createNotificators() = sequence {
         if (settingsProvider.applicationNotificationsAllowed()) {
-            yield(ApplicationNotificator(settingsProvider, resourceProvider, activity))
+            yield(createApplicationNotificator())
         }
         if (settingsProvider.calendarAdvancedNotificationsAllowed()) {
-            yield(createAdvancedNotificator())
+            yield(createAdvancedCalendarNotificator())
         } else {
             if (settingsProvider.calendarBasicNotificationsAllowed()) {
-                yield(createBasicNotificator())
+                yield(createBasicCalendarNotificator())
             }
         }
     }
 
-    private fun createAdvancedNotificator(): INotificator {
-        return CalendarAdvancedNotificator(
-            createBasicNotificator(),
-            CalendarRepository(activity),
-            EventRepository(activity),
-            ReminderRepository(activity),
-            settingsProvider,
-            settingsWriter,
-            activity
-        )
-    }
+    private fun createApplicationNotificator(): INotificator = ApplicationNotificator(
+        settingsProvider,
+        NotificationChannelRegistrar(resourceProvider, activity),
+        NotificationAlarmScheduler(activity),
+        activity
+    )
 
-    private fun createBasicNotificator(): CalendarDefaultNotificator =
-        CalendarDefaultNotificator(activity)
+    private fun createAdvancedCalendarNotificator(): INotificator = CalendarAdvancedNotificator(
+        createBasicCalendarNotificator(),
+        CalendarRepository(activity),
+        EventRepository(activity),
+        ReminderRepository(activity),
+        settingsProvider,
+        settingsWriter,
+        activity
+    )
+
+    private fun createBasicCalendarNotificator() = CalendarDefaultNotificator(activity)
 }
 
