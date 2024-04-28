@@ -25,7 +25,7 @@
 
     <string name="pref_title_allow_asking_for_calendar_permissions">Ask for calendar permission</string>
     <string name="pref_description_allow_asking_for_calendar_permissions">Permission is required to be able to create notifications faster and easier.\n
-Allows to create notifications in one click, change reminding time or background color.
+It allows to create notifications in one click, change reminding time or the background color.
     </string>
 
     <string name="pref_title_reminder">Remind before, minutes</string>
@@ -38,9 +38,9 @@ Allows to create notifications in one click, change reminding time or background
     <string name="car_charged_channel_descr">Notifies you when your EV is charged</string>
 
     <string name="calendar_permission_rationale_title">Why do we ask permission</string>
-    <string name="calendar_permission_rationale">Calendar permission is required to make reminder time customizable.
+    <string name="calendar_permission_rationale">Calendar permission is required to make reminder time customizable and create events faster.
 We do NOT read your calendar events.
-You can always change this in application settings.
+You can always change this in the application settings.
     </string>
     <string name="permission_dialog_allow">Allow access</string>
     <string name="permission_dialog_forbid">Forbid access</string>
@@ -58,10 +58,9 @@ You can always change this in application settings.
     <string name="first_time_settings_activity_message">Before continue fill your battery capacity and usual power line settings for more precise time calculation.</string>
     <string name="first_time_main_activity_message">This app is NOT connected to your car and cannot get its actual charging info.
 Charge time calculation is estimated.</string>
-    <string name="error_no_primary_calendar">Unable to get calendar using permissions.
-        Asking for calendar permission setting turned off.
-        Creating event using default calendar
-    </string>
-    <string name="error_creating_calendar_event">Unable to create calendar event.
-        Creating event using default calendar</string>
+    <string name="error_no_primary_calendar">The calendar is not found.
+        Request for the calendar permission is disabled in the settings.
+        Please follow your calendar instructions to create the notification.</string>
+    <string name="error_creating_calendar_event">Unable to create calendar event automatically.
+        Please follow your calendar instructions to create the notification.</string>
 </resources>

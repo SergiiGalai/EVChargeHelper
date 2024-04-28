@@ -3,13 +3,11 @@ package com.chebuso.chargetimer.notifications.calendar
 
 import android.Manifest
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Intent
 import android.provider.CalendarContract
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.StringRes
-import androidx.core.app.ActivityCompat
 import com.chebuso.chargetimer.R
 import com.chebuso.chargetimer.UserMessage.showToast
 import com.chebuso.chargetimer.calendar.CalendarEntity
@@ -17,7 +15,7 @@ import com.chebuso.chargetimer.calendar.CalendarEventEntity
 import com.chebuso.chargetimer.calendar.dal.ICalendarRepository
 import com.chebuso.chargetimer.calendar.dal.IEventRepository
 import com.chebuso.chargetimer.calendar.dal.IReminderRepository
-import com.chebuso.chargetimer.helpers.PermissionHelper.isFullCalendarPermissionsGranted
+import com.chebuso.chargetimer.helpers.PermissionHelper
 import com.chebuso.chargetimer.notifications.INotificator
 import com.chebuso.chargetimer.settings.ISettingsReader
 import com.chebuso.chargetimer.settings.ISettingsWriter
@@ -30,26 +28,35 @@ class CalendarAdvancedNotificator internal constructor(
     private val reminderRepository: IReminderRepository,
     private val settingsProvider: ISettingsReader,
     private val settingsWriter: ISettingsWriter,
-    private val activity: Activity
+    private val activity: Activity,
+    private val permissionResultLauncher: PermissionActivityResultLauncher,
 ) : INotificator {
 
     private lateinit var event: CalendarEventEntity
+    private val permissionDialog = PermissionRequestDialog(
+        activity.getString(R.string.calendar_permission_rationale_title),
+        activity.getString(R.string.calendar_permission_rationale),
+        CALENDAR_PERMISSIONS,
+        activity,
+        permissionResultLauncher,
+    )
 
     override fun scheduleCarChargedNotification(millisToEvent: Long) {
         Log.d(TAG, "started scheduleCarChargedNotification")
         event = createEvent(millisToEvent)
-        if (isFullCalendarPermissionsGranted(activity)) {
+        if (PermissionHelper.isFullCalendarPermissionsGranted(activity)) {
             Log.d(TAG, "Full calendar permissions granted")
-            val calendar = calendarRepository.getPrimaryCalendar()
+            val calendar = calendarRepository.findPrimaryCalendar()
             scheduleCalendarEvent(calendar)
-        } else if (settingsProvider.calendarAdvancedNotificationsAllowed()) {
+            return
+        }
+        if (settingsProvider.calendarAdvancedNotificationsAllowed()) {
             Log.d(TAG, "Calendar permissions not granted")
-            requestCalendarPermission()
-            scheduleCalendarEvent(null)
+            permissionDialog.requestPermissionsIfNeeded()
         }
     }
 
-    private fun createEvent(millisToEvent: Long): CalendarEventEntity = CalendarEventEntity(
+    private fun createEvent(millisToEvent: Long) = CalendarEventEntity(
         activity.getString(R.string.car_charged_title),
         activity.getString(R.string.car_charged_descr),
         millisToEvent
@@ -59,15 +66,17 @@ class CalendarAdvancedNotificator internal constructor(
         if (calendar == null) {
             disableAdvancedNotification()
             scheduleEventUsingDefaultNotificator(R.string.error_no_primary_calendar)
-        } else {
-            val eventId = eventRepository.createEvent(calendar.id, event)
-            if (eventId == -1L) {
-                scheduleEventUsingDefaultNotificator(R.string.error_creating_calendar_event)
-                return
-            }
-            setReminder(eventId)
-            openEventActivity(eventId)
+            return
         }
+
+        val eventId = eventRepository.createEvent(calendar.id, event)
+        if (eventId == -1L) {
+            scheduleEventUsingDefaultNotificator(R.string.error_creating_calendar_event)
+            return
+        }
+
+        setReminder(eventId)
+        openEventActivity(eventId)
     }
 
     private fun disableAdvancedNotification() {
@@ -97,53 +106,9 @@ class CalendarAdvancedNotificator internal constructor(
         Log.i(TAG, "setReminder $eventId")
     }
 
-    private fun requestCalendarPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(
-                activity,
-                Manifest.permission.WRITE_CALENDAR
-            )
-        ) {
-            Log.i(TAG, "Show permissions rationale")
-            showRationaleDialog()
-        } else {
-            Log.i(TAG, "Request calendar permissions")
-            ActivityCompat.requestPermissions(activity,
-                PERMISSIONS_CALENDAR,
-                REQUEST_CALENDAR
-            )
-        }
-    }
-
-    private fun showRationaleDialog() {
-        AlertDialog.Builder(activity).create().apply {
-            setTitle(activity.getString(R.string.calendar_permission_rationale_title))
-            setMessage(activity.getString(R.string.calendar_permission_rationale))
-
-            setButton(
-                AlertDialog.BUTTON_NEGATIVE,
-                activity.getString(R.string.permission_dialog_forbid)
-            ) { dialog, _ ->
-                dialog.dismiss()
-            }
-
-            setButton(
-                AlertDialog.BUTTON_POSITIVE,
-                activity.getString(R.string.permission_dialog_allow)
-            ) { dialog, _ ->
-                dialog.dismiss()
-                Log.i(TAG, "Request calendar permissions")
-                ActivityCompat.requestPermissions(activity,
-                    PERMISSIONS_CALENDAR,
-                    REQUEST_CALENDAR
-                )
-            }
-        }.show()
-    }
-
     companion object {
-        const val REQUEST_CALENDAR = 1
-        private val TAG = CalendarAdvancedNotificator::class.java.simpleName
-        private val PERMISSIONS_CALENDAR = arrayOf(
+        private val TAG = this::class.java.simpleName
+        private val CALENDAR_PERMISSIONS = arrayOf(
             Manifest.permission.READ_CALENDAR,
             Manifest.permission.WRITE_CALENDAR
         )

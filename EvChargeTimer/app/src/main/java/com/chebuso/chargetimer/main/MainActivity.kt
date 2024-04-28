@@ -1,5 +1,6 @@
 package com.chebuso.chargetimer.main
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -24,6 +25,7 @@ import com.chebuso.chargetimer.charge.*
 import com.chebuso.chargetimer.controls.StepNumberPicker
 import com.chebuso.chargetimer.helpers.PermissionHelper
 import com.chebuso.chargetimer.notifications.NotificationScheduler
+import com.chebuso.chargetimer.notifications.calendar.PermissionActivityResultLauncher
 import com.chebuso.chargetimer.settings.*
 import com.chebuso.chargetimer.settings.ui.SettingsActivity
 import com.google.android.material.snackbar.Snackbar
@@ -70,10 +72,21 @@ class MainActivity : BaseActivity() {
         }
     }
 
+    private val requestPermissionLauncherMultiple = this.registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        permissions.entries.forEach { (permission, isGranted) ->
+            Log.d(TAG, "$permission = $isGranted")
+            if (permission == Manifest.permission.WRITE_CALENDAR){
+                notificationScheduler.schedule(isGranted, viewModel.millisToCharge)
+            }
+        }
+    }
 
     private fun initializeVariables(){
         settingsReader = Factory.settingsReader(this)
-        notificationScheduler = Factory.notificationScheduler(this)
+        notificationScheduler = Factory.notificationScheduler(this,
+            PermissionActivityResultLauncher(this, requestPermissionLauncherMultiple))
         calendarRepository = CalendarRepository(this)
 
         remainingEnergySeekBar = findViewById(R.id.remainingEnergySeekBar)
@@ -117,7 +130,7 @@ class MainActivity : BaseActivity() {
             return value
         }
 
-    private fun initializeChangeListeners(){
+    private fun initializeChangeListeners() {
         val activity = this
         voltagePicker.setOnValueChangedListener(textWatcher)
         amperagePicker.setOnValueChangedListener(textWatcher)
@@ -154,7 +167,8 @@ class MainActivity : BaseActivity() {
                     lineNumber
                 ).show()
             } else {
-                UserMessage.showToast(activity,
+                UserMessage.showToast(
+                    activity,
                     R.string.error_no_primary_calendar,
                     Toast.LENGTH_LONG
                 )
@@ -204,6 +218,6 @@ class MainActivity : BaseActivity() {
         }
 
     companion object {
-        private const val TAG = "MainActivity"
+        private val TAG = this::class.java.simpleName
     }
 }

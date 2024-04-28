@@ -10,7 +10,7 @@ import android.util.Log
 import com.chebuso.chargetimer.calendar.CalendarEntity
 
 interface ICalendarRepository {
-    fun getPrimaryCalendar(): CalendarEntity?
+    fun findPrimaryCalendar(): CalendarEntity?
     fun getAvailableCalendars(): List<CalendarEntity>
     fun createCalendar(calendar: CalendarEntity, calendarColor: String?): Long
     fun deleteCalendar(calendarName: String): Int
@@ -20,7 +20,7 @@ interface ICalendarRepository {
 class CalendarRepository(private val activity: Activity) : ICalendarRepository {
     private val entityReader = CalendarEntityReader()
 
-    override fun getPrimaryCalendar(): CalendarEntity? {
+    override fun findPrimaryCalendar(): CalendarEntity? {
         Log.d(TAG, "getPrimaryCalendar")
         val calendars = ArrayList<CalendarEntity>()
         activity.contentResolver

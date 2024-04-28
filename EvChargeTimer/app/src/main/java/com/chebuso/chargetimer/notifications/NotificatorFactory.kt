@@ -2,6 +2,7 @@ package com.chebuso.chargetimer.notifications
 
 
 import android.app.Activity
+import androidx.activity.result.ActivityResultLauncher
 import com.chebuso.chargetimer.calendar.dal.CalendarRepository
 import com.chebuso.chargetimer.calendar.dal.EventRepository
 import com.chebuso.chargetimer.calendar.dal.ReminderRepository
@@ -10,15 +11,17 @@ import com.chebuso.chargetimer.notifications.application.NotificationAlarmSchedu
 import com.chebuso.chargetimer.notifications.application.NotificationChannelRegistrar
 import com.chebuso.chargetimer.notifications.calendar.CalendarAdvancedNotificator
 import com.chebuso.chargetimer.notifications.calendar.CalendarDefaultNotificator
+import com.chebuso.chargetimer.notifications.calendar.PermissionActivityResultLauncher
 import com.chebuso.chargetimer.settings.ISettingsReader
 import com.chebuso.chargetimer.settings.ISettingsWriter
 
 
 class NotificatorFactory(
-    private val activity: Activity,
     private val settingsProvider: ISettingsReader,
     private val resourceProvider: IResourceProvider,
-    private val settingsWriter: ISettingsWriter
+    private val settingsWriter: ISettingsWriter,
+    private val activity: Activity,
+    private val permissionResultLauncher: PermissionActivityResultLauncher,
 ) {
 
     fun tryCreate(calendarPermissionsGranted: Boolean): INotificator? {
@@ -58,7 +61,8 @@ class NotificatorFactory(
         ReminderRepository(activity),
         settingsProvider,
         settingsWriter,
-        activity
+        activity,
+        permissionResultLauncher,
     )
 
     private fun createBasicCalendarNotificator() = CalendarDefaultNotificator(activity)

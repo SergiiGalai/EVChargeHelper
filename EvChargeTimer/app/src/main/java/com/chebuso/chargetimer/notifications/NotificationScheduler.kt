@@ -1,20 +1,18 @@
 package com.chebuso.chargetimer.notifications
 
-import com.chebuso.chargetimer.helpers.PermissionHelper.isPermissionsGranted
-
-
 class NotificationScheduler(
     private val notificatorFactory: NotificatorFactory
 ) {
 
     fun schedule(millisToEvent: Long) {
-        for (notificator in notificatorFactory.createNotificators()) {
+        val notificators = notificatorFactory.createNotificators()
+        for (notificator in notificators) {
             notificator.scheduleCarChargedNotification(millisToEvent)
         }
     }
 
-    fun schedule(grantResults: IntArray, millisToEvent: Long) {
-        val notificator = notificatorFactory.tryCreate(isPermissionsGranted(grantResults))
+    fun schedule(grantResult: Boolean, millisToEvent: Long) {
+        val notificator = notificatorFactory.tryCreate(grantResult)
         notificator?.scheduleCarChargedNotification(millisToEvent)
     }
 }
