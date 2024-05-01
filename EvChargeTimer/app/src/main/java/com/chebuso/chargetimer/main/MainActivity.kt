@@ -36,14 +36,12 @@ class MainActivity : BaseActivity() {
     private lateinit var remainingEnergyTitle: TextView
     private lateinit var chargedInTitle: TextView
     private lateinit var remindButton: Button
-    private lateinit var showCalendarsButton: Button
     private lateinit var amperagePicker: StepNumberPicker
     private lateinit var voltagePicker: StepNumberPicker
 
     private lateinit var viewModel: ViewModel
     private lateinit var settingsReader: ISettingsReader
     private lateinit var notificationScheduler: NotificationScheduler
-    private lateinit var calendarRepository: ICalendarRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,29 +70,16 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    private val requestPermissionLauncherMultiple = this.registerForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
-    ) { permissions ->
-        permissions.entries.forEach { (permission, isGranted) ->
-            Log.d(TAG, "$permission = $isGranted")
-            if (permission == Manifest.permission.WRITE_CALENDAR){
-                notificationScheduler.schedule(isGranted, viewModel.millisToCharge)
-            }
-        }
-    }
-
     private fun initializeVariables(){
         settingsReader = Factory.settingsReader(this)
         notificationScheduler = Factory.notificationScheduler(this,
             PermissionActivityResultLauncher(this, requestPermissionLauncherMultiple)
         )
-        calendarRepository = CalendarRepository(this)
 
         remainingEnergySeekBar = findViewById(R.id.remainingEnergySeekBar)
         remainingEnergyTitle = findViewById(R.id.remainingEnergyTitle)
         chargedInTitle = findViewById(R.id.chargedInTitle)
         remindButton = findViewById(R.id.remindButton)
-        showCalendarsButton = findViewById(R.id.showCalendarsButton)
 
         val defaultAmperage = settingsReader.getDefaultAmperage()
         amperagePicker = StepNumberPicker(this, R.id.amperageValue,
@@ -124,6 +109,17 @@ class MainActivity : BaseActivity() {
         remindButton.text = viewModel.remindButtonText
     }
 
+    private val requestPermissionLauncherMultiple = this.registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        permissions.entries.forEach { (permission, isGranted) ->
+            Log.d(TAG, "$permission = $isGranted")
+            if (permission == Manifest.permission.WRITE_CALENDAR){
+                notificationScheduler.scheduleCalendar(isGranted, viewModel.millisToCharge)
+            }
+        }
+    }
+
     private val remainingEnergyPercentage: Byte
         get() {
             val value = (remainingEnergySeekBar.progress * 5).toByte()
@@ -132,7 +128,6 @@ class MainActivity : BaseActivity() {
         }
 
     private fun initializeChangeListeners() {
-        val activity = this
         voltagePicker.setOnValueChangedListener(textWatcher)
         amperagePicker.setOnValueChangedListener(textWatcher)
 
@@ -153,38 +148,13 @@ class MainActivity : BaseActivity() {
         remindButton.setOnClickListener {
             Log.d(TAG, "remindButton.onClick")
             updateControls()
-            notificationScheduler.schedule(viewModel.millisToCharge)
-        }
-
-        showCalendarsButton.setOnClickListener {
-            Log.d(TAG, "showCalendarsButton.onClick")
-            if (PermissionHelper.isFullCalendarPermissionsGranted(activity)) {
-                deleteDebugCalendars()
-                val calendarsLog = calendarRepository.getAvailableCalendars().calendarsToString()
-                val lineNumber = calendarsLog.length / 20
-
-                UserMessage.toMultilineSnackbar(
-                    UserMessage.getSnackbar(activity, calendarsLog, Snackbar.LENGTH_INDEFINITE),
-                    lineNumber
-                ).show()
-            } else {
-                UserMessage.showToast(
-                    activity,
-                    R.string.error_no_primary_calendar,
-                    Toast.LENGTH_LONG
-                )
-            }
+            notificationScheduler.scheduleAll(viewModel.millisToCharge)
         }
     }
 
     private val textWatcher = OnValueChangeListener { numberPicker, _, _ ->
         Log.d(TAG, numberPicker.id.toString() + ".onValueChange")
         updateControls()
-    }
-
-    private fun deleteDebugCalendars() {
-        Log.i(TAG, "delete DebugCalendars")
-        calendarRepository.deleteCalendar("com.sergiigalai.chargetimer")
     }
 
     private fun startSettingsActivity() {

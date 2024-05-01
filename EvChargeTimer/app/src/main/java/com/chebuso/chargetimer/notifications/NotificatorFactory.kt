@@ -23,7 +23,7 @@ class NotificatorFactory(
     private val permissionResultLauncher: PermissionActivityResultLauncher,
 ) {
 
-    fun tryCreate(calendarPermissionsGranted: Boolean): INotificator? {
+    fun tryCreateCalendarNotificator(calendarPermissionsGranted: Boolean): INotificator? {
         if (calendarPermissionsGranted && settingsProvider.calendarAdvancedNotificationsAllowed()) {
             return createAdvancedCalendarNotificator()
         }
