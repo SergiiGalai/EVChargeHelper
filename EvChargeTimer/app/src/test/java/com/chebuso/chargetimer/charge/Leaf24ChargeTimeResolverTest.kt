@@ -1,10 +1,9 @@
 package com.chebuso.chargetimer.charge
 
-import com.chebuso.chargetimer.Time
-import com.chebuso.chargetimer.helpers.TimeHelper.toTime
+import com.chebuso.chargetimer.shared.Time
+import com.chebuso.chargetimer.shared.helpers.TimeHelper.toTime
 import org.junit.Assert
 import org.junit.Test
-import org.junit.runners.Parameterized
 
 class Leaf24ChargeTimeResolverTest {
 

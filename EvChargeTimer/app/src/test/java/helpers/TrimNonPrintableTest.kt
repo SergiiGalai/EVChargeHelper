@@ -1,6 +1,6 @@
 package helpers
 
-import com.chebuso.chargetimer.helpers.trimNonPrintable
+import com.chebuso.chargetimer.shared.helpers.trimNonPrintable
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith

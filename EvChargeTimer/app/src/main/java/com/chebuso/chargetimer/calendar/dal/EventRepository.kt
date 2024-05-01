@@ -6,11 +6,11 @@ import android.database.sqlite.SQLiteDoneException
 import android.provider.CalendarContract
 import android.util.Log
 import android.widget.Toast
-import com.chebuso.chargetimer.UserMessage.showToast
+import com.chebuso.chargetimer.shared.UserMessage.showToast
 import com.chebuso.chargetimer.calendar.CalendarEventEntity
-import com.chebuso.chargetimer.helpers.TimeHelper.now
-import com.chebuso.chargetimer.helpers.emptyIfNull
-import com.chebuso.chargetimer.helpers.toFallbackLong
+import com.chebuso.chargetimer.shared.helpers.TimeHelper.now
+import com.chebuso.chargetimer.shared.helpers.emptyIfNull
+import com.chebuso.chargetimer.shared.helpers.toFallbackLong
 import java.util.Calendar
 
 interface IEventRepository {

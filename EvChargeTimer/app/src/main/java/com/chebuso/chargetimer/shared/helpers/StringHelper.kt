@@ -1,4 +1,4 @@
-package com.chebuso.chargetimer.helpers
+package com.chebuso.chargetimer.shared.helpers
 
 fun String.trimNonPrintable() = this.trim { it <= ' ' }
 fun String?.emptyIfNull(): String = this ?: ""

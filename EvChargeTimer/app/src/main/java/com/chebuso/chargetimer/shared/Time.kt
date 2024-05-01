@@ -1,4 +1,4 @@
-package com.chebuso.chargetimer
+package com.chebuso.chargetimer.shared
 
 data class Time (val days: Int, val hours: Int, val minutes: Int)
 {

@@ -1,18 +1,10 @@
-package com.chebuso.chargetimer.notifications.calendar
+package com.chebuso.chargetimer.permissions
 
 import android.app.Activity
 import android.app.AlertDialog
 import android.util.Log
-import androidx.activity.ComponentActivity
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import com.chebuso.chargetimer.R
-
-data class PermissionActivityResultLauncher(
-    val activity: Activity,
-    val activityResultLauncher: ActivityResultLauncher<Array<String>>,
-)
 
 class PermissionRequestDialog internal constructor(
     private val dialogTitle: String,

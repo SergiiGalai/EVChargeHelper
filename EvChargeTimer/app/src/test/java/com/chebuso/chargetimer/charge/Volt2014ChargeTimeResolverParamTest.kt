@@ -1,7 +1,7 @@
 package com.chebuso.chargetimer.charge
 
-import com.chebuso.chargetimer.Time
-import com.chebuso.chargetimer.helpers.TimeHelper
+import com.chebuso.chargetimer.shared.Time
+import com.chebuso.chargetimer.shared.helpers.TimeHelper
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith

@@ -1,6 +1,6 @@
 package helpers
 
-import com.chebuso.chargetimer.helpers.toFallbackInt
+import com.chebuso.chargetimer.shared.helpers.toFallbackInt
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith

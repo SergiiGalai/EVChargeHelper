@@ -1,10 +1,10 @@
-package com.chebuso.chargetimer.helpers
+package com.chebuso.chargetimer.shared.helpers
 
-import com.chebuso.chargetimer.Time
-import com.chebuso.chargetimer.helpers.TimeHelper.formatAsMediumTime
-import com.chebuso.chargetimer.helpers.TimeHelper.formatAsShortDateTime
-import com.chebuso.chargetimer.helpers.TimeHelper.formatAsShortTime
-import com.chebuso.chargetimer.helpers.TimeHelper.toTime
+import com.chebuso.chargetimer.shared.Time
+import com.chebuso.chargetimer.shared.helpers.TimeHelper.formatAsMediumTime
+import com.chebuso.chargetimer.shared.helpers.TimeHelper.formatAsShortDateTime
+import com.chebuso.chargetimer.shared.helpers.TimeHelper.formatAsShortTime
+import com.chebuso.chargetimer.shared.helpers.TimeHelper.toTime
 import org.junit.Assert
 import org.junit.Test
 import java.util.Date

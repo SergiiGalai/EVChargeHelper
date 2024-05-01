@@ -2,10 +2,10 @@ package com.chebuso.chargetimer.notifications.application
 
 import android.app.Activity
 import com.chebuso.chargetimer.R
-import com.chebuso.chargetimer.UserMessage.showSnackbar
-import com.chebuso.chargetimer.helpers.TimeHelper
-import com.chebuso.chargetimer.helpers.TimeHelper.formatAsShortTime
-import com.chebuso.chargetimer.helpers.TimeHelper.toDate
+import com.chebuso.chargetimer.shared.UserMessage.showSnackbar
+import com.chebuso.chargetimer.shared.helpers.TimeHelper
+import com.chebuso.chargetimer.shared.helpers.TimeHelper.formatAsShortTime
+import com.chebuso.chargetimer.shared.helpers.TimeHelper.toDate
 import com.chebuso.chargetimer.notifications.INotificator
 import com.chebuso.chargetimer.settings.ISettingsReader
 import java.util.Date

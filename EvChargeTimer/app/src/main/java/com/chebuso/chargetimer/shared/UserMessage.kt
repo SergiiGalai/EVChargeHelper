@@ -1,4 +1,4 @@
-package com.chebuso.chargetimer
+package com.chebuso.chargetimer.shared
 
 import android.app.Activity
 import android.content.Context
@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.StringRes
+import com.chebuso.chargetimer.R
 import com.google.android.material.snackbar.Snackbar
 
 object UserMessage {

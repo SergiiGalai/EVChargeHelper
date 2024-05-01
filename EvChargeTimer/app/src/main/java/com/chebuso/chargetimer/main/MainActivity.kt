@@ -14,18 +14,18 @@ import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import com.chebuso.chargetimer.Factory
+import com.chebuso.chargetimer.shared.Factory
 import com.chebuso.chargetimer.R
-import com.chebuso.chargetimer.UserMessage
+import com.chebuso.chargetimer.shared.UserMessage
 import com.chebuso.chargetimer.controls.BaseActivity
 import com.chebuso.chargetimer.calendar.*
 import com.chebuso.chargetimer.calendar.dal.CalendarRepository
 import com.chebuso.chargetimer.calendar.dal.ICalendarRepository
 import com.chebuso.chargetimer.charge.*
 import com.chebuso.chargetimer.controls.StepNumberPicker
-import com.chebuso.chargetimer.helpers.PermissionHelper
+import com.chebuso.chargetimer.permissions.PermissionHelper
 import com.chebuso.chargetimer.notifications.NotificationScheduler
-import com.chebuso.chargetimer.notifications.calendar.PermissionActivityResultLauncher
+import com.chebuso.chargetimer.permissions.PermissionActivityResultLauncher
 import com.chebuso.chargetimer.settings.*
 import com.chebuso.chargetimer.settings.ui.SettingsActivity
 import com.google.android.material.snackbar.Snackbar
@@ -86,7 +86,8 @@ class MainActivity : BaseActivity() {
     private fun initializeVariables(){
         settingsReader = Factory.settingsReader(this)
         notificationScheduler = Factory.notificationScheduler(this,
-            PermissionActivityResultLauncher(this, requestPermissionLauncherMultiple))
+            PermissionActivityResultLauncher(this, requestPermissionLauncherMultiple)
+        )
         calendarRepository = CalendarRepository(this)
 
         remainingEnergySeekBar = findViewById(R.id.remainingEnergySeekBar)

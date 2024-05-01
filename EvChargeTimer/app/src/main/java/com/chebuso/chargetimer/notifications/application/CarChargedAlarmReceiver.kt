@@ -5,10 +5,10 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import com.chebuso.chargetimer.Factory
-import com.chebuso.chargetimer.UserMessage
-import com.chebuso.chargetimer.helpers.TimeHelper
-import com.chebuso.chargetimer.helpers.parcelable
+import com.chebuso.chargetimer.shared.Factory
+import com.chebuso.chargetimer.shared.UserMessage
+import com.chebuso.chargetimer.shared.helpers.TimeHelper
+import com.chebuso.chargetimer.shared.helpers.parcelable
 
 class CarChargedAlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {

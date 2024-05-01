@@ -1,4 +1,4 @@
-package com.chebuso.chargetimer.helpers
+package com.chebuso.chargetimer.settings
 
 import android.text.InputType
 import androidx.preference.EditTextPreference

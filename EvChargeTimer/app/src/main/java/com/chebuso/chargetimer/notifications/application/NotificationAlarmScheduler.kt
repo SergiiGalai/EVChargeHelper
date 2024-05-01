@@ -5,8 +5,8 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import com.chebuso.chargetimer.helpers.TimeHelper
-import com.chebuso.chargetimer.helpers.TimeHelper.formatAsMediumTime
+import com.chebuso.chargetimer.shared.helpers.TimeHelper
+import com.chebuso.chargetimer.shared.helpers.TimeHelper.formatAsMediumTime
 
 class NotificationAlarmScheduler internal constructor(
     private val context: Context

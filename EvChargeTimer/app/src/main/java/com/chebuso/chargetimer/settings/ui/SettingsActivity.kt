@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.chebuso.chargetimer.R
-import com.chebuso.chargetimer.UserMessage.getSnackbar
+import com.chebuso.chargetimer.shared.UserMessage.getSnackbar
 
 /**
  * Android Design Settings: https://m2.material.io/design/platform-guidance/android-settings.html

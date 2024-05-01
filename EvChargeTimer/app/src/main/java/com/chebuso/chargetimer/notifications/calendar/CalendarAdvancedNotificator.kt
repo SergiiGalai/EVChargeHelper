@@ -9,14 +9,16 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.StringRes
 import com.chebuso.chargetimer.R
-import com.chebuso.chargetimer.UserMessage.showToast
+import com.chebuso.chargetimer.shared.UserMessage.showToast
 import com.chebuso.chargetimer.calendar.CalendarEntity
 import com.chebuso.chargetimer.calendar.CalendarEventEntity
 import com.chebuso.chargetimer.calendar.dal.ICalendarRepository
 import com.chebuso.chargetimer.calendar.dal.IEventRepository
 import com.chebuso.chargetimer.calendar.dal.IReminderRepository
-import com.chebuso.chargetimer.helpers.PermissionHelper
+import com.chebuso.chargetimer.permissions.PermissionHelper
 import com.chebuso.chargetimer.notifications.INotificator
+import com.chebuso.chargetimer.permissions.PermissionActivityResultLauncher
+import com.chebuso.chargetimer.permissions.PermissionRequestDialog
 import com.chebuso.chargetimer.settings.ISettingsReader
 import com.chebuso.chargetimer.settings.ISettingsWriter
 
@@ -29,7 +31,7 @@ class CalendarAdvancedNotificator internal constructor(
     private val settingsProvider: ISettingsReader,
     private val settingsWriter: ISettingsWriter,
     private val activity: Activity,
-    private val permissionResultLauncher: PermissionActivityResultLauncher,
+    permissionResultLauncher: PermissionActivityResultLauncher,
 ) : INotificator {
 
     private lateinit var event: CalendarEventEntity

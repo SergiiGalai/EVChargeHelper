@@ -6,8 +6,8 @@ import android.content.Intent
 import android.provider.CalendarContract
 import android.util.Log
 import com.chebuso.chargetimer.R
-import com.chebuso.chargetimer.helpers.TimeHelper
-import com.chebuso.chargetimer.helpers.TimeHelper.toDate
+import com.chebuso.chargetimer.shared.helpers.TimeHelper
+import com.chebuso.chargetimer.shared.helpers.TimeHelper.toDate
 import com.chebuso.chargetimer.notifications.INotificator
 import java.util.Calendar
 import java.util.Date

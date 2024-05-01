@@ -1,4 +1,4 @@
-package com.chebuso.chargetimer.helpers
+package com.chebuso.chargetimer.permissions
 
 import android.Manifest
 import android.content.Context

@@ -4,7 +4,7 @@ import android.app.Notification
 import android.content.Context
 import androidx.core.app.NotificationCompat
 import com.chebuso.chargetimer.R
-import com.chebuso.chargetimer.helpers.TimeHelper.formatAsShortTime
+import com.chebuso.chargetimer.shared.helpers.TimeHelper.formatAsShortTime
 import com.chebuso.chargetimer.notifications.IResourceProvider
 import java.util.Date
 

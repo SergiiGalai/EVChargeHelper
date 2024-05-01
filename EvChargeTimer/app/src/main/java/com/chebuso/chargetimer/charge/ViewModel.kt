@@ -3,11 +3,11 @@ package com.chebuso.chargetimer.charge
 import android.content.Context
 import android.util.Log
 import com.chebuso.chargetimer.R
-import com.chebuso.chargetimer.helpers.TimeHelper.formatAsShortDateTime
-import com.chebuso.chargetimer.helpers.TimeHelper.formatAsShortTime
-import com.chebuso.chargetimer.helpers.TimeHelper.now
-import com.chebuso.chargetimer.helpers.TimeHelper.toDate
-import com.chebuso.chargetimer.helpers.TimeHelper.toTime
+import com.chebuso.chargetimer.shared.helpers.TimeHelper.formatAsShortDateTime
+import com.chebuso.chargetimer.shared.helpers.TimeHelper.formatAsShortTime
+import com.chebuso.chargetimer.shared.helpers.TimeHelper.now
+import com.chebuso.chargetimer.shared.helpers.TimeHelper.toDate
+import com.chebuso.chargetimer.shared.helpers.TimeHelper.toTime
 
 class ViewModel(
     context: Context,

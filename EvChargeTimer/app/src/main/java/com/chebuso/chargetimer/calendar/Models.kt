@@ -1,6 +1,6 @@
 package com.chebuso.chargetimer.calendar
 
-import com.chebuso.chargetimer.helpers.emptyIfNull
+import com.chebuso.chargetimer.shared.helpers.emptyIfNull
 
 class CalendarEntity {
     var id: Long = 0

@@ -1,14 +1,13 @@
-package com.chebuso.chargetimer
+package com.chebuso.chargetimer.shared
 
 import android.app.Activity
 import android.content.Context
-import androidx.activity.result.ActivityResultLauncher
 import com.chebuso.chargetimer.notifications.IResourceProvider
 import com.chebuso.chargetimer.notifications.application.NotificationFactory
 import com.chebuso.chargetimer.notifications.NotificationScheduler
 import com.chebuso.chargetimer.notifications.NotificatorFactory
 import com.chebuso.chargetimer.notifications.ResourceProvider
-import com.chebuso.chargetimer.notifications.calendar.PermissionActivityResultLauncher
+import com.chebuso.chargetimer.permissions.PermissionActivityResultLauncher
 import com.chebuso.chargetimer.settings.ISettingsReader
 import com.chebuso.chargetimer.settings.ISettingsWriter
 import com.chebuso.chargetimer.settings.SharedPreferenceSettingsReader

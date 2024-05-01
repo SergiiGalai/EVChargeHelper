@@ -6,11 +6,11 @@ import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.chebuso.chargetimer.R
-import com.chebuso.chargetimer.UserMessage
-import com.chebuso.chargetimer.helpers.asNumber
-import com.chebuso.chargetimer.helpers.onPreferenceChange
-import com.chebuso.chargetimer.helpers.toFallbackInt
-import com.chebuso.chargetimer.helpers.trimNonPrintable
+import com.chebuso.chargetimer.shared.UserMessage
+import com.chebuso.chargetimer.settings.asNumber
+import com.chebuso.chargetimer.settings.onPreferenceChange
+import com.chebuso.chargetimer.shared.helpers.toFallbackInt
+import com.chebuso.chargetimer.shared.helpers.trimNonPrintable
 
 
 class NotificationPreferenceFragment : PreferenceFragmentCompat() {

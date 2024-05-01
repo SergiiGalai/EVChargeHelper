@@ -1,4 +1,4 @@
-package com.chebuso.chargetimer.helpers
+package com.chebuso.chargetimer.shared.helpers
 
 import android.content.Intent
 import android.os.Build

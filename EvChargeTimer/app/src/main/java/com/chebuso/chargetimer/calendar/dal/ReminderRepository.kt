@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDoneException
 import android.provider.CalendarContract
 import android.util.Log
 import android.widget.Toast
-import com.chebuso.chargetimer.UserMessage.showToast
+import com.chebuso.chargetimer.shared.UserMessage.showToast
 
 interface IReminderRepository {
     fun setReminder(eventId: Long, minutesBefore: Int)

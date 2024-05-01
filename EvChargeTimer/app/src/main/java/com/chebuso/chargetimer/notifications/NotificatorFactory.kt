@@ -2,7 +2,6 @@ package com.chebuso.chargetimer.notifications
 
 
 import android.app.Activity
-import androidx.activity.result.ActivityResultLauncher
 import com.chebuso.chargetimer.calendar.dal.CalendarRepository
 import com.chebuso.chargetimer.calendar.dal.EventRepository
 import com.chebuso.chargetimer.calendar.dal.ReminderRepository
@@ -11,7 +10,7 @@ import com.chebuso.chargetimer.notifications.application.NotificationAlarmSchedu
 import com.chebuso.chargetimer.notifications.application.NotificationChannelRegistrar
 import com.chebuso.chargetimer.notifications.calendar.CalendarAdvancedNotificator
 import com.chebuso.chargetimer.notifications.calendar.CalendarDefaultNotificator
-import com.chebuso.chargetimer.notifications.calendar.PermissionActivityResultLauncher
+import com.chebuso.chargetimer.permissions.PermissionActivityResultLauncher
 import com.chebuso.chargetimer.settings.ISettingsReader
 import com.chebuso.chargetimer.settings.ISettingsWriter
 

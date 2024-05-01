@@ -1,7 +1,7 @@
-package com.chebuso.chargetimer.helpers
+package com.chebuso.chargetimer.shared.helpers
 
 import android.util.Log
-import com.chebuso.chargetimer.Time
+import com.chebuso.chargetimer.shared.Time
 import java.text.DateFormat
 import java.util.Date
 import java.util.concurrent.TimeUnit
