@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorText">#ffffff</color>
-    <color name="colorPrimary">#512DA8</color>
-    <color name="colorPrimaryDark">#311B92</color>
-    <color name="colorAccent">#ffa000</color>
+    <color name="colorPrimary">#4B3999</color>
+    <color name="colorPrimaryDark">#331D99</color>
+    <color name="colorAccent">#57CC32</color>
     <color name="colorSecondary">#6C628F</color>
+
+    <color name="seekbar_background">#DBDBDB</color>
+    <color name="seekbar_progress">#A7DB99</color>
+    <color name="seekbar_thumb">#54C631</color>
 </resources>

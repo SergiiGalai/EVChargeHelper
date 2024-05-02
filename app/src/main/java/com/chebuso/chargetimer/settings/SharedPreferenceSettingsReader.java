@@ -55,15 +55,27 @@ public class SharedPreferenceSettingsReader implements ISettingsReader
     }
 
     @Override
-    public int getDefaultAmperage(){
-        return parseInteger("default_amperage",
-                context.getString(R.string.pref_default_amperage));
+    public int getDefaultHomeVoltage(){
+        return parseInteger("default_voltage",
+                context.getString(R.string.pref_default_home_voltage));
     }
 
     @Override
-    public int getDefaultVoltage(){
-        return parseInteger("default_voltage",
-                context.getString(R.string.pref_default_voltage));
+    public int getDefaultHomeAmperage(){
+        return parseInteger("default_amperage",
+                context.getString(R.string.pref_default_home_amperage));
+    }
+
+    @Override
+    public int getDefaultPublicVoltage(){
+        return parseInteger("default_public_voltage",
+                context.getString(R.string.pref_default_public_voltage));
+    }
+
+    @Override
+    public int getDefaultPublicAmperage(){
+        return parseInteger("default_public_amperage",
+                context.getString(R.string.pref_default_public_amperage));
     }
 
     @Override

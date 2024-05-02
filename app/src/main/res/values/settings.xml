@@ -4,8 +4,10 @@
     <bool name="pref_default_allow_calendar_permission_notifications">true</bool>
     <string name="pref_default_app_notification_reminder_minutes" translatable="false">10</string>
     <string name="pref_default_calendar_permission_reminder_minutes" translatable="false">15</string>
-    <string name="pref_default_voltage" translatable="false">220</string>
-    <string name="pref_default_amperage" translatable="false">16</string>
+    <string name="pref_default_home_voltage" translatable="false">220</string>
+    <string name="pref_default_home_amperage" translatable="false">10</string>
+    <string name="pref_default_public_voltage" translatable="false">230</string>
+    <string name="pref_default_public_amperage" translatable="false">16</string>
     <string name="pref_default_battery_capacity" translatable="false">10.5</string>
     <string name="pref_default_charging_loss" translatable="false">12</string>
 

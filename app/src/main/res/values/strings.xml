@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">EV Charge Timer</string>
+    <string name="app_name">EV Charge Time</string>
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_bugreport">Bug Report</string>
 
@@ -9,8 +9,10 @@
     <!-- Example settings for Charging -->
     <string name="pref_header_charging">Battery and charging</string>
 
-    <string name="pref_title_voltage">Default voltage in network, V</string>
-    <string name="pref_title_amperage">Default consuming amperage, A</string>
+    <string name="pref_title_home_voltage">Default voltage at home, V</string>
+    <string name="pref_title_home_amperage">Default consumption at home, A</string>
+    <string name="pref_title_public_voltage">Default voltage on public charge, V</string>
+    <string name="pref_title_public_amperage">Default consumption on public charge, A</string>
     <string name="pref_title_charge_loss">Charge loss, %</string>
     <string name="pref_title_battery_capacity">Usable battery capacity, kWh</string>
 
@@ -28,7 +30,8 @@
 Allows to create notifications in one click, change reminding time or background color.
     </string>
 
-    <string name="pref_title_reminder">Remind before, minutes</string>
+    <string name="pref_title_app_reminder">Remind in app before, minutes</string>
+    <string name="pref_title_calendar_reminder">Remind in calendar before, minutes</string>
     <string name="pref_title_reminder_validation_error">It seems too big. We don\'t allow value for reminder more than %d minutes.</string>
 
     <string name="car_charged_title">Car charged</string>
@@ -48,15 +51,19 @@ You can always change this in application settings.
     <string name="calendar_permissions_not_granted">CALENDAR permissions were NOT granted.</string>
     <string name="remind_me_button_title">Remind me at %s</string>
     <string name="remaining_energy_title">%d%% battery remaining (%.1f of %.1fkWh)</string>
-    <string name="current_description_title">Power line options:</string>
+    <string name="public_charge_title">Public Charge</string>
+    <string name="current_description_title">EVSE parameters:</string>
     <string name="amperage_title">A</string>
     <string name="voltage_title">V</string>
-    <string name="should_be_charged_in_days_title">Car should be charged for %dd %02dh %02dm</string>
-    <string name="should_be_charged_in_hours_title">Car should be charged for %dh %02dm</string>
+    <string name="should_be_charged_in_days_title">Car will change in %dd %02dh %02dm</string>
+    <string name="should_be_charged_in_hours_title">Car will change in %dh %02dm</string>
+    <string name="estimate">* estimate</string>
     <string name="event_created">Calendar event created</string>
     <string name="first_time_settings_activity_message">Before continue fill your battery capacity and usual power line settings for more precise time calculation.</string>
-    <string name="first_time_main_activity_message">This app is NOT connected to your car and cannot get its actual charging info.
-Charge time calculation is estimated.</string>
+    <string name="first_time_main_activity_message">Charge time calculation is estimated.
+This app is NOT connected to your car.</string>
     <string name="error_no_primary_calendar">Unable to get calendar using permissions. Ask for calendar permission setting turned off</string>
     <string name="error_creating_calendar_event">Unable to create calendar event. Opening default calendar</string>
+
+    <string name="show_all_calendars" translatable="false">Show all calendars</string>
 </resources>

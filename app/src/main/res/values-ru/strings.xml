@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Зарядка Электромобиля</string>
     <string name="title_activity_settings">Настройки</string>
     <string name="title_activity_bugreport">Сообщение об ошибке</string>
     <string name="value_not_empty">Значение не может быть пустым</string>
     <string name="pref_header_charging">Батарея и зарядка</string>
-    <string name="pref_title_voltage">Напряжение заряда по умолчанию, В</string>
-    <string name="pref_title_amperage">Сила тока при заряде по умолчанию, А</string>
+    <string name="pref_title_home_voltage">Напряжение дома по умолчанию, В</string>
+    <string name="pref_title_home_amperage">Сила тока при заряде дома, А</string>
+    <string name="pref_title_public_voltage">Напряжение на публичной зарядке, В</string>
+    <string name="pref_title_public_amperage">Сила тока на публичной зарядке, А</string>
     <string name="pref_title_charge_loss">Потери при заряде, %</string>
     <string name="pref_title_battery_capacity">Полезная емкость батареи, кВт\u22C5ч</string>
     <string name="pref_header_notifications">Настройки уведомлений</string>
@@ -24,12 +27,15 @@
     <string name="calendar_permissions_not_granted">Доступ к КАЛЕНДАРЮ запрещен</string>
     <string name="remind_me_button_title">Напомнить в %s</string>
     <string name="remaining_energy_title">Осталось %d%% заряда (%.1f из %.1fкВтч)</string>
-    <string name="current_description_title">Настройки сети:</string>
+    <string name="public_charge_title">Публичная зарядка</string>
+    <string name="current_description_title">Параметры зарядки:</string>
     <string name="amperage_title">A</string>
     <string name="voltage_title">В</string>
-    <string name="should_be_charged_in_days_title">Авто должно быть заряжно через %dд %02dч %02dм</string>
-    <string name="should_be_charged_in_hours_title">Авто должно быть заряжно через %dч %02dмин</string>
-    <string name="pref_title_reminder">Сообщить за, минут</string>
+    <string name="should_be_charged_in_days_title">Авто зарядится через %dд %02dч %02dм</string>
+    <string name="should_be_charged_in_hours_title">Авто зарядится через %dч %02dмин</string>
+    <string name="estimate">* приблизительно</string>
+    <string name="pref_title_app_reminder">Сообщить в приложении за, минут</string>
+    <string name="pref_title_calendar_reminder">Сообщить в календаре за, минут</string>
     <string name="pref_title_reminder_validation_error">Мы не разрешаем значение для уведомления больше %d минут</string>
 
     <string name="calendar_permission_rationale_title">Для чего нужен доступ</string>
@@ -40,8 +46,8 @@
     <string name="permission_dialog_forbid">Запретить доступ</string>
     <string name="event_created">Уведомление в календаре создано</string>
     <string name="first_time_settings_activity_message">Заполните емкость батареи, а также напряжение и силу тока в вашей сети для более точного расчета времени</string>
-    <string name="first_time_main_activity_message">Программа НЕ подключена к вашему авто и не может использовать его актуальные данные.
-Расчет времени зарядки является приблизительным.</string>
+    <string name="first_time_main_activity_message">Расчет времени зарядки является приблизительным.
+Программа НЕ подключена к вашему авто.</string>
     <string name="error_no_primary_calendar">Невозможно открыть календарь, используя права. Запрос на доступ к календарю отключен</string>
     <string name="error_creating_calendar_event">Невозможно создать событие календаря. Открываю календарь по-умолчанию</string>
 </resources>

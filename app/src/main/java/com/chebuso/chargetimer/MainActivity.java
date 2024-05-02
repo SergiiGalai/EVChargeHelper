@@ -11,8 +11,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.NumberPicker;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +45,7 @@ public class MainActivity extends BaseActivity
     private final static String TAG = "MainActivity";
     private final static int SETTINGS_REQUEST_CODE = 9000;
 
+    private Switch isFastChargeSwitch;
     private SeekBar remainingEnergySeekBar;
     private TextView remainingEnergyTitle;
     private StepNumberPicker amperagePicker;
@@ -61,21 +64,30 @@ public class MainActivity extends BaseActivity
         scheduler = Factory.createScheduler(this);
         calendarRepository = new CalendarRepository(this);
 
+        isFastChargeSwitch = findViewById(R.id.isFastChargeSwitch);
         remainingEnergySeekBar = findViewById(R.id.remainingEnergySeekBar);
         remainingEnergyTitle = findViewById(R.id.remainingEnergyTitle);
         chargedInTitle = findViewById(R.id.chargedInTitle);
         remindButton = findViewById(R.id.remindButton);
         showCalendarsButton = findViewById(R.id.showCalendarsButton);
 
-        int defaultAmperage = settingsProvider.getDefaultAmperage();
         amperagePicker = new StepNumberPicker(this, R.id.amperageValue);
-        amperagePicker.setValues(ChargeValuesProvider.getAllowedAmperage(defaultAmperage));
-        amperagePicker.setValue(String.valueOf(defaultAmperage));
-
-        int defaultVoltage = settingsProvider.getDefaultVoltage();
         voltagePicker = new StepNumberPicker(this, R.id.voltageValue);
+        setAmperageAndVoltageValues();
+    }
+
+    private void setAmperageAndVoltageValues(){
+        Log.d(TAG, "updateControls");
+        boolean publicCharge = isFastChargeSwitch.isChecked();
+
+        int defaultVoltage = publicCharge ? settingsProvider.getDefaultPublicVoltage() : settingsProvider.getDefaultHomeVoltage();
+        int defaultAmperage = publicCharge ? settingsProvider.getDefaultPublicAmperage() : settingsProvider.getDefaultHomeAmperage();
+
         voltagePicker.setValues(ChargeValuesProvider.getAllowedVoltage(defaultVoltage));
         voltagePicker.setValue(String.valueOf(defaultVoltage));
+
+        amperagePicker.setValues(ChargeValuesProvider.getAllowedAmperage(defaultAmperage));
+        amperagePicker.setValue(String.valueOf(defaultAmperage));
     }
 
     @Override
@@ -137,6 +149,7 @@ public class MainActivity extends BaseActivity
     }
 
     private class ViewModel{
+        private boolean isFastCharge;
         private String remainingEnergyText;
         private String chargedInText;
         private String remindButtonText;
@@ -154,6 +167,7 @@ public class MainActivity extends BaseActivity
 
         void refresh() {
             Log.d(TAG, "ViewModel.refresh");
+            isFastCharge = isFastChargeSwitch.isChecked();
             powerLine.Amperage = Integer.valueOf(amperagePicker.getValue());
             powerLine.Voltage = Integer.valueOf(voltagePicker.getValue());
             battery.UsableCapacityKWh = settingsProvider.getBatteryCapacity();
@@ -205,6 +219,15 @@ public class MainActivity extends BaseActivity
 
         voltagePicker.setOnValueChangedListener(textWatcher);
         amperagePicker.setOnValueChangedListener(textWatcher);
+
+        isFastChargeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.d(TAG, "isFastChargeSwitch.onCheckedChanged");
+                setAmperageAndVoltageValues();
+                updateControls();
+            }
+        });
 
         remainingEnergySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
         {
